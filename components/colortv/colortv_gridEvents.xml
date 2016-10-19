@@ -1,0 +1,7 @@
+<component name="colortv_gridEvents" extends="Node">
+    <interface>
+    	<field id="closed" type="boolean" />
+        <field id="moreDataUrl" type="string" />
+        <field id="impression" type="string" />
+    </interface>
+</component>

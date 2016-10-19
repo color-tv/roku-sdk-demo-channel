@@ -1,0 +1,78 @@
+<component name="colortv_gridButton" extends="Group">
+
+    <interface>
+        <field id="focused" type="bool" />
+        <field id="colors" type="colorarray" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_gridButton.brs" />
+
+    <children>
+        <Animation
+          id="backgroundFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"
+              keyValue="[0xE40913FF, 0xe43039ff, 0xe47176ff, 0xe4b9bbff, 0xe4cfd0ff, 0xFFFFFFFF]"       
+              fieldToInterp="buttonBg.blendColor" />
+        </Animation>
+        <Animation
+          id="backgroundUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"    
+              keyValue="[ 0xFFFFFFFF, 0xe4cfd0ff, 0xe4b9bbff, 0xe47176ff, 0xe43039ff, 0xE40913FF ]"       
+              fieldToInterp="buttonBg.blendColor" />
+        </Animation>
+        <Animation
+          id="buttonIconFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"    
+              keyValue="[ 0xFFFFFFFF, 0xe4cfd0ff, 0xe4b9bbff, 0xe47176ff, 0xe43039ff, 0xE40913FF ]"       
+              fieldToInterp="buttonIcon.blendColor" />
+        </Animation>
+        <Animation
+          id="buttonIconUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"
+              keyValue="[0xE40913FF, 0xe43039ff, 0xe47176ff, 0xe4b9bbff, 0xe4cfd0ff, 0xFFFFFFFF]"       
+              fieldToInterp="buttonIcon.blendColor" />
+        </Animation>
+        <Animation
+          id="buttonLabelFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"    
+              keyValue="[ 0xFFFFFFFF, 0xe4cfd0ff, 0xe4b9bbff, 0xe47176ff, 0xe43039ff, 0xE40913FF ]"       
+              fieldToInterp="buttonLabel.color" />
+        </Animation>
+        <Animation
+          id="buttonLabelUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 0.1, 0.25, 0.5, 0.75, 1.0]"
+              keyValue="[0xE40913FF, 0xe43039ff, 0xe47176ff, 0xe4b9bbff, 0xe4cfd0ff, 0xFFFFFFFF]"       
+              fieldToInterp="buttonLabel.color" />
+        </Animation>
+    </children>
+</component>

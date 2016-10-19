@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="colortv_subscriptionThankYouWindow" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_subscriptionThankYouWindow.brs" />
+
+    <interface>
+        <field id="parentNodeReference" type="node" />
+    </interface>
+
+    <children>
+        <Rectangle 
+          id="overlay"
+          width="1920"
+          height="1080"
+          color="0x404040AA" />
+        <Rectangle 
+          id="bg"
+          width="1000"
+          height="500"
+          color="0xFFFFFFFF"
+          translation="[460,290]"
+          >
+            <Label 
+              id="subscriptionText"
+              wrap="true"
+              text="Thank you for your interest, we will be in contact with you shortly"
+              color="0x404040FF" 
+              font="font:SmallSystemFont"
+              horizAlign = "center"
+              vertAlign = "top"
+              width="712"
+              height="200"
+              translation="[144,242]" />
+            <colortv_engagementButton 
+              id="okButton"
+              buttonLabelText="OK"
+              buttonColor="0x0492F7FF"
+              buttonLabelColor="0xFFFFFFFF"
+              buttonClickedColor="0x157BC3FF"
+              scaleRotateCenter="[200,35]"
+              buttonSize="[400,70]"
+              translation="[300,380]" />
+            <Poster
+              uri="pkg:/images/colortv/color_tv_confirm_icon.png"
+              width="128"
+              height="128"
+              translation="[436,50]" />
+            <Rectangle
+              width="200"
+              height="2"
+              color="0xF1F2F2FF"
+              translation="[186,116]" />
+            <Rectangle
+              width="200"
+              height="2"
+              color="0xF1F2F2FF"
+              translation="[614,116]" />
+        </Rectangle>
+    </children>
+
+</component>

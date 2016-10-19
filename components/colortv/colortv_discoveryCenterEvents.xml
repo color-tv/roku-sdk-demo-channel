@@ -1,0 +1,6 @@
+<component name="colortv_discoveryCenterEvents" extends="Node">
+    <interface>
+        <field id="subscribed" type="assocarray" />
+        <field id="clicked" type="assocarray" />
+    </interface>
+</component>

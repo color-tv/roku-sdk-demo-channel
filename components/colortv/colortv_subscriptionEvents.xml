@@ -1,0 +1,6 @@
+<component name="colortv_subscriptionEvents" extends="Node">
+    <interface>
+        <field id="subscribed" type="string" />
+        <field id="closed" type="bool" />
+    </interface>
+</component>

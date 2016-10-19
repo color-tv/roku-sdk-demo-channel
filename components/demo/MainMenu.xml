@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="MainMenu" extends="Scene" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://rokudev.roku.com/rokudev/schema/RokuSceneGraph.xsd">
+
+    <script type="text/brightscript" uri="pkg:/components/demo/MainMenu.brs" />
+
+    <children>
+        <menuControlEvents id="menuControlEvents" />
+
+        <Poster 
+            id="bg"
+            uri="pkg:/images/demo/colortv_background.jpg"
+            width="1920"
+            height="1080" />
+
+        <menuButton 
+            id="showDiscoveryCenter"
+            buttonLabelText="DISCOVERY CENTER"
+            buttonColor="0xE35050FF"
+            buttonHighlightedColor="0xFF3030FF"
+            buttonClickedColor="0xA31C1CFF"
+            translation="[110,800]" />
+
+        <menuButton 
+            id="showAppFeature"
+            buttonLabelText="APP FEATURE"
+            buttonColor="0xFEC550FF"
+            buttonHighlightedColor="0xFEB41BFF"
+            buttonClickedColor="0xC8911EFF"
+            translation="[460,800]" />
+
+        <menuButton 
+            id="showDirectEngagement"
+            buttonLabelText="DIRECT ENGAGEMENT"
+            buttonColor="0xAFD739FF"
+            buttonHighlightedColor="0x91BB14FF"
+            buttonClickedColor="0x71940DFF"
+            translation="[810,800]" />
+                        
+        <menuButton 
+            id="showVideo"
+            buttonLabelText="VIDEO"
+            buttonColor="0x79CCECFF"
+            buttonHighlightedColor="0x42CAFFFF"
+            buttonClickedColor="0x138AB9FF"
+            translation="[1160,800]" />
+        
+        <menuButton 
+            id="showContentRecommendation"
+            buttonLabelText="CONTENT RECOMMENDATION"
+            buttonColor="0xC492DBFF"
+            buttonHighlightedColor="0xB96FDBFF"
+            buttonClickedColor="0x903BB7FF"
+            translation="[1510,800]" />
+
+    </children>
+</component>

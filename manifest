@@ -1,0 +1,10 @@
+title=ColorTV Demo App
+
+major_version=1
+minor_version=0
+build_version=0
+
+ui_resolutions=fhd
+
+splash_color=#121212
+splash_min_time=0

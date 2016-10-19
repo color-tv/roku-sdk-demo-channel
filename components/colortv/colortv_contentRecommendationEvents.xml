@@ -1,0 +1,6 @@
+<component name="colortv_contentRecommendationEvents" extends="Node">
+    <interface>
+        <field id="favourite" type="string" />
+        <field id="clicked" type="assocarray" />
+    </interface>
+</component>

@@ -1,0 +1,6 @@
+<component name="menuControlEvents" extends="Node">
+    <interface>
+        <field id="loadAd" type="string" />
+        <field id="loadContentRecommendation" type="string" />
+    </interface>
+</component>

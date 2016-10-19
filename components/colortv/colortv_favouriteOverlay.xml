@@ -1,0 +1,44 @@
+<component name="colortv_favouriteOverlay" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_favouriteOverlay.brs" />
+
+    <interface>
+        <field id="parentNodeReference" type="node" />
+    </interface>
+
+    <children>
+        <Poster
+          id="favouriteOverlayBackground"
+          width="584"
+          height="584"
+          translation="[668,340]" />
+
+        <Animation
+          id="showAnimation"
+          duration="0.2"
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ 0xFFFFFF00, 0xFFFFFFFF ]"
+              fieldToInterp="favouriteOverlayBackground.blendColor" />
+        </Animation>
+        <Animation
+          id="hideAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"    
+              keyValue="[ 0xFFFFFFFF, 0xFFFFFF00 ]"
+              fieldToInterp="favouriteOverlayBackground.blendColor" />
+        </Animation>
+
+        <Timer
+          id="hideTimer"
+          repeat="false"
+          duration="1.5" />
+    </children>
+</component>

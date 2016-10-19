@@ -1,0 +1,20 @@
+<component name="colortv_commonAdElements" extends="Scene">
+  
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_commonAdElements.brs" />
+
+    <interface>
+      <field id="dataModel" type="assocarray" onChange="setAdModel" />        
+    </interface>
+
+    <children>
+        <colortv_adEvents id="colorTvAdEvents" />
+        <colortv_subscriptionEvents id="colorTvSubscriptionEvents" />
+        <colortv_appstoreEvents id="colorTvAppstoreEvents" />
+
+        <Timer
+          id="impressionTimer"
+          repeat="false"
+          duration="0.2" />
+    </children>
+
+</component>

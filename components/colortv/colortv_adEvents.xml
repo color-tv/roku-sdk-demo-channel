@@ -1,0 +1,6 @@
+<component name="colortv_adEvents" extends="Node">
+    <interface>
+        <field id="adShown" type="bool" />
+        <field id="closeAd" type="bool" />
+    </interface>
+</component>

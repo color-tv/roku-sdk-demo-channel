@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="colortv_interstitial" extends="colortv_commonAdElements">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_interstitial.brs" />
+
+    <interface>   
+        <field id="cancelAutoCloseTimer" type="boolean" />
+        <field id="screenshotsLoaded" type="boolean" />
+    </interface>
+
+    <children>
+
+        <Rectangle
+          width="1920"
+          height="670"
+          color="0xd3d3d3FF" />
+        <Rectangle
+          width="1920"
+          height="5"
+          color="0xb4b4b4FF"
+          translation="[0,670]" />
+        <Rectangle
+          width="1920"
+          height="405"
+          color="0xFFFFFFFF"
+          translation="[0,674]" />
+
+        <colortv_screenshotSlider id="screenshotSlider" />
+
+        <Group
+          translation="[350,715]"
+          >
+            <Label 
+              id="appTitle"
+              color="0x000000FF" 
+              font="font:MediumSystemFont" />
+            <Label
+              id="appRating"
+              text="111"
+              color="0xf9b233FF"
+              translation="[0,57]"
+              >
+                   <Font role="font" uri="pkg:/fonts/colortv/color_tv_stars.ttf" size="24" />
+            </Label>
+            <Label 
+              id="appReviewsNumber"
+              color="0x000000FF" 
+              font="font:SmallestSystemFont"
+              translation="[130,57]" />
+            <Label 
+              id="appPrice"
+              color="0x000000FF" 
+              font="font:SmallestBoldSystemFont"
+              translation="[0,104]" />
+            <Label 
+              id="appDescription"
+              color="0x000000FF" 
+              font="font:SmallestSystemFont"
+              horizAlign = "left"
+              wrap="true"
+              maxLines="5"
+              width="1335"
+              translation="[0,149]" />
+        </Group>
+
+        <Poster 
+          id="appLogo"
+          width="250"
+          height="250"
+          translation="[70,610]" />
+
+        <colortv_actionButton 
+          id="actionButton"
+          buttonLabelText="E-Mail Now!"
+          buttonColor="0xE35050FF"
+          buttonLabelColor="0x000000FF"
+          buttonClickedColor="0xA31C1CFF"
+          scaleRotateCenter="[219,48]"
+          translation="[1286,701]" />
+        <colortv_interstitialCloseButton
+          id="closeButton"
+          width="100"
+          height="100"
+          scaleRotateCenter="[50,50]"
+          translation="[1784,698]" />
+        
+        <colortv_autoCloseTimer 
+          id="autoCloseTimer"
+          width="80"
+          height="80"
+          translation="[1784,50]" />
+
+        <Poster 
+          id="colorTvLogo"
+          uri="pkg:/images/colortv/color_tv_interstitial_logo.png"
+          width="129"
+          height="51"
+          translation="[1751,993]" />
+
+        <colortv_progressSpinner
+          id="progressSpinner" />
+
+    </children>
+
+</component>

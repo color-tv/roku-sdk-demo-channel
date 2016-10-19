@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="colortv_subscriptionWindow" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_subscriptionWindow.brs" />
+
+    <interface>
+        <field id="parentNodeReference" type="node" />
+        <field id="clickedModel" type="assocarray" />
+    </interface>
+
+    <children>
+        <Rectangle 
+          id="overlay"
+          width="1920"
+          height="1080"
+          color="0x404040AA" />
+        <Rectangle 
+          id="bg"
+          width="1000"
+          height="500"
+          color="0xFFFFFFFF"
+          translation="[460,290]"
+          >
+            <Label 
+              id="subscriptionText"
+              wrap="true"
+              color="0x404040FF" 
+              font="font:SmallSystemFont"
+              horizAlign = "center"
+              vertAlign = "top"
+              width="880"
+              height="200"
+              translation="[60,55]" />
+            <Rectangle 
+              id="inputBackground"
+              width="650"
+              height="80"
+              color="0xF1F2F2FF"
+              translation="[55,260]"
+              >
+                <TextEditBox
+                  id="inputField"
+                  hintText=""
+                  maxTextLength="40"
+                  hintTextColor="0x808080FF"
+                  textColor="0x0F0F0FFF"
+                  width="600"
+                  translation="[20,40]"
+                  backgroundUri="pkg:/images/colortv/color_tv_transparent.png" />
+          </Rectangle>
+          <colortv_engagementButton 
+            id="engagementButton"
+            buttonLabelText="Find out more"
+            buttonColor="0x0492F7FF"
+            buttonLabelColor="0xFFFFFFFF"
+            buttonClickedColor="0x157BC3FF"
+            scaleRotateCenter="[169,50]"
+            translation="[655,250]" />
+          <Poster
+            uri="pkg:/images/colortv/color_tv_powered_by.png"
+            width="292"
+            height="60"
+            translation="[355,397]" />
+        </Rectangle>
+        <KeyboardDialog id="keyboardDialog"
+          title="Enter your email" />
+    </children>
+
+</component>

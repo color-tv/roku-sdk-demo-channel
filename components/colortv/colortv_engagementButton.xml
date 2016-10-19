@@ -1,0 +1,51 @@
+<component name="colortv_engagementButton" extends="Group">
+
+    <interface>
+        <field id="buttonClicked" type="bool" />
+        <field id="buttonLabelText" type="string" />
+        <field id="buttonColor" type="color" />
+        <field id="buttonLabelColor" type="color" />
+        <field id="buttonClickedColor" type="color" />
+        <field id="buttonSize" type="vector2d" />
+        <field id="focused" type="bool" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_engagementButton.brs" />
+
+    <children>
+        <Rectangle 
+          id="engagementButtonBg"
+          width="338"
+          height="100"
+          >
+              <Label 
+                id="buttonLabel"
+                color="0xFFFFFFFF" 
+                font="font:SmallBoldSystemFont"
+                horizAlign = "center"
+                vertAlign = "center"
+                width="338"
+                height="100" />
+        </Rectangle>
+        <Animation
+          id="scaleUpAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [0.8, 0.8], [1.0, 1.0] ]"
+              fieldToInterp="engagementButtonBg.scale" />
+        </Animation>
+        <Animation
+          id="scaleDownAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [1.0, 1.0], [0.8, 0.8] ]"
+              fieldToInterp="engagementButtonBg.scale" />
+        </Animation>
+    </children>
+</component>

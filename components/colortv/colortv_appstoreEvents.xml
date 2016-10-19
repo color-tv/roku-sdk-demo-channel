@@ -1,0 +1,5 @@
+<component name="colortv_appstoreEvents" extends="Node">
+    <interface>
+        <field id="clicked" type="bool" />
+    </interface>
+</component>

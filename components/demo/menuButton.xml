@@ -1,0 +1,31 @@
+<component name="menuButton" extends="Group">
+  
+    <interface>
+        <field id="buttonFocused" type="bool" />
+        <field id="buttonClicked" type="bool" />
+        <field id="buttonLabelText" type="string" />
+        <field id="buttonColor" type="color" />
+        <field id="buttonClickedColor" type="color" />
+        <field id="buttonHighlightedColor" type="color" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/demo/menuButton.brs" />
+
+    <children>
+        <Rectangle 
+          id="buttonBg"
+          width="300"
+          height="120"
+          >
+            <Label 
+              id="buttonLabel"
+              wrap="true" 
+              color="0xFFFFFFFF" 
+              font="font:SmallestSystemFont"
+              horizAlign = "center"
+              vertAlign = "center"
+              width="300"
+              height="120" />
+        </Rectangle>
+    </children>
+</component>
