@@ -24,14 +24,15 @@ end sub
 
 function updateViewWithData(dataArray)
     m.dataArray = dataArray
-     if not m.loadingMoreData then
+    if not m.loadingMoreData then
         removeGridElementsIfNecessary()
+        setGridAndAnimationDimensions()
         for i = 0 to m.gridElementViews.count() - 1 
             m.gridElementViews[i].contentModel = m.dataArray[i]
             setFavouriteButtonColors(m.gridElementViews[i])
             setTextColors(m.gridElementViews[i])
             setBackgroundColors(m.gridElementViews[i])
-            m.gridElementViews[i].findNode("backgroundImage").ObserveField("loadStatus", "checkIfAlreadyLoaded")
+            m.gridElementViews[i].findNode(getBackgroundImageNodeName()).findNode("backgroundImage").ObserveField("loadStatus", "checkIfAlreadyLoaded")
         end for
         setFeatured()
         checkIfAlreadyLoaded()
@@ -42,6 +43,19 @@ function updateViewWithData(dataArray)
         updateScreenPositions(-1)
         m.clippedRight = true
     end if
+end function
+
+function getBackgroundImageNodeName()
+    if m.top.dataModel.type = "discovery" then
+        nodeName = "gridDiscoveryElement"
+    else
+        if m.top.dataModel.format <> invalid and m.top.dataModel.format = "simple" then
+            nodeName = "gridContentSimplifiedElement"
+        else
+            nodeName = "gridContentElement"
+        end if
+    end if
+    return nodeName
 end function
 
 function setFavouriteButtonColors(gridElementView)
@@ -138,7 +152,6 @@ function initGridElementsViews()
             j++
         end if
     end for
-    m.gridElementViews[0].focused = true
 end function
 
 function setFeatured()
@@ -157,9 +170,16 @@ function setFeatured()
         slightlyLeftAnimationInterpolator = m.top.findNode("moveSlightlyLeftAnimationInterpolator")
         slightlyRightAnimationInterpolator = m.top.findNode("moveSlightlyRightAnimationInterpolator")
         showNewDataAnimationInterpolator = m.top.findNode("showNewDataAnimationInterpolator")
-        slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-601,0]]
-        slightlyRightAnimationInterpolator.keyValue = [[0,0],[601,0]]
+        if isSimplifiedContentRecommendation() then
+            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-412,0]]
+            slightlyRightAnimationInterpolator.keyValue = [[0,0],[412,0]]
+        else
+            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-601,0]]
+            slightlyRightAnimationInterpolator.keyValue = [[0,0],[601,0]]
+        end if
         showNewDataAnimationInterpolator.keyValue = [[0,0],[-68,0]]
+    else
+        m.gridElementViews[0].focused = true
     end if
 end function
 
@@ -181,10 +201,48 @@ function removeGridElementsIfNecessary()
     end if
 end function
 
+function setGridAndAnimationDimensions()
+    margin = 29
+    gridElementWidth = getGridElementWidth()
+    for i = 0 to m.gridElementViews.count() - 1
+        if i MOD 2 = 1 then
+            row = (i - 1) / 2
+        else
+            row = i / 2
+        end if
+        m.gridElementViews[i].translation = [(row + 1) * margin + row * gridElementWidth, m.gridElementViews[i].translation[1]]
+        m.gridElementViews[i].startTranslation = m.gridElementViews[i].translation
+    end for
+    if isSimplifiedContentRecommendation() then
+        fullMove = 909
+        slightMove = 836
+    else
+        fullMove = 669
+        slightMove = 116
+    end if
+    slightlyLeftAnimationInterpolator = m.top.findNode("moveSlightlyLeftAnimationInterpolator")
+    slightlyRightAnimationInterpolator = m.top.findNode("moveSlightlyRightAnimationInterpolator")
+    fullyLeftAnimationInterpolator = m.top.findNode("moveFullyLeftAnimationInterpolator")
+    fullyRightAnimationInterpolator = m.top.findNode("moveFullyRightAnimationInterpolator")
+    slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-slightMove,0]]
+    slightlyRightAnimationInterpolator.keyValue = [[0,0],[slightMove,0]]
+    fullyLeftAnimationInterpolator.keyValue = [[0,0],[-fullMove,0]]
+    fullyRightAnimationInterpolator.keyValue = [[0,0],[fullMove,0]]
+end function
+
+function getGridElementWidth()
+    if isSimplifiedContentRecommendation() then
+        elementWidth = 880
+    else
+        elementWidth = 640
+    end if
+    return elementWidth
+end function
+
 sub checkIfAlreadyLoaded()
     ' Only first 6 items are visible
     for i = 0 to 5
-        if isViewStillLoading(m.gridElementViews[i]) or isViewStillLoading(m.featured) then
+        if isViewStillLoading(m.gridElementViews[i].findNode(getBackgroundImageNodeName())) or isViewStillLoading(m.featured) then
             return
         end if
     end for
@@ -192,7 +250,11 @@ sub checkIfAlreadyLoaded()
 end sub
 
 function isViewStillLoading(view) as Boolean
-    return view <> invalid and (view.findNode("backgroundImage").loadStatus = "none" or view.findNode("backgroundImage").loadStatus = "loading")
+    if view = invalid then
+        return false
+    end if
+    loadStatus = view.findNode("backgroundImage").loadStatus
+    return view <> invalid and (loadStatus = "none" or loadStatus = "loading" or loadStatus = "error")
 end function
 
 function presentView()
@@ -202,7 +264,7 @@ function presentView()
         m.showFeaturedAnimation.ObserveField("state", "focusFeaturedAdAfterInitAnimation")
     end if
     for i = 0 to m.gridElementViews.count() - 1 
-        m.gridElementViews[i].findNode("backgroundImage").UnobserveField("loadStatus")
+        m.gridElementViews[i].findNode(getBackgroundImageNodeName()).findNode("backgroundImage").UnobserveField("loadStatus")
     end for
     if isContentRecommendation(m.top.dataModel) and m.top.dataModel.autoPlayEnabled = "true" then
         startAutoplayTimer()
@@ -218,7 +280,7 @@ function startAutoplayTimer()
     if m.featured <> invalid then
         m.autoplayTimer = m.featured.findNode("autoplayTimer")
     else
-        m.autoplayTimer = m.currentlyFocusedView.findNode("autoplayTimer")
+        m.autoplayTimer = m.currentlyFocusedView.findNode(getBackgroundImageNodeName()).findNode("autoplayTimer")
     end if
     if m.top.dataModel.autoPlayDuration <> invalid then
         m.autoplayTimer.duration = m.top.dataModel.autoPlayDuration
@@ -276,7 +338,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 performDownloadOrEngagement(clickedItem)
             end if
         end if
-    else if key = "play" and m.top.dataModel.type = "recommendation" then
+    else if key = "play" and m.top.dataModel.type = "recommendation" and not isSimplifiedContentRecommendation() then
         keyIntercepted = true
         clickedModel = invalid
         if m.featured <> invalid and m.featured.focused then
@@ -354,16 +416,21 @@ sub changeCardFocus(key)
         end if
     end if
 
+    if isSimplifiedContentRecommendation() and m.featured <> invalid then
+        viewIndexThatTriggersAnimation = 1
+    else
+        viewIndexThatTriggersAnimation = 2
+    end if
     if key = "left" and m.nextViewToFocus.currentScreenPosition = 0 and not m.clippedRight then
         animationToPlay = m.moveSlightlyRightAnimation
         m.clippedRight = true
     else if key = "left" and m.nextViewToFocus.currentScreenPosition = -1 then
         animationToPlay = m.moveFullyRightAnimation
         updateScreenPositions(1)
-    else if key = "right" and m.nextViewToFocus.currentScreenPosition = 2 and m.clippedRight then
+    else if key = "right" and m.nextViewToFocus.currentScreenPosition = viewIndexThatTriggersAnimation and m.clippedRight then
         animationToPlay = m.moveSlightlyLeftAnimation
         m.clippedRight = false
-    else if key = "right" and m.nextViewToFocus.currentScreenPosition = 3 then
+    else if key = "right" and m.nextViewToFocus.currentScreenPosition = viewIndexThatTriggersAnimation + 1 then
         animationToPlay = m.moveFullyLeftAnimation
         updateScreenPositions(-1)
     end if
@@ -459,11 +526,17 @@ function getLeftGridViewIndexAddFactor(currentlyShownElementIndex, isUpperViewFo
 end function
 
 function getLeftGridViewXTranslation() as Integer
+    elementWidth = getGridElementWidth()
+    featuredAdWidth = 484
     if m.featured <> invalid then
-        return -156
+        return -(elementWidth-featuredAdWidth)
     else
-        return -640
+        return -elementWidth
     end if
+end function
+
+function isSimplifiedContentRecommendation()
+    return m.top.dataModel.format <> invalid and m.top.dataModel.format = "simple"
 end function
 
 sub updateRightGridViews(isUpperViewFocused)

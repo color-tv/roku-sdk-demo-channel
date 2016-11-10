@@ -108,6 +108,7 @@
           easeFunction="linear"
           >
             <Vector2DFieldInterpolator
+              id="moveFullyLeftAnimationInterpolator"
               key="[0.0, 1.0]"
               keyValue="[ [0, 0], [-669.0, 0] ]"
               fieldToInterp="animationTranslation.translation"   />
@@ -119,6 +120,7 @@
           easeFunction="linear"
           >
             <Vector2DFieldInterpolator
+              id="moveFullyRightAnimationInterpolator"
               key="[0.0, 1.0]"
               keyValue="[ [0, 0], [669.0, 0] ]"
               fieldToInterp="animationTranslation.translation"   />

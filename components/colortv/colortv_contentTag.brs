@@ -59,6 +59,10 @@ end function
 function setColors()
     reversedColors = m.top.colors
     reversedColors.reverse()
+    m.tagLabel.color = m.top.colors[0] 
+    m.background.blendColor = m.top.colors[0] 
+    m.circleRight.blendColor = m.top.colors[0] 
+    m.circleLeft.blendColor = m.top.colors[0]
     m.backgroundFocusedAnimation.getChild(0).keyValue = m.top.colors
     m.backgroundFocusedAnimation.getChild(0).key = [0.0, 0.1, 0.25, 0.5, 0.75, 1.0]
     m.backgroundUnfocusedAnimation.getChild(0).keyValue = reversedColors
