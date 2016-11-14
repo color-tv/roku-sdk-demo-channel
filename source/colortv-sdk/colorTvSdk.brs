@@ -1009,9 +1009,9 @@ m.colortv_iz = {}
 end if
 m.colortv_iz["watchedSeconds"] = colortv_jb%
 end if
-else if type(colortv_dn) = "roVideoPlayerEvent" then
-if colortv_dn.isStatusMessage() and colortv_dn.GetMessage() = "start of play" then
-m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", invalid)
+else if type(colortv_dn) = "roVideoPlayerEvent" or type(colortv_dn) = "roVideoScreenEvent" then
+if (colortv_dn.isStatusMessage() and colortv_dn.GetMessage() = "start of play") or colortv_dn.isStreamStarted() then
+m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", m.colortv_iz)
 else if colortv_dn.isPlaybackPosition() then
 m.colortv_iz = { "watchedSeconds": colortv_dn.getIndex() }
 else if colortv_dn.isFullResult() then
@@ -1032,7 +1032,7 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.2.0"
+return "1.2.1"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000

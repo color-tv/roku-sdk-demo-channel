@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="colortv_contentRecommendation" extends="colortv_commonGridElements">
-
-    <script type="text/brightscript" uri="pkg:/components/colortv/colortv_contentRecommendation.brs" />
-
-</component>

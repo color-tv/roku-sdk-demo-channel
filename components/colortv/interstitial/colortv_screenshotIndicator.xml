@@ -1,0 +1,38 @@
+<component name="colortv_screenshotIndicator" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/interstitial/colortv_screenshotIndicator.brs" />
+
+    <interface>
+        <field id="focused" type="bool" />
+    </interface>
+
+    <children>
+        <Poster 
+          id="indicator"
+          width="8"
+          height="8"
+          scale="[1,1]"
+          uri="pkg:/images/colortv/color_tv_interstitial_indicator_circle.png"
+          scaleRotateCenter="[4,4]" />
+        <Animation
+          id="scaleUpAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [1.0, 1.0], [2, 2] ]"
+              fieldToInterp="indicator.scale" />
+        </Animation>
+        <Animation
+          id="scaleDownAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [2, 2], [1, 1] ]"
+              fieldToInterp="indicator.scale" />
+        </Animation>
+    </children>
+</component>

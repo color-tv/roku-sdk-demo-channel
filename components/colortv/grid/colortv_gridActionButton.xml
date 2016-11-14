@@ -1,0 +1,37 @@
+<component name="colortv_gridActionButton" extends="colortv_gridButton">
+
+    <interface>
+        <field id="contentModel" type="assocarray" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/grid/colortv_gridActionButton.brs" />
+
+    <children>
+        <Poster 
+          id="buttonBg"
+          uri="pkg:/images/colortv/color_tv_action_button_wide.png"
+          blendColor="0xe40913ff"
+          width="570"
+          height="46"
+          >
+            <Poster 
+              id="buttonIcon"
+              uri="pkg:/images/colortv/color_tv_icon_watch_now.png"
+              width="20"
+              height="20"
+              translation="[180,13]" />
+            <Label 
+              id="buttonLabel"
+              color="0xFFFFFFFF" 
+              horizAlign = "center"
+              vertAlign = "center"
+              translation="[18,-1]"
+              text="WATCH NOW"
+              width="570"
+              height="46" 
+              >
+                <Font role="font" uri="pkg:/fonts/colortv/AurulentSans-Bold.otf" size="20" />
+            </Label>
+        </Poster>
+    </children>
+</component>

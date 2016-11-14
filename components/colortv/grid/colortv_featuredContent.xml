@@ -1,0 +1,67 @@
+<component name="colortv_featuredContent" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/grid/colortv_featuredContent.brs" />
+
+    <interface>
+        <field id="focused" type="bool" />
+        <field id="contentModel" type="assocarray" onChange="setContentModel" />
+        <field id="impressionNode" type="node" />
+    </interface>
+
+    <children>
+        <Rectangle
+          id="gridElementsContents"
+          width="514"
+          height="1080"
+          color="0xdde3e9ff"
+          >
+            <Poster 
+              id="backgroundImage"
+              translation="[14,29]"
+              width="486"
+              height="1020"
+              loadDisplayMode="scaleToZoom"
+              scaleRotateCenter="[243,510]"
+              uri="pkg:/images/featuredMock.jpg"
+              >
+                <colortv_actionButton 
+                  id="actionButton"
+                  buttonLabelText="E-Mail Now!"
+                  buttonColor="0xE35050FF"
+                  buttonLabelColor="0xFFFFFFFF"
+                  translation="[53,902]" />
+
+                <colortv_autoCloseTimer 
+                  id="autoplayTimer"
+                  width="50"
+                  height="50"
+                  visible="false"
+                  duration="8"
+                  translation="[414,20]" />
+            </Poster>
+        </Rectangle>
+
+        <Animation
+          id="focusedAnimation"
+          duration="0.2"
+          repeat="false"
+          easeFunction="linear"
+          >
+           <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [1.0, 1.0], [1.06, 1.06] ]"
+              fieldToInterp="backgroundImage.scale" />
+        </Animation>
+        <Animation
+          id="unfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [1.06, 1.06], [1.0, 1.0] ]"
+              fieldToInterp="backgroundImage.scale" />
+        </Animation>
+    </children>
+</component>

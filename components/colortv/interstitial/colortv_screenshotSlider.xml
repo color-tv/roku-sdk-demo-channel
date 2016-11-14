@@ -1,0 +1,18 @@
+<component name="colortv_screenshotSlider" extends="Group">
+
+    <interface>
+        <field id="screenshots" type="stringarray" />
+        <field id="parentNodeReference" type="node" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/interstitial/colortv_screenshotSlider.brs" />
+
+    <children>
+        <Group 
+          id="screenshotsContainer"
+          translation="[0,70]" />
+        <Group 
+          id="indicators"
+          translation="[960,637]" />
+    </children>
+</component>

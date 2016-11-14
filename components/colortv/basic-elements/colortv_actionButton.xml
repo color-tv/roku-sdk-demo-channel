@@ -1,0 +1,60 @@
+<component name="colortv_actionButton" extends="Group">
+
+    <interface>
+        <field id="buttonClicked" type="bool" />
+        <field id="buttonLabelText" type="string" />
+        <field id="buttonColor" type="color" />
+        <field id="buttonLabelColor" type="color" />
+        <field id="buttonClickedColor" type="color" />
+        <field id="iconUri" type="string" />
+        <field id="unobserveFields" type="bool" />
+        <field id="focused" type="bool" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/basic-elements/colortv_actionButton.brs" />
+
+    <children>
+        <Poster 
+          id="actionButtonBg"
+          uri="pkg:/images/colortv/color_tv_action_button.png"
+          width="380"
+          height="88"
+          >
+            <Poster 
+              id="actionButtonIcon"
+              uri="pkg:/images/colortv/color_tv_icon_mail.png"
+              width="40"
+              height="40"
+              translation="[30,24]" />
+            <Label 
+              id="buttonLabel"
+              color="0xFFFFFFFF" 
+              font="font:SmallSystemFont"
+              horizAlign = "center"
+              vertAlign = "center"
+              translation="[30,0]"
+              width="380"
+              height="88" />
+        </Poster>
+        <Animation
+          id="scaleUpAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [0.9, 0.9], [1.0, 1.0] ]"
+              fieldToInterp="actionButtonBg.scale" />
+        </Animation>
+        <Animation
+          id="scaleDownAnimation"
+          duration="0.1"
+          easeFunction="outCubic"
+          >
+            <Vector2DFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[ [1.0, 1.0], [0.9, 0.9] ]"
+              fieldToInterp="actionButtonBg.scale" />
+        </Animation>
+    </children>
+</component>
