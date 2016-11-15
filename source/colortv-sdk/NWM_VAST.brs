@@ -91,31 +91,31 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
           for each url in ad.wrapper.impression
             newAd.video.trackingEvents.Push({
               time: 0
-              url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+              url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
             })
           next
           for each url in xml.wrapper.wrapper.impression.url
             newAd.video.trackingEvents.Push({
               time: 0
-              url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+              url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
             })
           next
         end if
 
         ' collect any tracking events in this VAST before we process the redirect
         for each trackingEvent in ad.wrapper.creatives.creative.linear.trackingEvents.tracking
-          if ValidStr(trackingEvent.GetText()) <> ""
+          if isvalidstr(trackingEvent.GetText()) <> ""
             newAd.video.trackingEvents.Push({
-              timing: UCase(ValidStr(trackingEvent@event))
+              timing: UCase(isvalidstr(trackingEvent@event))
               time:   0
-              url:  timestampRX.Replace(ValidStr(trackingEvent.GetText()), timestamp)
+              url:  timestampRX.Replace(isvalidstr(trackingEvent.GetText()), timestamp)
             })
           end if
           for each url in trackingEvent.url
             newAd.video.trackingEvents.Push({
-              timing: UCase(ValidStr(trackingEvent@event))
+              timing: UCase(isvalidstr(trackingEvent@event))
               time:   0
-              url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+              url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
             })
           next
         next
@@ -125,17 +125,17 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
         url = invalid
         if ad.wrapper.vastAdTagURI.Count() > 0
           if ad.wrapper.vastAdTagURI.url.Count() > 0
-            url = ValidStr(ad.wrapper.vastAdTagURI.url.GetText())
+            url = isvalidstr(ad.wrapper.vastAdTagURI.url.GetText())
           else
-            url = ValidStr(ad.wrapper.vastAdTagURI.GetText())
+            url = isvalidstr(ad.wrapper.vastAdTagURI.GetText())
           end if
         else if ad.wrapper.VASTAdTagURL.Count() > 0
           ' this method is not part of the VAST 2.0 spec as far as I can tell
           ' but I have seen at least one provider doing it this way
           if ad.wrapper.VASTAdTagURL.url.Count() > 0
-            url = ValidStr(ad.wrapper.VASTAdTagURL.url.GetText())
+            url = isvalidstr(ad.wrapper.VASTAdTagURL.url.GetText())
           else
-            url = ValidStr(ad.wrapper.VASTAdTagURL.GetText())
+            url = isvalidstr(ad.wrapper.VASTAdTagURL.GetText())
           end if
         end if
 
@@ -167,26 +167,26 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
         end if
       end while
 
-      m.id = ValidStr(ad@id)
+      m.id = isvalidstr(ad@id)
 
       if ad.inLine.video.Count() > 0
         creative = ad.inLine.video[0]
 
         for each mediaFile in creative.mediaFiles.mediaFile
           ' step through the various media files for the creative
-          mimeType = LCase(ValidStr(mediaFile@type))
+          mimeType = LCase(isvalidstr(mediaFile@type))
           if m.supportedMimeTypes.DoesExist(mimeType) or returnUnsupportedVideo
             newStream = {
-              url: ValidStr(mediaFile.url.GetText()).Trim()
-              height: StrToI(ValidStr(mediaFile@height))
+              url: isvalidstr(mediaFile.url.GetText()).Trim()
+              height: StrToI(isvalidstr(mediaFile@height))
             }
 
             if mimeType = "application/json"
               newStream.provider = "iroll"
             end if
 
-            if StrToI(ValidStr(mediaFile@bitrate)) > 0
-              newStream.bitrate = StrToI(ValidStr(mediaFile@bitrate))
+            if StrToI(isvalidstr(mediaFile@bitrate)) > 0
+              newStream.bitrate = StrToI(isvalidstr(mediaFile@bitrate))
             end if
 
             if m.debug
@@ -199,13 +199,13 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
             end if
             newAd.video.streams.Push(newStream)
           else
-            if m.debug then print "NWM_VAST: unsupported video type: " + ValidStr(mediaFile@type)
+            if m.debug then print "NWM_VAST: unsupported video type: " + isvalidstr(mediaFile@type)
           end if
         next
 
         if newAd.video.streams.Count() > 0
           ' we found playable content
-          durationBits = colonRX.Split(ValidStr(creative.duration.GetText()))
+          durationBits = colonRX.Split(isvalidstr(creative.duration.GetText()))
           length = 0
           secondsPerUnit = 1
           i = durationBits.Count() - 1
@@ -225,29 +225,29 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
               if m.debug then print "NWM_VAST: processing impression"
               newAd.video.trackingEvents.Push({
                 time: 0
-                url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
               })
             next
             for each url in ad.inline.impression.url
               if m.debug then print "NWM_VAST: processing impression"
               newAd.video.trackingEvents.Push({
                 time: 0
-                url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
               })
             next
           end if
 
           for each trackingEvent in ad.inline.trackingEvents.tracking
-            if ValidStr(trackingEvent.GetText()) <> ""
+            if isvalidstr(trackingEvent.GetText()) <> ""
               newAd.video.trackingEvents.Push({
-                timing: UCase(ValidStr(trackingEvent@event))
-                url:  timestampRX.Replace(ValidStr(trackingEvent.GetText()), timestamp)
+                timing: UCase(isvalidstr(trackingEvent@event))
+                url:  timestampRX.Replace(isvalidstr(trackingEvent.GetText()), timestamp)
               })
             end if
             for each url in trackingEvent.url
               newAd.video.trackingEvents.Push({
-                timing: UCase(ValidStr(trackingEvent@event))
-                url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                timing: UCase(isvalidstr(trackingEvent@event))
+                url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
               })
             next
           next
@@ -259,19 +259,19 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
 
             for each mediaFile in creative.mediaFiles.mediaFile
               ' step through the various media files for the creative
-              mimeType = LCase(ValidStr(mediaFile@type))
+              mimeType = LCase(isvalidstr(mediaFile@type))
               if m.supportedMimeTypes.DoesExist(mimeType) or returnUnsupportedVideo
                 newStream = {
-                  url: ValidStr(mediaFile.GetText()).Trim()
-                  height: StrToI(ValidStr(mediaFile@height))
+                  url: isvalidstr(mediaFile.GetText()).Trim()
+                  height: StrToI(isvalidstr(mediaFile@height))
                 }
 
                 if mimeType = "application/json"
                   newStream.provider = "iroll"
                 end if
 
-                if StrToI(ValidStr(mediaFile@bitrate)) > 0
-                  newStream.bitrate = StrToI(ValidStr(mediaFile@bitrate))
+                if StrToI(isvalidstr(mediaFile@bitrate)) > 0
+                  newStream.bitrate = StrToI(isvalidstr(mediaFile@bitrate))
                 end if
 
                 if m.debug
@@ -284,14 +284,14 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
                 end if
                 newAd.video.streams.Push(newStream)
               else
-                if m.debug then print "NWM_VAST: unsupported video type: " + ValidStr(mediaFile@type)
+                if m.debug then print "NWM_VAST: unsupported video type: " + isvalidstr(mediaFile@type)
               end if
             next
 
             if newAd.video.streams.Count() > 0
               ' we found playable content
 
-              durationBits = colonRX.Split(ValidStr(creative.duration.GetText()))
+              durationBits = colonRX.Split(isvalidstr(creative.duration.GetText()))
               length = 0
               secondsPerUnit = 1
               i = durationBits.Count() - 1
@@ -311,31 +311,31 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
                   if m.debug then print "NWM_VAST: processing impression"
                   newAd.video.trackingEvents.Push({
                     time: 0
-                    url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                    url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
                   })
-                  newAd.video.impressions.Push(timestampRX.Replace(ValidStr(url.GetText()), timestamp)) ' to support some partners' need to fire events for videos that aren't actually played
+                  newAd.video.impressions.Push(timestampRX.Replace(isvalidstr(url.GetText()), timestamp)) ' to support some partners' need to fire events for videos that aren't actually played
                 next
                 for each url in ad.inline.impression.url
                  if m.debug then print "NWM_VAST: processing impression"
                  newAd.video.trackingEvents.Push({
                     time: 0
-                    url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                    url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
                   })
-                  newAd.video.impressions.Push(timestampRX.Replace(ValidStr(url.GetText()), timestamp)) ' to support some partners' need to fire events for videos that aren't actually played
+                  newAd.video.impressions.Push(timestampRX.Replace(isvalidstr(url.GetText()), timestamp)) ' to support some partners' need to fire events for videos that aren't actually played
                 next
               end if
 
               for each trackingEvent in creative.trackingEvents.tracking
-                if ValidStr(trackingEvent.GetText()) <> ""
+                if isvalidstr(trackingEvent.GetText()) <> ""
                   newAd.video.trackingEvents.Push({
-                    timing: UCase(ValidStr(trackingEvent@event))
-                    url:  timestampRX.Replace(ValidStr(trackingEvent.GetText()), timestamp)
+                    timing: UCase(isvalidstr(trackingEvent@event))
+                    url:  timestampRX.Replace(isvalidstr(trackingEvent.GetText()), timestamp)
                   })
                 end if
                 for each url in trackingEvent.url
                   newAd.video.trackingEvents.Push({
-                    timing: UCase(ValidStr(trackingEvent@event))
-                    url:  timestampRX.Replace(ValidStr(url.GetText()), timestamp)
+                    timing: UCase(isvalidstr(trackingEvent@event))
+                    url:  timestampRX.Replace(isvalidstr(url.GetText()), timestamp)
                   })
                 next
               next
@@ -343,27 +343,27 @@ function NWM_VAST_Parse(raw, returnUnsupportedVideo = false, normalizeURLs = fal
           else if creative.companionAds.Count() > 0
             for each companion in creative.companionAds.companion
               newCompanion = {
-                width:          StrToI(ValidStr(companion@width))
-                height:         StrToI(ValidStr(companion@height))
+                width:          StrToI(isvalidstr(companion@width))
+                height:         StrToI(isvalidstr(companion@height))
                 trackingEvents: []
               }
 
               if m.debug then print "NWM_VAST: found companion"
               if companion.staticResource.Count() > 0
-                companionType = LCase(ValidStr(companion.staticResource[0]@creativeType))
+                companionType = LCase(isvalidstr(companion.staticResource[0]@creativeType))
                 if m.debug then print "NWM_VAST: - type: " + companionType
                 if companionType = "image/jpeg" or companionType = "image/png"
-                  newCompanion.imageURL = ValidStr(companion.staticResource[0].GetText())
+                  newCompanion.imageURL = isvalidstr(companion.staticResource[0].GetText())
                   if m.debug then print "NWM_VAST: - url: " + newCompanion.imageURL
                 end if
               end if
 
               for each trackingEvent in companion.trackingEvents.tracking
-                newCompanion.trackingEvents.Push(timestampRX.Replace(ValidStr(trackingEvent.GetText()), timestamp))
+                newCompanion.trackingEvents.Push(timestampRX.Replace(isvalidstr(trackingEvent.GetText()), timestamp))
               next
 
               if companion.companionClickThrough.Count() > 0
-                newCompanion.clickThrough = ValidStr(companion.companionClickThrough[0].GetText())
+                newCompanion.clickThrough = isvalidstr(companion.companionClickThrough[0].GetText())
               end if
 
               newAd.companionAds.Push(newCompanion)

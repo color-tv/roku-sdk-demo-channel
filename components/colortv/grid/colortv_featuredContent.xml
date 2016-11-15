@@ -30,14 +30,6 @@
                   buttonColor="0xE35050FF"
                   buttonLabelColor="0xFFFFFFFF"
                   translation="[53,902]" />
-
-                <colortv_autoCloseTimer 
-                  id="autoplayTimer"
-                  width="50"
-                  height="50"
-                  visible="false"
-                  duration="8"
-                  translation="[414,20]" />
             </Poster>
         </Rectangle>
 

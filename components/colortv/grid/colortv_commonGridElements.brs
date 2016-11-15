@@ -178,8 +178,6 @@ function setFeatured()
             slightlyRightAnimationInterpolator.keyValue = [[0,0],[601,0]]
         end if
         showNewDataAnimationInterpolator.keyValue = [[0,0],[-68,0]]
-    else
-        m.gridElementViews[0].focused = true
     end if
 end function
 
@@ -265,7 +263,6 @@ function presentView()
     m.progressSpinner.visible = false
     if m.featured <> invalid then
         m.showFeaturedAnimation.control = "start"
-        m.showFeaturedAnimation.ObserveField("state", "focusFeaturedAdAfterInitAnimation")
     end if
     for i = 0 to m.gridElementViews.count() - 1 
         m.gridElementViews[i].findNode(getBackgroundImageNodeName()).findNode("backgroundImage").UnobserveField("loadStatus")
@@ -273,19 +270,11 @@ function presentView()
     if isContentRecommendation(m.top.dataModel) and m.top.dataModel.autoPlayEnabled = "true" then
         startAutoplayTimer()
     end if
-end function
-
-function focusFeaturedAdAfterInitAnimation()
-    m.showFeaturedAnimation.UnobserveField("state")
-    tryToChangeFeaturedAdFocus(true)
+    m.gridElementViews[0].focused = true
 end function
 
 function startAutoplayTimer()
-    if m.featured <> invalid then
-        m.autoplayTimer = m.featured.findNode("autoplayTimer")
-    else
-        m.autoplayTimer = m.currentlyFocusedView.findNode(getBackgroundImageNodeName()).findNode("autoplayTimer")
-    end if
+    m.autoplayTimer = m.currentlyFocusedView.findNode(getBackgroundImageNodeName()).findNode("autoplayTimer")
     if m.top.dataModel.autoPlayDuration <> invalid then
         m.autoplayTimer.duration = m.top.dataModel.autoPlayDuration
     end if
