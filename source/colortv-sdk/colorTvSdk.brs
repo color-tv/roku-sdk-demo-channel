@@ -994,7 +994,7 @@ if m.colortv_iz = invalid then
 m.colortv_iz = {}
 end if
 m.colortv_iz.colortv_ja = true
-m.colortv_iz["watchedSeconds"] = 0
+m.colortv_iz["positionSeconds"] = 0
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", m.colortv_iz)
 else if colortv_dn.getData() = "stopped"  and m.colortv_iz <> invalid then
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STOPPED", m.colortv_iz)
@@ -1008,26 +1008,20 @@ colortv_jb% = colortv_dn.getData()
 if m.colortv_iz = invalid then
 m.colortv_iz = {}
 end if
-m.colortv_iz["watchedSeconds"] = colortv_jb%
+m.colortv_iz["positionSeconds"] = colortv_jb%
 end if
 else if type(colortv_dn) = "roVideoPlayerEvent" or type(colortv_dn) = "roVideoScreenEvent" then
 if colortv_dn.isStreamStarted() then
 if m.colortv_jc = invalid or m.colortv_jc = false then
-m.colortv_iz = { "watchedSeconds": colortv_dn.getIndex() }
+m.colortv_iz = { "positionSeconds": colortv_dn.getIndex() }
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", m.colortv_iz)
 end if
 else if colortv_dn.isPlaybackPosition() then
+m.colortv_iz = { "positionSeconds": colortv_dn.getIndex() }
 if m.colortv_jc <> invalid and m.colortv_jc then
 m.colortv_jc = false
-colortv_jd = 0
-if m.colortv_iz <> invalid and m.colortv_iz["watchedSeconds"] <> invalid then
-colortv_jd = m.colortv_iz["watchedSeconds"]
+m.colortv_ft.colortv_au(colortv_dk, "VIDEO_RESUMED", m.colortv_iz)
 end if
-colortv_je = colortv_dn.getIndex()
-colortv_jf = {"startSkipped": colortv_jd, "endSkipped": colortv_je}
-m.colortv_ft.colortv_au(colortv_dk, "VIDEO_SKIPPED", colortv_jf)
-end if
-m.colortv_iz = { "watchedSeconds": colortv_dn.getIndex() }
 else if colortv_dn.isFullResult() then
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_COMPLETED", m.colortv_iz)
 m.colortv_iz = invalid
@@ -1036,9 +1030,9 @@ m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STOPPED", m.colortv_iz)
 m.colortv_iz = invalid
 else if colortv_dn.isPaused() then
 m.colortv_jc = true
+m.colortv_ft.colortv_au(colortv_dk, "VIDEO_PAUSED", m.colortv_iz)
 else if colortv_dn.isResumed() then
 m.colortv_jc = false
-m.colortv_ft.colortv_au(colortv_dk, "VIDEO_PAUSED", m.colortv_iz)
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_RESUMED", m.colortv_iz)
 end if
 else if type(colortv_dn) = "String" or type(colortv_dn) = "roString" then
@@ -1052,13 +1046,13 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.2.2"
+return "1.2.3"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000
 end function
-sub colortv_hi(colortv_jg)
-if colortv_jg = invalid then
+sub colortv_hi(colortv_jd)
+if colortv_jd = invalid then
 return
 end if
 colortv_fh = colortv_br("pollingUrls", "colortv")
@@ -1066,84 +1060,84 @@ if colortv_fh = invalid then
 colortv_fh = "{}"
 end if
 colortv_fi = ParseJson(colortv_fh)
-colortv_fi[colortv_em().toStr()] = colortv_jg
+colortv_fi[colortv_em().toStr()] = colortv_jd
 colortv_bt("pollingUrls", FormatJson(colortv_fi), "colortv")
 end sub
 function colortv_io()
-colortv_jh = []
-colortv_ji = colortv_br("installedApps", "colortv")
-if colortv_ji <> invalid
-colortv_jh = ParseJson(colortv_ji)
+colortv_je = []
+colortv_jf = colortv_br("installedApps", "colortv")
+if colortv_jf <> invalid
+colortv_je = ParseJson(colortv_jf)
 end if
-return colortv_jh
+return colortv_je
 end function
 function colortv_hm(colortv_hg) as Boolean
-return colortv_hg.colortv_jj <> invalid and colortv_hg.colortv_jj
+return colortv_hg.colortv_jg <> invalid and colortv_hg.colortv_jg
 end function
 function colortv_hh(colortv_aw as String, colortv_fv as Object) as Boolean
 if not colortv_fv.DoesExist(colortv_aw) then
 colortv_bd("Ad for placement: " + colortv_aw + " isn't loaded. Please call loadAd function first.")
 return false
-else if not colortv_jk(colortv_fv[colortv_aw]) then
+else if not colortv_jh(colortv_fv[colortv_aw]) then
 colortv_bd("Ad for placement: " + colortv_aw + " is not valid anymore. Please load the ad again.")
 return false
 end if
 return true
 end function
-function colortv_iy(colortv_aw as String, colortv_jl as Object) as Boolean
-if not colortv_jl.DoesExist(colortv_aw) then
+function colortv_iy(colortv_aw as String, colortv_ji as Object) as Boolean
+if not colortv_ji.DoesExist(colortv_aw) then
 colortv_bd("Content recommendation for placement: " + colortv_aw + " isn't loaded. Please call loadContentRecommendation function first.")
 return false
-else if not colortv_jk(colortv_jl[colortv_aw]) then
+else if not colortv_jh(colortv_ji[colortv_aw]) then
 colortv_bd("Content recommendation for placement: " + colortv_aw + " is not valid anymore. Please load the content recommendation again.")
 return false
 end if
 return true
 end function
-function colortv_jk(colortv_hg) as Boolean
-colortv_jm = CreateObject("roDateTime")
-colortv_jm.fromIso8601String(colortv_hg["validUntil"])
-colortv_jn = CreateObject("roDateTime")
-return colortv_jm.asSeconds() > colortv_jn.asSeconds()
+function colortv_jh(colortv_hg) as Boolean
+colortv_jj = CreateObject("roDateTime")
+colortv_jj.fromIso8601String(colortv_hg["validUntil"])
+colortv_jk = CreateObject("roDateTime")
+return colortv_jj.asSeconds() > colortv_jk.asSeconds()
 end function
-function colortv_hw(colortv_jo as String) as Boolean
-return colortv_jo = "CLICK_TO_SMS" or colortv_jo = "CLICK_TO_CALL" or colortv_jo = "CLICK_TO_EMAIL"
+function colortv_hw(colortv_jl as String) as Boolean
+return colortv_jl = "CLICK_TO_SMS" or colortv_jl = "CLICK_TO_CALL" or colortv_jl = "CLICK_TO_EMAIL"
 end function
-function colortv_hx(colortv_jo as String) as Boolean
-return colortv_jo = "CLICK_TO_APPSTORE" or colortv_jo = "CLICK_TO_CONTENT"
+function colortv_hx(colortv_jl as String) as Boolean
+return colortv_jl = "CLICK_TO_APPSTORE" or colortv_jl = "CLICK_TO_CONTENT"
 end function
 function colortv_bh(colortv_by as String) as Object
 colortv_c = ParseJson(colortv_by)
 if not colortv_c.DoesExist("error") then
-colortv_jp = CreateObject("roDateTime")
-colortv_jp.fromSeconds(colortv_jp.asSeconds() + colortv_c["validFor"])
-colortv_c["validUntil"] = colortv_jp.toIsoString()
-colortv_c.colortv_ih = colortv_jq
-colortv_c["storedPhoneNumber"] = colortv_jr("phone")
-colortv_c["storedEmailAddress"] = colortv_jr("email")
+colortv_jm = CreateObject("roDateTime")
+colortv_jm.fromSeconds(colortv_jm.asSeconds() + colortv_c["validFor"])
+colortv_c["validUntil"] = colortv_jm.toIsoString()
+colortv_c.colortv_ih = colortv_jn
+colortv_c["storedPhoneNumber"] = colortv_jo("phone")
+colortv_c["storedEmailAddress"] = colortv_jo("email")
 end if
 return colortv_c
 end function
-function colortv_jr(colortv_bl)
+function colortv_jo(colortv_bl)
 return ColorTVSdkGetInstance().colortv_gt(colortv_bl)
 end function
-function colortv_jq(colortv_js as String) as Void
+function colortv_jn(colortv_jp as String) as Void
+if colortv_jp = invalid then
+return
+end if
+colortv_jq = CreateObject("roRegex", "\A[^@]+@[^@]+\z", "")
+colortv_jr = CreateObject("roRegex", "[\(]?[0-9]{3}[\)]?[ ]?[-]?[ ]?[0-9]{3}[ ]?[-]?[ ]?[0-9]{3,4}", "")
+colortv_js = invalid
+if colortv_jq.isMatch(colortv_jp) then
+colortv_js = "email"
+else if colortv_jr.isMatch(colortv_jp)
+colortv_js = "phone"
+end if
 if colortv_js = invalid then
 return
 end if
-colortv_jt = CreateObject("roRegex", "\A[^@]+@[^@]+\z", "")
-colortv_ju = CreateObject("roRegex", "[\(]?[0-9]{3}[\)]?[ ]?[-]?[ ]?[0-9]{3}[ ]?[-]?[ ]?[0-9]{3,4}", "")
-colortv_jv = invalid
-if colortv_jt.isMatch(colortv_js) then
-colortv_jv = "email"
-else if colortv_ju.isMatch(colortv_js)
-colortv_jv = "phone"
-end if
-if colortv_jv = invalid then
-return
-end if
-colortv_jw = ColorTVSdkGetInstance()
-colortv_jw.colortv_gv(colortv_js, colortv_jv)
+colortv_jt = ColorTVSdkGetInstance()
+colortv_jt.colortv_gv(colortv_jp, colortv_js)
 end function
 function colortv_bz(colortv_by) as Object
 if colortv_by = invalid or Len(colortv_by) = 0
@@ -1161,19 +1155,19 @@ end function
 function colortv_cc()
 return 60 * 1000
 end function
-function colortv_ce(colortv_jx as Double, colortv_fe as Dynamic, colortv_ck as Function)
+function colortv_ce(colortv_ju as Double, colortv_fe as Dynamic, colortv_ck as Function)
 colortv_c = {
 colortv_ck: colortv_ck,
 colortv_fe: colortv_fe,
-colortv_ik: colortv_jy,
-equals: colortv_jz
+colortv_ik: colortv_jv,
+equals: colortv_jw
 }
-colortv_c.colortv_ka = colortv_em() + colortv_jx
+colortv_c.colortv_jx = colortv_em() + colortv_ju
 return colortv_c
 end function
-function colortv_jy() as Boolean
-colortv_kb = colortv_em()
-if colortv_kb < m.colortv_ka then
+function colortv_jv() as Boolean
+colortv_jy = colortv_em()
+if colortv_jy < m.colortv_jx then
 return false
 end if
 if m.colortv_fe.isEmpty() then
@@ -1183,40 +1177,40 @@ m.colortv_ck(m.colortv_fe)
 end if
 return true
 end function
-function colortv_jz(colortv_kc as Dynamic) as Boolean
-return m.colortv_ka = colortv_kc.colortv_ka and m.colortv_ck = colortv_kc.colortv_ck
+function colortv_jw(colortv_jz as Dynamic) as Boolean
+return m.colortv_jx = colortv_jz.colortv_jx and m.colortv_ck = colortv_jz.colortv_ck
 end function
 function colortv_hk(colortv_hg as Object, colortv_ft as Object, colortv_he as Object) as Object
-colortv_kd = NWM_VAST()
-colortv_ke = colortv_kd.GetPrerollFromURL(colortv_hg["ads"][0]["markupUrl"])
-if colortv_ke = invalid then
+colortv_ka = NWM_VAST()
+colortv_kb = colortv_ka.GetPrerollFromURL(colortv_hg["ads"][0]["markupUrl"])
+if colortv_kb = invalid then
 return invalid
 end if
 colortv_c = {
-colortv_hl: colortv_kf
-colortv_kg: colortv_kh
-colortv_ki: colortv_kj
-colortv_kk: colortv_kl
-colortv_km: colortv_kn
-colortv_ko: colortv_kp
-colortv_kq: colortv_kr
-colortv_ks: colortv_kt
-colortv_ku: colortv_kv
-colortv_kw: colortv_kx
-colortv_ke: colortv_ke
+colortv_hl: colortv_kc
+colortv_kd: colortv_ke
+colortv_kf: colortv_kg
+colortv_kh: colortv_ki
+colortv_kj: colortv_kk
+colortv_kl: colortv_km
+colortv_kn: colortv_ko
+colortv_kp: colortv_kq
+colortv_kr: colortv_ks
+colortv_kt: colortv_ku
+colortv_kb: colortv_kb
 colortv_hg: colortv_hg
 colortv_he: colortv_he
 colortv_ft: colortv_ft
 }
 return colortv_c
 end function
-function colortv_kf() as Void
-colortv_ky = m.colortv_kg()
-colortv_ky.Show()
-colortv_kz = m.colortv_ki()
-colortv_kz.Play()
+function colortv_kc() as Void
+colortv_kv = m.colortv_kd()
+colortv_kv.Show()
+colortv_kw = m.colortv_kf()
+colortv_kw.Play()
 if m.colortv_hg["type"] <> "video"
-m.colortv_kk(colortv_ky)
+m.colortv_kh(colortv_kv)
 end if
 while true
 colortv_hp = wait(GetColorTVSDKTimerInterval(), m.colortv_bo)
@@ -1240,63 +1234,63 @@ else if colortv_hp.isRequestFailed()
 ColorTVSdkGetInstance().colortv_fz(m.colortv_hg["placement"], "INTERNAL_SDK_ERROR", colortv_hp.getMessage())
 exit while
 else if colortv_hp.isStatusMessage() and colortv_hp.GetMessage() = "start of play"
-m.colortv_km(colortv_ky)
+m.colortv_kj(colortv_kv)
 else if colortv_hp.isPlaybackPosition()
-m.colortv_ko(colortv_ky, colortv_hp.GetIndex(), m.colortv_ke["length"])
-m.colortv_kq(colortv_hp.getIndex())
+m.colortv_kl(colortv_kv, colortv_hp.GetIndex(), m.colortv_kb["length"])
+m.colortv_kn(colortv_hp.getIndex())
 end if
 else if type(colortv_hp) = "roImageCanvasEvent" and colortv_hp.isRemoteKeyPressed()
-if m.colortv_ks(colortv_hp.GetIndex(), colortv_kz) then
+if m.colortv_kp(colortv_hp.GetIndex(), colortv_kw) then
 exit while
 end if
 end if
 ColorTVSdkGetInstance().timerTick()
 end while
 end function
-function colortv_kh()
+function colortv_ke()
 m.colortv_bo = CreateObject("roMessagePort")
-colortv_ky = CreateObject("roImageCanvas")
-colortv_ky.SetMessagePort(m.colortv_bo)
-colortv_ky.SetLayer(1, {"color": "#000000"})
-return colortv_ky
+colortv_kv = CreateObject("roImageCanvas")
+colortv_kv.SetMessagePort(m.colortv_bo)
+colortv_kv.SetLayer(1, {"color": "#000000"})
+return colortv_kv
 end function
-function colortv_kj()
+function colortv_kg()
 colortv_cz = CreateObject("roDeviceInfo")
-colortv_kz = CreateObject("roVideoPlayer")
-colortv_kz.SetMessagePort(m.colortv_bo)
-colortv_kz.SetDestinationRect({colortv_la:colortv_cz.GetDisplaySize().colortv_la,colortv_lb:colortv_cz.GetDisplaySize().colortv_lb,colortv_lc:0,colortv_ld:0})
-colortv_kz.SetPositionNotificationPeriod(1)
-colortv_kz.AddContent(m.colortv_ke)
-return colortv_kz
+colortv_kw = CreateObject("roVideoPlayer")
+colortv_kw.SetMessagePort(m.colortv_bo)
+colortv_kw.SetDestinationRect({colortv_kx:colortv_cz.GetDisplaySize().colortv_kx,colortv_ky:colortv_cz.GetDisplaySize().colortv_ky,colortv_kz:0,colortv_la:0})
+colortv_kw.SetPositionNotificationPeriod(1)
+colortv_kw.AddContent(m.colortv_kb)
+return colortv_kw
 end function
-function colortv_kn(colortv_ky as Object)
-colortv_ky.ClearLayer(2)
-colortv_ky.SetLayer(1, {"color": "#00000000", "CompositionMode": "Source"})
+function colortv_kk(colortv_kv as Object)
+colortv_kv.ClearLayer(2)
+colortv_kv.SetLayer(1, {"color": "#00000000", "CompositionMode": "Source"})
 end function
-function colortv_kr(colortv_le)
-for each colortv_lf in m.colortv_ke["trackingEvents"]
-if colortv_lf["time"] = colortv_le
-colortv_lg(colortv_lf)
+function colortv_ko(colortv_lb)
+for each colortv_lc in m.colortv_kb["trackingEvents"]
+if colortv_lc["time"] = colortv_lb
+colortv_ld(colortv_lc)
 end if
 end for
 end function
-function colortv_kt(colortv_lh, colortv_kz) as Boolean
-if colortv_lh = 2 or colortv_lh = 0  'colortv_li or colortv_lj
-m.colortv_kw()
+function colortv_kq(colortv_le, colortv_kw) as Boolean
+if colortv_le = 2 or colortv_le = 0  'colortv_lf or colortv_lg
+m.colortv_kt()
 return true
-else if colortv_lh = 6 and m.colortv_hg["type"] <> "video"
-colortv_kz.pause()
+else if colortv_le = 6 and m.colortv_hg["type"] <> "video"
+colortv_kw.pause()
 if colortv_hw(m.colortv_hg["ads"][0]["actionButton"]["actionType"]) then
-if m.colortv_ku() then
-m.colortv_kw()
-m.colortv_hg.colortv_jj = true
+if m.colortv_kr() then
+m.colortv_kt()
+m.colortv_hg.colortv_jg = true
 return true
 else
-colortv_kz.resume()
+colortv_kw.resume()
 end if
 else if m.colortv_hg["ads"][0]["actionButton"]["actionType"] = "CLICK_TO_APPSTORE"
-m.colortv_kw()
-m.colortv_hg.colortv_jj = true
+m.colortv_kt()
+m.colortv_hg.colortv_jg = true
 colortv_hy = m.colortv_hg["ads"][0]
 m.colortv_ft.colortv_p(colortv_hy["clickTracker"])
 if colortv_hy["clickData"]["contentId"] <> invalid then
@@ -1306,165 +1300,165 @@ m.colortv_ft.colortv_ak(colortv_hy["clickData"]["channelId"])
 end if
 return true
 else if m.colortv_hg["ads"][0]["actionButton"]["actionType"] = "CLICK_TO_CONTENT"
-m.colortv_kw()
+m.colortv_kt()
 colortv_hy = m.colortv_hg["ads"][0]
-m.colortv_hg.colortv_jj = true
+m.colortv_hg.colortv_jg = true
 m.colortv_ft.colortv_ao(colortv_hy["clickData"]["channelId"], colortv_hy["clickData"]["contentId"])
 return true
 end if
 end if
 return false
 end function
-function colortv_kx()
-for each colortv_lf in m.colortv_ke["trackingEvents"]
-if colortv_lf["event"] = "CLOSE"
-colortv_lg(colortv_lf)
+function colortv_ku()
+for each colortv_lc in m.colortv_kb["trackingEvents"]
+if colortv_lc["event"] = "CLOSE"
+colortv_ld(colortv_lc)
 end if
 end for
 if m.colortv_he <> invalid and m.colortv_he["adClosed"] <> invalid then
 m.colortv_he["adClosed"](m.colortv_hg["placement"])
 end if
 end function
-sub colortv_kl(colortv_ky as Object)
-colortv_lk = 720.0 / 1080.0
-colortv_ll% = 1356.0 * colortv_lk
-colortv_lm% = 902.0 * colortv_lk
-colortv_ln% = 400.0 * colortv_lk
-colortv_lo% = 100.0 * colortv_lk
-colortv_lp = invalid
-colortv_lq = m.colortv_hg["ads"][0]
-if colortv_hw(colortv_lq["actionButton"]["actionType"]) then
-colortv_lr% = colortv_ll% + 30 * colortv_lk
-colortv_ls% = colortv_lm% + 4 * colortv_lk
-colortv_lt% = colortv_ll% + 30.0 * colortv_lk
-colortv_lu% = colortv_lm% + 30.0 * colortv_lk
-colortv_lv% = 40.0 * colortv_lk
-colortv_lw% = 40.0 * colortv_lk
-if colortv_lq["actionButton"]["actionType"] = "CLICK_TO_EMAIL" then
-colortv_lx = "color_tv_icon_mail"
-else if colortv_lq["actionButton"]["actionType"] = "CLICK_TO_CALL" then
-colortv_lx = "color_tv_icon_phone"
+sub colortv_ki(colortv_kv as Object)
+colortv_lh = 720.0 / 1080.0
+colortv_li% = 1356.0 * colortv_lh
+colortv_lj% = 902.0 * colortv_lh
+colortv_lk% = 400.0 * colortv_lh
+colortv_ll% = 100.0 * colortv_lh
+colortv_lm = invalid
+colortv_ln = m.colortv_hg["ads"][0]
+if colortv_hw(colortv_ln["actionButton"]["actionType"]) then
+colortv_lo% = colortv_li% + 30 * colortv_lh
+colortv_lp% = colortv_lj% + 4 * colortv_lh
+colortv_lq% = colortv_li% + 30.0 * colortv_lh
+colortv_lr% = colortv_lj% + 30.0 * colortv_lh
+colortv_ls% = 40.0 * colortv_lh
+colortv_lt% = 40.0 * colortv_lh
+if colortv_ln["actionButton"]["actionType"] = "CLICK_TO_EMAIL" then
+colortv_lu = "color_tv_icon_mail"
+else if colortv_ln["actionButton"]["actionType"] = "CLICK_TO_CALL" then
+colortv_lu = "color_tv_icon_phone"
 else
-colortv_lx = "color_tv_icon_sms"
+colortv_lu = "color_tv_icon_sms"
 end if
-colortv_lp = {
-"Url": "pkg:/images/colortv/" + colortv_lx + ".png"
+colortv_lm = {
+"Url": "pkg:/images/colortv/" + colortv_lu + ".png"
 "TargetRect": {
-"x": colortv_lt%
-"y": colortv_lu%
-"w": colortv_lw%
-"h": colortv_lv%
+"x": colortv_lq%
+"y": colortv_lr%
+"w": colortv_lt%
+"h": colortv_ls%
 }
 }
 else
-colortv_lr% = colortv_ll%
-colortv_ls% = colortv_lm%
+colortv_lo% = colortv_li%
+colortv_lp% = colortv_lj%
 end if
-colortv_ly = colortv_eg(colortv_lq["actionButton"]["backgroundRed"], colortv_lq["actionButton"]["backgroundGreen"], colortv_lq["actionButton"]["backgroundBlue"])
-colortv_lz = colortv_eg(colortv_lq["actionButton"]["textRed"], colortv_lq["actionButton"]["textGreen"], colortv_lq["actionButton"]["textBlue"])
-colortv_ma = {
+colortv_lv = colortv_eg(colortv_ln["actionButton"]["backgroundRed"], colortv_ln["actionButton"]["backgroundGreen"], colortv_ln["actionButton"]["backgroundBlue"])
+colortv_lw = colortv_eg(colortv_ln["actionButton"]["textRed"], colortv_ln["actionButton"]["textGreen"], colortv_ln["actionButton"]["textBlue"])
+colortv_lx = {
 "TargetRect": {
-"x": colortv_lr%
-"y": colortv_ls%
-"w": colortv_ln%
-"h": colortv_lo%
+"x": colortv_lo%
+"y": colortv_lp%
+"w": colortv_lk%
+"h": colortv_ll%
 }
-"Text": colortv_lq["actionButton"]["text"]
+"Text": colortv_ln["actionButton"]["text"]
 "TextAttrs":{
-"Color" : colortv_lz,
+"Color" : colortv_lw,
 "Font" : "Small",
 "HAlign" : "HCenter",
 "VAlign" : "VCenter",
 "Direction" : "LeftToRight"
 }
 }
-colortv_mb = {
+colortv_ly = {
 "TargetRect": {
-"x": colortv_ll%
-"y": colortv_lm%
-"w": colortv_ln%
-"h": colortv_lo%
+"x": colortv_li%
+"y": colortv_lj%
+"w": colortv_lk%
+"h": colortv_ll%
 }
-"color": colortv_ly
+"color": colortv_lv
 }
-colortv_ky.SetLayer(20, colortv_ma)
-colortv_ky.SetLayer(19, colortv_mb)
-if colortv_lp <> invalid then
-colortv_ky.SetLayer(21, colortv_lp)
+colortv_kv.SetLayer(20, colortv_lx)
+colortv_kv.SetLayer(19, colortv_ly)
+if colortv_lm <> invalid then
+colortv_kv.SetLayer(21, colortv_lm)
 end if
 end sub
-sub colortv_kp(colortv_ky as Object, colortv_jn as Integer, colortv_mc as Integer)
-colortv_lk = 720.0 / 1080.0
-colortv_md% = 100.0 * colortv_lk
-colortv_me% = 906.0 * colortv_lk
-colortv_mf% = 902.0 * colortv_lk
-colortv_mg% = 100.0 * colortv_lk
-colortv_mh% = 100.0 * colortv_lk
-colortv_mi = colortv_eg(255, 255, 255)
-colortv_mj = (colortv_mc - colortv_jn).toStr()
+sub colortv_km(colortv_kv as Object, colortv_jk as Integer, colortv_lz as Integer)
+colortv_lh = 720.0 / 1080.0
+colortv_ma% = 100.0 * colortv_lh
+colortv_mb% = 906.0 * colortv_lh
+colortv_mc% = 902.0 * colortv_lh
+colortv_md% = 100.0 * colortv_lh
+colortv_me% = 100.0 * colortv_lh
+colortv_mf = colortv_eg(255, 255, 255)
+colortv_mg = (colortv_lz - colortv_jk).toStr()
+colortv_mh = {
+"TargetRect": {
+"x": colortv_ma%
+"y": colortv_mb%
+"w": colortv_md%
+"h": colortv_me%
+}
+"Text": colortv_mg
+"TextAttrs":{
+"Color" : colortv_mf,
+"Font" : "Small",
+"HAlign" : "HCenter",
+"VAlign" : "VCenter",
+"Direction" : "LeftToRight"
+}
+}
+colortv_mi! = (colortv_lz - colortv_jk) / colortv_lz
+if colortv_mi! >= 1 then
+colortv_mj = "colortv_timer_1"
+else if colortv_mi! >= 0.93 then
+colortv_mj = "colortv_timer_2"
+else if colortv_mi! >= 0.86 then
+colortv_mj = "colortv_timer_3"
+else if colortv_mi! >= 0.8 then
+colortv_mj = "colortv_timer_4"
+else if colortv_mi! >= 0.73 then
+colortv_mj = "colortv_timer_5"
+else if colortv_mi! >= 0.66 then
+colortv_mj = "colortv_timer_6"
+else if colortv_mi! >= 0.6 then
+colortv_mj = "colortv_timer_7"
+else if colortv_mi! >= 0.53 then
+colortv_mj = "colortv_timer_8"
+else if colortv_mi! >= 0.46 then
+colortv_mj = "colortv_timer_9"
+else if colortv_mi! >= 0.4 then
+colortv_mj = "colortv_timer_10"
+else if colortv_mi! >= 0.33 then
+colortv_mj = "colortv_timer_11"
+else if colortv_mi! >= 0.26 then
+colortv_mj = "colortv_timer_12"
+else if colortv_mi! >= 0.2 then
+colortv_mj = "colortv_timer_13"
+else if colortv_mi! >= 0.13 then
+colortv_mj = "colortv_timer_14"
+else if colortv_mi! >= 0.066 then
+colortv_mj = "colortv_timer_15"
+else
+colortv_mj = "colortv_timer_16"
+end if
 colortv_mk = {
+"Url": "pkg:/images/colortv/timer/" + colortv_mj + ".png"
 "TargetRect": {
-"x": colortv_md%
-"y": colortv_me%
-"w": colortv_mg%
-"h": colortv_mh%
-}
-"Text": colortv_mj
-"TextAttrs":{
-"Color" : colortv_mi,
-"Font" : "Small",
-"HAlign" : "HCenter",
-"VAlign" : "VCenter",
-"Direction" : "LeftToRight"
+"x": colortv_ma%
+"y": colortv_mc%
+"w": colortv_md%
+"h": colortv_me%
 }
 }
-colortv_ml! = (colortv_mc - colortv_jn) / colortv_mc
-if colortv_ml! >= 1 then
-colortv_mm = "colortv_timer_1"
-else if colortv_ml! >= 0.93 then
-colortv_mm = "colortv_timer_2"
-else if colortv_ml! >= 0.86 then
-colortv_mm = "colortv_timer_3"
-else if colortv_ml! >= 0.8 then
-colortv_mm = "colortv_timer_4"
-else if colortv_ml! >= 0.73 then
-colortv_mm = "colortv_timer_5"
-else if colortv_ml! >= 0.66 then
-colortv_mm = "colortv_timer_6"
-else if colortv_ml! >= 0.6 then
-colortv_mm = "colortv_timer_7"
-else if colortv_ml! >= 0.53 then
-colortv_mm = "colortv_timer_8"
-else if colortv_ml! >= 0.46 then
-colortv_mm = "colortv_timer_9"
-else if colortv_ml! >= 0.4 then
-colortv_mm = "colortv_timer_10"
-else if colortv_ml! >= 0.33 then
-colortv_mm = "colortv_timer_11"
-else if colortv_ml! >= 0.26 then
-colortv_mm = "colortv_timer_12"
-else if colortv_ml! >= 0.2 then
-colortv_mm = "colortv_timer_13"
-else if colortv_ml! >= 0.13 then
-colortv_mm = "colortv_timer_14"
-else if colortv_ml! >= 0.066 then
-colortv_mm = "colortv_timer_15"
-else
-colortv_mm = "colortv_timer_16"
-end if
-colortv_mn = {
-"Url": "pkg:/images/colortv/timer/" + colortv_mm + ".png"
-"TargetRect": {
-"x": colortv_md%
-"y": colortv_mf%
-"w": colortv_mg%
-"h": colortv_mh%
-}
-}
-colortv_ky.SetLayer(22, colortv_mn)
-colortv_ky.SetLayer(23, colortv_mk)
+colortv_kv.SetLayer(22, colortv_mk)
+colortv_kv.SetLayer(23, colortv_mh)
 end sub
-function colortv_kv()
+function colortv_ks()
 colortv_hn = CreateObject("roSGScreen")
 colortv_bo = CreateObject("roMessagePort")
 colortv_hn.setMessagePort(colortv_bo)
@@ -1493,27 +1487,27 @@ end if
 ColorTVSdkGetInstance().timerTick()
 end while
 end function
-function colortv_lg(colortv_lf)
-colortv_mo = true
-colortv_mp = 3000
-colortv_mq = CreateObject("roTimespan")
-colortv_mq.Mark()
+function colortv_ld(colortv_lc)
+colortv_ml = true
+colortv_mm = 3000
+colortv_mn = CreateObject("roTimespan")
+colortv_mn.Mark()
 colortv_bo = CreateObject("roMessagePort")
-colortv_mr = CreateObject("roURLTransfer")
-colortv_mr.SetCertificatesFile("common:/certs/ca-bundle.crt")
-colortv_mr.SetPort(colortv_bo)
-colortv_mr.SetURL(colortv_lf["url"])
-colortv_bd("~~~TRACKING: " + colortv_mr.GetURL())
-if colortv_mr.AsyncGetToString()
-colortv_dn = wait(colortv_mp, colortv_bo)
+colortv_mo = CreateObject("roURLTransfer")
+colortv_mo.SetCertificatesFile("common:/certs/ca-bundle.crt")
+colortv_mo.SetPort(colortv_bo)
+colortv_mo.SetURL(colortv_lc["url"])
+colortv_bd("~~~TRACKING: " + colortv_mo.GetURL())
+if colortv_mo.AsyncGetToString()
+colortv_dn = wait(colortv_mm, colortv_bo)
 if colortv_dn = invalid
-colortv_mr.AsyncCancel()
-colortv_mo = false
+colortv_mo.AsyncCancel()
+colortv_ml = false
 else
-colortv_bd("Req finished: " + colortv_mq.TotalMilliseconds().ToStr())
+colortv_bd("Req finished: " + colortv_mn.TotalMilliseconds().ToStr())
 colortv_bd(colortv_dn.GetResponseCode().ToStr())
 colortv_bd(colortv_dn.GetFailureReason())
 end if
 end if
-return colortv_mo
+return colortv_ml
 end function
