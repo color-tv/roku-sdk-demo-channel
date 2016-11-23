@@ -989,37 +989,47 @@ end sub
 function colortv_hd(colortv_dk as String, colortv_dn as Object)
 if type(colortv_dn) = "roSGNodeEvent" then
 if colortv_dn.getField() = "state" then
-if colortv_dn.getData() = "playing" and (m.colortv_iz = invalid or not m.colortv_iz.colortv_ja) then
+if colortv_dn.getData() = "playing" then
+if m.colortv_iz = invalid or not m.colortv_iz.colortv_ja then
 if m.colortv_iz = invalid then
 m.colortv_iz = {}
 end if
 m.colortv_iz.colortv_ja = true
 m.colortv_iz["positionSeconds"] = 0
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", m.colortv_iz)
+else
+m.colortv_jb = true
+end if
 else if colortv_dn.getData() = "stopped"  and m.colortv_iz <> invalid then
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STOPPED", m.colortv_iz)
 m.colortv_iz = invalid
+else if colortv_dn.getData() = "paused" then
+m.colortv_ft.colortv_au(colortv_dk, "VIDEO_PAUSED", m.colortv_iz)
 else if colortv_dn.getData() = "finished"
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_COMPLETED", m.colortv_iz)
 m.colortv_iz = invalid
 end if
 else if colortv_dn.getField() = "position" then
-colortv_jb% = colortv_dn.getData()
-if m.colortv_iz = invalid then
-m.colortv_iz = {}
+colortv_jc% = colortv_dn.getData()
+if m.colortv_jb <> invalid and m.colortv_jb then
+m.colortv_jb = false
+if m.colortv_iz <> invalid and colortv_jc% - m.colortv_iz["positionSeconds"] > 1 then
+m.colortv_iz["positionSeconds"] = colortv_jc%
 end if
-m.colortv_iz["positionSeconds"] = colortv_jb%
+m.colortv_ft.colortv_au(colortv_dk, "VIDEO_RESUMED", m.colortv_iz)
+end if
+m.colortv_iz["positionSeconds"] = colortv_jc%
 end if
 else if type(colortv_dn) = "roVideoPlayerEvent" or type(colortv_dn) = "roVideoScreenEvent" then
 if colortv_dn.isStreamStarted() then
-if m.colortv_jc = invalid or m.colortv_jc = false then
+if m.colortv_jb = invalid or m.colortv_jb = false then
 m.colortv_iz = { "positionSeconds": colortv_dn.getIndex() }
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STARTED", m.colortv_iz)
 end if
 else if colortv_dn.isPlaybackPosition() then
 m.colortv_iz = { "positionSeconds": colortv_dn.getIndex() }
-if m.colortv_jc <> invalid and m.colortv_jc then
-m.colortv_jc = false
+if m.colortv_jb <> invalid and m.colortv_jb then
+m.colortv_jb = false
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_RESUMED", m.colortv_iz)
 end if
 else if colortv_dn.isFullResult() then
@@ -1029,10 +1039,10 @@ else if colortv_dn.isPartialResult() and m.colortv_iz <> invalid then
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STOPPED", m.colortv_iz)
 m.colortv_iz = invalid
 else if colortv_dn.isPaused() then
-m.colortv_jc = true
+m.colortv_jb = true
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_PAUSED", m.colortv_iz)
 else if colortv_dn.isResumed() then
-m.colortv_jc = false
+m.colortv_jb = false
 m.colortv_ft.colortv_au(colortv_dk, "VIDEO_RESUMED", m.colortv_iz)
 end if
 else if type(colortv_dn) = "String" or type(colortv_dn) = "roString" then
@@ -1046,7 +1056,7 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.2.3"
+return "1.2.4"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000

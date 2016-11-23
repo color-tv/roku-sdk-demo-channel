@@ -5,9 +5,6 @@
     <children>
 		<Video
 		  id="musicvideos"
-		  width="1280"
-		  height="720"
-		  translation="[0,0]"
 		/>
     </children>
 </component>

@@ -113,6 +113,5 @@ function videoTrackingExample()
                 m.colorTvSdk.trackVideoEvents("videoId", msg)
             end if
         end if
-        m.timerTick()
     end while
 end function

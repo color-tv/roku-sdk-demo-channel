@@ -9,4 +9,5 @@ sub init()
   m.video = m.top.findNode("musicvideos")
   m.video.content = videoContent
   m.video.control = "play"
+  m.video.setFocus(true)
 end sub
