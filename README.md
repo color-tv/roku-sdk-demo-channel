@@ -172,8 +172,8 @@ sub contentRecommendationLoaded(placement as String)
     print "Content recommendation loaded for placement: " + placement
 end sub
 
-sub contentRecommendationClicked(placement as String, contentId as String)
-    print "Content recommendation has been clicked for placement: " + placement + " and content id: " + contentId
+sub contentRecommendationClicked(placement as String, contentData as Object)
+    print "Content recommendation has been clicked for placement: " + placement + " and content id: " + contentData.videoId + " and content url: " + contentData.videoUrl
 end sub
 
 sub contentRecommendationClosed(placement as String)

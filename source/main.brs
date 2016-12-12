@@ -73,8 +73,8 @@ sub contentRecommendationLoaded(placement as String)
     ColorTVSdkGetInstance().showContentRecommendation(placement)
 end sub
 
-sub contentRecommendationClicked(placement as String, contentId as String)
-    print "Content recommendation has been clicked for placement: " + placement + " and content id: " + contentId
+sub contentRecommendationClicked(placement as String, contentData as Object)
+    print "Content recommendation has been clicked for placement: " + placement + " and content id: " + contentData.videoId
 end sub
 
 sub contentRecommendationClosed(placement as String)

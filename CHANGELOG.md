@@ -1,5 +1,8 @@
 # ROKU SDK changelog
 
+# 1.3.0
+- Added video URL to content recommendation clicked callback
+
 # 1.2.4
 - Improved video tracking for SG video node videos
 

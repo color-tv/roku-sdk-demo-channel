@@ -940,7 +940,11 @@ if colortv_hy["clickTracker"] <> invalid then
 m.colortv_ft.colortv_p(colortv_hy["clickTracker"])
 end if
 if m.colortv_hf <> invalid and m.colortv_hf["contentRecommendationClicked"] <> invalid then
-m.colortv_hf["contentRecommendationClicked"](colortv_aw, colortv_hy["partnerVideoId"])
+colortv_do = {
+"videoId": colortv_hy["partnerVideoId"]
+"videoUrl": colortv_hy["url"]
+}
+m.colortv_hf["contentRecommendationClicked"](colortv_aw, colortv_do)
 end if
 exit while
 else if colortv_hp.getField() = "favourite" and colortv_hp.getData() <> "" then
@@ -1056,7 +1060,7 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.2.4"
+return "1.3.0"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000
