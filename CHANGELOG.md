@@ -1,5 +1,9 @@
 # ROKU SDK changelog
 
+# 1.3.1
+- UI improvements
+- Prepared the UI for scaling
+
 # 1.3.0
 - Added video URL to content recommendation clicked callback
 

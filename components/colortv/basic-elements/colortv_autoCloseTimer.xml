@@ -21,7 +21,10 @@
           font="font:SmallSystemFont"
           translation="[0,2]"
           horizAlign = "center"
-          vertAlign = "center" />
+          vertAlign = "center" 
+          >
+            <Font role="font" uri="pkg:/fonts/colortv/ABeeZee-Regular.otf" size="20" />
+        </Label>
         <Timer
           id="secondsTimer"
           repeat="true"

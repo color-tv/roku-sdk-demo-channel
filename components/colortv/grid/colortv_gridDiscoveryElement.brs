@@ -208,14 +208,14 @@ sub setGenres(genres)
         end for
     end if
 
-    m.spaceBetweenGenres = 12
+    m.spaceBetweenGenresDimension = 12
     
     if genres.count() > 1 then
-        totalViewWidth = 330
-        translationX = (totalViewWidth - calculateTotalGenresWidth(genres)) / 2
+        totalViewWidthDimension = 330
+        translationX = (totalViewWidthDimension - calculateTotalGenresWidth(genres)) / 2
     else
-        totalViewWidth = 300
-        translationX = (totalViewWidth - calculateTotalGenresWidth(genres))
+        totalViewWidthDimension = 300
+        translationX = (totalViewWidthDimension - calculateTotalGenresWidth(genres))
     end if
 
     if translationX < 0 then
@@ -230,7 +230,7 @@ sub setGenres(genres)
         tag.translation = [translationX, 0]
         tag.text = genres[i]
         translationX += calculateGenreViewWidth(genres[i].toStr())
-        translationX += m.spaceBetweenGenres
+        translationX += m.spaceBetweenGenresDimension
     end for
 end sub
 
@@ -239,15 +239,15 @@ function calculateTotalGenresWidth(genres as Object)
     for i = 0 to genres.count() - 1
         totalWidth += calculateGenreViewWidth(genres[i])
     end for
-    totalWidth += (genres.count() - 1) * m.spaceBetweenGenres
+    totalWidth += (genres.count() - 1) * m.spaceBetweenGenresDimension
     return totalWidth
 end function
 
 function calculateGenreViewWidth(genre as String) as Integer
-    approximateCharacterWidth = 7
-    paddingX = 3
-    roundedEgdesWidth = 30
-    retValue = approximateCharacterWidth * genre.len() + paddingX + roundedEgdesWidth
+    approximateCharacterWidthDimension = 7
+    paddingXDimension = 3
+    roundedEgdesWidthDimension = 30
+    retValue = approximateCharacterWidthDimension * genre.len() + paddingXDimension + roundedEgdesWidthDimension
     return retValue
 end function
 

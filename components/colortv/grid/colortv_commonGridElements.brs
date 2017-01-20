@@ -171,13 +171,16 @@ function setFeatured()
         slightlyRightAnimationInterpolator = m.top.findNode("moveSlightlyRightAnimationInterpolator")
         showNewDataAnimationInterpolator = m.top.findNode("showNewDataAnimationInterpolator")
         if isSimplifiedContentRecommendation() then
-            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-412,0]]
-            slightlyRightAnimationInterpolator.keyValue = [[0,0],[412,0]]
+            endXValueDimension = 412
+            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-endXValueDimension,0]]
+            slightlyRightAnimationInterpolator.keyValue = [[0,0],[endXValueDimension,0]]
         else
-            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-601,0]]
-            slightlyRightAnimationInterpolator.keyValue = [[0,0],[601,0]]
+            endXValueDimension = 601
+            slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-endXValueDimension,0]]
+            slightlyRightAnimationInterpolator.keyValue = [[0,0],[endXValueDimension,0]]
         end if
-        showNewDataAnimationInterpolator.keyValue = [[0,0],[-68,0]]
+        newDataEndXValueDimension = -68
+        showNewDataAnimationInterpolator.keyValue = [[0,0],[newDataEndXValueDimension,0]]
     end if
 end function
 
@@ -200,7 +203,7 @@ function removeGridElementsIfNecessary()
 end function
 
 function setGridAndAnimationDimensions()
-    margin = 29
+    marginDimension = 29
     gridElementWidth = getGridElementWidth()
     for i = 0 to m.gridElementViews.count() - 1
         if i MOD 2 = 1 then
@@ -208,33 +211,33 @@ function setGridAndAnimationDimensions()
         else
             row = i / 2
         end if
-        m.gridElementViews[i].translation = [(row + 1) * margin + row * gridElementWidth, m.gridElementViews[i].translation[1]]
+        m.gridElementViews[i].translation = [(row + 1) * marginDimension + row * gridElementWidth, m.gridElementViews[i].translation[1]]
         m.gridElementViews[i].startTranslation = m.gridElementViews[i].translation
     end for
     if isSimplifiedContentRecommendation() then
-        fullMove = 909
-        slightMove = 836
+        fullMoveDimension = 909
+        slightMoveDimension = 836
     else
-        fullMove = 669
-        slightMove = 116
+        fullMoveDimension = 669
+        slightMoveDimension = 116
     end if
     slightlyLeftAnimationInterpolator = m.top.findNode("moveSlightlyLeftAnimationInterpolator")
     slightlyRightAnimationInterpolator = m.top.findNode("moveSlightlyRightAnimationInterpolator")
     fullyLeftAnimationInterpolator = m.top.findNode("moveFullyLeftAnimationInterpolator")
     fullyRightAnimationInterpolator = m.top.findNode("moveFullyRightAnimationInterpolator")
-    slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-slightMove,0]]
-    slightlyRightAnimationInterpolator.keyValue = [[0,0],[slightMove,0]]
-    fullyLeftAnimationInterpolator.keyValue = [[0,0],[-fullMove,0]]
-    fullyRightAnimationInterpolator.keyValue = [[0,0],[fullMove,0]]
+    slightlyLeftAnimationInterpolator.keyValue = [[0,0],[-slightMoveDimension,0]]
+    slightlyRightAnimationInterpolator.keyValue = [[0,0],[slightMoveDimension,0]]
+    fullyLeftAnimationInterpolator.keyValue = [[0,0],[-fullMoveDimension,0]]
+    fullyRightAnimationInterpolator.keyValue = [[0,0],[fullMoveDimension,0]]
 end function
 
 function getGridElementWidth()
     if isSimplifiedContentRecommendation() then
-        elementWidth = 880
+        elementWidthDimension = 880
     else
-        elementWidth = 640
+        elementWidthDimension = 640
     end if
-    return elementWidth
+    return elementWidthDimension
 end function
 
 sub checkIfAlreadyLoaded()
@@ -520,9 +523,9 @@ end function
 
 function getLeftGridViewXTranslation() as Integer
     elementWidth = getGridElementWidth()
-    featuredAdWidth = 484
+    featuredAdWidthDimension = 484
     if m.featured <> invalid then
-        return -(elementWidth-featuredAdWidth)
+        return -(elementWidth-featuredAdWidthDimension)
     else
         return -elementWidth
     end if
@@ -541,7 +544,8 @@ sub updateRightGridViews(isUpperViewFocused)
             if m.currentlyFocusedView.currentlyShownElementIndex + addFactor > m.dataArray.count() - 1
                 return
             end if
-            element.translation = [1920,element.translation[1]]
+            screenWidthDimension = 1920
+            element.translation = [screenWidthDimension,element.translation[1]]
             element.startTranslation = element.translation
             element.currentlyShownElementIndex = m.currentlyFocusedView.currentlyShownElementIndex + addFactor
             element.contentModel = m.dataArray[element.currentlyShownElementIndex]

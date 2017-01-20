@@ -8,11 +8,14 @@ function onScreenshotsSet()
     m.indicatorsGroup = m.top.findNode("indicators")
     m.screenshotImagesGroup = m.top.findNode("screenshotsContainer")
 
+    totalIndicatorWidthDimension = 24
     if m.screenshotUrls.count() MOD 2 <> 0 then 
-        indicatorPosition = -4 - 24 * (m.screenshotUrls.count() - 1) / 2
+        indicatorPositionStartPaddingDimension = -4
+        indicatorPosition = indicatorPositionStartPaddingDimension - totalIndicatorWidthDimension * (m.screenshotUrls.count() - 1) / 2
         m.currentlyFocusedScreenshot = (m.screenshotUrls.count() - 1) / 2
     else
-        indicatorPosition = -16 - 24 * (m.screenshotUrls.count() - 2) / 2
+        indicatorPositionStartPaddingDimension = -16
+        indicatorPosition = indicatorPositionStartPaddingDimension - totalIndicatorWidthDimension * (m.screenshotUrls.count() - 2) / 2
         m.currentlyFocusedScreenshot = m.screenshotUrls.count() / 2
     end if
 
@@ -22,7 +25,7 @@ function onScreenshotsSet()
     for i=0 to m.screenshotUrls.count() - 1
         m.indicators[i] = m.indicatorsGroup.createChild("colortv_screenshotIndicator")
         m.indicators[i].translation = "[" + indicatorPosition.toStr() + ",0]"
-        indicatorPosition += 24
+        indicatorPosition += totalIndicatorWidthDimension
     end for
 
     setScreenshotImages()
@@ -32,11 +35,13 @@ function onScreenshotsSet()
 end function
 
 function setScreenshotImages()
-    screenshotPosition = 420 - 1320 * 2
+    screenshotGapDimension = 420
+    screenshotWidthDimension = 1320
+    screenshotPosition = screenshotGapDimension - screenshotWidthDimension * 2
     for i = 0 to 4
         m.screenshotImages[i] = m.screenshotImagesGroup.createChild("colortv_screenshotImage")
         m.screenshotImages[i].findNode("screenshot").translation = "[" + screenshotPosition.toStr() + ",0]"
-        screenshotPosition += 1320
+        screenshotPosition += screenshotWidthDimension
         m.screenshotImages[i].imageUri = m.screenshotUrls[getAbsoluteImageIndex(m.currentlyFocusedScreenshot + i - 2, m.screenshotUrls.count())]
         m.screenshotImages[i].ObserveField("loadStatus", "checkIfImagesAreAlreadyLoaded")
         m.screenshotImages[i].currentPosition = i

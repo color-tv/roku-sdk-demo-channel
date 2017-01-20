@@ -10,10 +10,12 @@ end sub
 
 function setToastText()
     m.toastlabel.text = m.top.text
-    toastwidth = 18 * Len(m.top.text)
+    characterWidthDimension = 18
+    toastwidth = characterWidthDimension * Len(m.top.text)
     m.toastbg.width = toastwidth
     m.toastlabel.width = toastwidth
-    toastx = 960 - toastwidth / 2
+    screenCenterDimension = 960
+    toastx = screenCenterDimension - toastwidth / 2
     m.toastbg.translation = "[" + Str(toastx) + "," + Str(m.toastbg.translation[1]) + "]"
 end function
 

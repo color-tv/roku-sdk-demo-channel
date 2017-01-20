@@ -5,12 +5,14 @@ end sub
 function setupView()
     if m.top.contentModel <> invalid then
         contentModel = m.top.contentModel
+        buttonLabelYTranslationDimension = -1
         if isIconType() then
             m.top.findNode("buttonIcon").uri = chooseCorrectIconDependingOnType(contentModel.actionType)
             m.top.findNode("buttonIcon").visible = true
-            m.top.findNode("buttonLabel").translation = [18,-1]
+            buttonLabelXTranslationDimension = 18
+            m.top.findNode("buttonLabel").translation = [buttonLabelXTranslationDimension,buttonLabelYTranslationDimension]
         else
-            m.top.findNode("buttonLabel").translation = [0,-1]
+            m.top.findNode("buttonLabel").translation = [0,buttonLabelYTranslationDimension]
             m.top.findNode("buttonIcon").visible = false
         end if
         m.top.findNode("buttonLabel").text = contentModel.text

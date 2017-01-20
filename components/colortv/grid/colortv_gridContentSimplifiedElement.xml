@@ -51,7 +51,7 @@
                       width="70"
                       height="15"
                       horizAlign = "center"
-                      translation="[68,433]"
+                      translation="[73,433]"
                       color="0x000000ff"
                       text="1h 48m"
                       >
@@ -60,12 +60,12 @@
                 </Group>
                 <Group
                   id="tagsContainer"
-                  translation="[530,35]" />
+                  translation="[850,35]" />
                 <Label
                   id="title"
                   width="575"
                   height="25"
-                  translation="[45,388]"
+                  translation="[45,395]"
                   color="0x4a4a4aff"
                   text="Rouge One: A Star Wars Story"
                   font="font:SmallBoldSystemFont" />

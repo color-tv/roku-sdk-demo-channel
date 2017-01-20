@@ -51,11 +51,13 @@ function currentPositionChanged()
 end function
 
 function moveScreenshotToLastPosition()
-    m.screenshot.translation = "[2640,0]"
+    screenshotTranslationXDimension = 2640
+    m.screenshot.translation = "[" + screenshotTranslationXDimension.toStr() + ",0]"
 end function
 
 function moveScreenshotToFirstPosition()
-    m.screenshot.translation = "[-2640,0]"
+    screenshotTranslationXDimension = 2640
+    m.screenshot.translation = "[-" + screenshotTranslationXDimension.toStr() + ",0]"
 end function
 
 function chooseRightAnimationToPerform()

@@ -169,7 +169,13 @@ function setContentRecommendationModel(contentModel)
     if contentModel.thumbnailUrl <> invalid then
         m.backgroundImage.uri = contentModel.thumbnailUrl
     end if
-    m.durationLabel.text = getDurationString(contentModel.durationInMinutes)
+    duration = 0
+    if contentModel.durationInSeconds <> invalid then
+        duration = contentModel.durationInSeconds
+    else
+        duration = contentModel.durationInMinutes * 60
+    end if
+    m.durationLabel.text = getDurationString(duration)
     m.titleLabel.text = box(contentModel.title).trim()
     if contentModel.description <> invalid then
         m.descriptionLabel.text = box(contentModel.description).trim()
@@ -234,14 +240,14 @@ sub setGenres(genres)
         end for
     end if
 
-    m.spaceBetweenGenres = 12
+    m.spaceBetweenGenresDimension = 12
     
     if genres.count() > 1 then
-        totalViewWidth = 330
-        translationX = (totalViewWidth - calculateTotalGenresWidth(genres)) / 2
+        totalViewWidthDimension = 330
+        translationX = (totalViewWidthDimension - calculateTotalGenresWidth(genres)) / 2
     else
-        totalViewWidth = 300
-        translationX = (totalViewWidth - calculateTotalGenresWidth(genres))
+        totalViewWidthDimension = 300
+        translationX = (totalViewWidthDimension - calculateTotalGenresWidth(genres))
     end if
 
     if translationX < 0 then
@@ -256,7 +262,7 @@ sub setGenres(genres)
         tag.translation = [translationX, 0]
         tag.text = genres[i]
         translationX += calculateGenreViewWidth(genres[i].toStr())
-        translationX += m.spaceBetweenGenres
+        translationX += m.spaceBetweenGenresDimension
     end for
 end sub
 
@@ -265,28 +271,33 @@ function calculateTotalGenresWidth(genres as Object)
     for i = 0 to genres.count() - 1
         totalWidth += calculateGenreViewWidth(genres[i])
     end for
-    totalWidth += (genres.count() - 1) * m.spaceBetweenGenres
+    totalWidth += (genres.count() - 1) * m.spaceBetweenGenresDimension
     return totalWidth
 end function
 
 function calculateGenreViewWidth(genre as String) as Integer
-    approximateCharacterWidth = 7
-    paddingX = 3
-    roundedEgdesWidth = 30
-    retValue = approximateCharacterWidth * genre.len() + paddingX + roundedEgdesWidth
+    approximateCharacterWidthDimension = 7
+    paddingXDimension = 3
+    roundedEgdesWidthDimension = 30
+    retValue = approximateCharacterWidthDimension * genre.len() + paddingXDimension + roundedEgdesWidthDimension
     return retValue
 end function
 
 function getDurationString(duration as Integer) as String
-    if duration < 60 then
-        return duration.toStr() + "m"
-    else
-        hours = 0
-        minutes = duration
-        while minutes > 60
-            minutes -= 60
-            hours++
-        end while
-        return hours.toStr() + "h " + minutes.toStr() + "m"
+    if duration = 0 then
+        return ""
     end if
+    hours = fix(duration / 60 / 60)
+    minutes = fix((duration - hours * 60 * 60) / 60)
+    seconds = duration - hours * 60 * 60 - minutes * 60
+    if hours < 10 then
+        hours = "0" + hours.toStr()
+    end if
+    if minutes < 10 then
+        minutes = "0" + minutes.toStr()
+    end if
+    if seconds < 10 then
+        seconds = "0" + seconds.toStr()
+    end if
+    return hours.toStr() + ":" + minutes.toStr() + ":" + seconds.toStr()
 end function

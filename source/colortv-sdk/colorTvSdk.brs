@@ -989,8 +989,12 @@ end if
 end if
 m.timerTick()
 end while
+colortv_hn.close()
 end sub
-function colortv_hd(colortv_dk as String, colortv_dn as Object)
+sub colortv_hd(colortv_dk as String, colortv_dn as Object)
+if colortv_dk = invalid then
+return
+end if
 if type(colortv_dn) = "roSGNodeEvent" then
 if colortv_dn.getField() = "state" then
 if colortv_dn.getData() = "playing" then
@@ -1055,12 +1059,12 @@ m.colortv_ft.colortv_au(colortv_dk, "VIDEO_STOPPED", m.colortv_iz)
 m.colortv_iz = invalid
 end if
 end if
-end function
+end sub
 function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.3.0"
+return "1.3.1"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000

@@ -1,0 +1,134 @@
+<component name="colortv_simplifiedContentTag" extends="Group">
+  
+    <interface>
+        <field id="text" type="string" />
+        <field id="focused" type="boolean" />
+        <field id="colors" type="colorarray" />
+        <field id="viewWidth" type="int" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/basic-elements/colortv_simplifiedContentTag.brs" />
+
+    <children>
+        <Poster
+          id="circleLeft"
+          width="25"
+          height="50"
+          blendColor="0x4a4a4aFF"
+          uri="pkg:/images/colortv/color_tv_tag_simplified_circle.png" />
+        <Poster
+          id="circleRight"
+          width="25"
+          height="50"
+          blendColor="0x4a4a4aFF"
+          uri="pkg:/images/colortv/color_tv_tag_simplified_circle_right.png" />
+        <Poster
+          id="tagBackground"
+          width="67"
+          height="50"
+          translation="[25,0]"
+          blendColor="0x4a4a4aFF"
+          uri="pkg:/images/colortv/color_tv_tag_simplified_background.png"
+          loadDisplayMode="scaleToFill" />
+        <Label
+          id="tagLabel"
+          wrap="false" 
+          color="0x4a4a4aFF" 
+          horizAlign = "center"
+          vertAlign = "center"
+          height="50"
+          width="67"
+          >
+            <Font role="font" uri="pkg:/fonts/colortv/ABeeZee-Regular.otf" size="20" />
+        </Label>
+        
+        <Animation
+          id="backgroundFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0x4a4a4aFF, 0xFFFFFFFF]"
+              fieldToInterp="tagBackground.blendColor" />
+        </Animation>
+        <Animation
+          id="backgroundUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0xFFFFFFFF, 0x4a4a4aFF]"
+              fieldToInterp="tagBackground.blendColor" />
+        </Animation>
+        <Animation
+          id="circleLeftFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0x4a4a4aFF, 0xFFFFFFFF]"
+              fieldToInterp="circleLeft.blendColor" />
+        </Animation>
+        <Animation
+          id="circleLeftUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0xFFFFFFFF, 0x4a4a4aFF]"
+              fieldToInterp="circleLeft.blendColor" />
+        </Animation>
+        <Animation
+          id="circleRightFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0x4a4a4aFF, 0xFFFFFFFF]"
+              fieldToInterp="circleRight.blendColor" />
+        </Animation>
+        <Animation
+          id="circleRightUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0xFFFFFFFF, 0x4a4a4aFF]"
+              fieldToInterp="circleRight.blendColor" />
+        </Animation>
+        <Animation
+          id="labelUnfocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"    
+              keyValue="[ 0xFFFFFFFF, 0x4a4a4aFF ]"
+              fieldToInterp="tagLabel.color" />
+        </Animation>
+        <Animation
+          id="labelFocusedAnimation"
+          duration="0.2"  
+          repeat="false"
+          easeFunction="linear"
+          >
+            <ColorFieldInterpolator
+              key="[0.0, 1.0]"
+              keyValue="[0x4a4a4aFF, 0xFFFFFFFF]"
+              fieldToInterp="tagLabel.color" />
+        </Animation>
+    </children>
+</component>

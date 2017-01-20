@@ -7,6 +7,10 @@ sub init()
     m.closebutton = m.top.findNode("closeButton")
     m.closebuttonbg = m.top.findNode("closeButtonBg")
     m.autoCloseTimer = m.top.findNode("autoCloseTimer")
+    m.shakeActionButtonAnimation = m.top.findNode("shakeActionButtonAnimation")
+    m.shakeActionButtonAnimation.ObserveField("state", "shakeRepeat")
+    m.shakeRepeatTimer = m.top.findNode("shakeRepeatTimer")
+    m.shakeRepeatTimer.ObserveField("fire", "startShakeAnimation")
 
     m.currentlyfocused = "slider"
     m.engagementFormShown = false
@@ -15,8 +19,25 @@ sub init()
     m.top.findNode("impressionTimer").control = "start"
     m.autoCloseTimer.ObserveField("closeAd", "exitView")
     m.top.ObserveField("cancelAutoCloseTimer", "cancelAutoCloseTimer")
-    m.top.ObserveField("screenshotsLoaded", "closeProgressSpinner")
+    m.top.ObserveField("screenshotsLoaded", "presentView")
 End sub
+
+function presentView()
+    closeProgressSpinner()
+    startShakeAnimation()
+end function
+
+function startShakeAnimation()
+    if not m.actionButton.focused then
+        m.shakeActionButtonAnimation.control = "start"
+    end if
+end function
+
+function shakeRepeat()
+    if m.shakeActionButtonAnimation.state = "stopped" then
+        m.shakeRepeatTimer.control = "start"
+    end if
+end function
 
 function onKeyEvent(key as String, press as Boolean) as Boolean    
     keyIntercepted = isOneOfTheButtonsToIntercept(key)
@@ -61,18 +82,27 @@ end function
 function changeButtonFocus()
     if m.currentlyfocused = "actionButton" then
         m.closebutton.focused = true
-        m.actionbutton.focused = false
+        focusActionButton(false)
         m.currentlyfocused = "closeButton"
     else
-        m.actionbutton.focused = true
+        focusActionButton(true)
         m.closebutton.focused = false
         m.currentlyfocused = "actionButton"
     end if
 end function
 
+function focusActionButton(focused)
+    m.actionbutton.focused = focused
+    if focused then
+        m.shakeRepeatTimer.control = "stop"
+    else
+        m.shakeRepeatTimer.control = "start"
+    end if
+end function
+
 function setFocusOnActionButton()
     if m.currentlyfocused = "slider" then
-        m.actionbutton.focused = true
+        focusActionButton(true)
         m.closebutton.focused = false
         m.currentlyfocused = "actionButton"
         m.actionbutton.setFocus(true)
@@ -82,7 +112,7 @@ end function
 function setFocusOnScreenshotSlider()
     if (m.currentlyfocused = "actionButton" or m.currentlyfocused = "closeButton") and not m.engagementFormShown then
         m.currentlyfocused = "slider"
-        m.actionbutton.focused = false
+        focusActionButton(false)
         m.closebutton.focused = false
         m.screenshotSlider.setFocus(true)
     end if
@@ -142,13 +172,17 @@ function setupActionButton()
     m.actionButton.buttonClickedColor = colorFromRGB(actionButton.backgroundRed - 50, actionButton.backgroundGreen - 50, actionButton.backgroundBlue - 50)
     m.actionButton.buttonLabelColor = colorFromRGB(actionButton.textRed, actionButton.textGreen, actionButton.textBlue)
 
-    actionButtonBackground.width = 437
-    actionButtonBackground.height = 95
+    actionButtonBackgroundWidthDimension = 437
+    actionButtonBackgroundHeightDimension = 95
+    actionButtonBackground.width = actionButtonBackgroundWidthDimension
+    actionButtonBackground.height = actionButtonBackgroundHeightDimension
 
-    actionButtonLabel.width = 437
-    actionButtonLabel.height = 95
+    actionButtonLabel.width = actionButtonBackgroundWidthDimension
+    actionButtonLabel.height = actionButtonBackgroundHeightDimension
 
-    actionButtonIcon.translation = "[40,28]"
+    actionButtonIconXTranslationDimension = 40
+    actionButtonIconYTranslationDimension = 28
+    actionButtonIcon.translation = "[" + actionButtonIconXTranslationDimension.toStr() + "," + actionButtonIconYTranslationDimension.toStr() + "]"
 end function
 
 function setupScreenshotSlider()

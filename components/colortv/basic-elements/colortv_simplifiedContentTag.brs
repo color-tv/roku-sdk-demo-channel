@@ -22,13 +22,13 @@ end sub
 function setLabelText()
     m.tagLabel.text = m.top.text
     textLength = m.top.text.len()
-    containerMaxLenghtDimension = 300
-    approximateCharacterWidthDimension = 7
-    paddingXDimension = 3
-    roundedEgdesWidthDimension = 30
+    containerMaxLenghtDimension = 500
+    approximateCharacterWidthDimension = 10
+    paddingXDimension = 5
+    roundedEgdesWidthDimension = 50
     if m.top.translation[0] + approximateCharacterWidthDimension * textLength + paddingXDimension > containerMaxLenghtDimension then
         m.background.width = containerMaxLenghtDimension - m.top.translation[0]
-        paddingDimension = 10
+        paddingDimension = 15
         m.tagLabel.width = m.background.width + paddingDimension
         m.tagLabel.translation = [paddingDimension,0]
     else
@@ -36,11 +36,12 @@ function setLabelText()
         m.tagLabel.width = m.background.width + roundedEgdesWidthDimension
     end if
 
-    oneRoundedEdgeWidthDimension = 14
+    oneRoundedEdgeWidthDimension = 23
     circleTranslationX = m.background.width + oneRoundedEdgeWidthDimension
     circleTranslationY = m.circleRight.translation[1]
     circleTranslation = [circleTranslationX, circleTranslationY]
     m.circleRight.translation = circleTranslation
+    m.top.viewWidth = m.background.width + 2 * oneRoundedEdgeWidthDimension
 end function
 
 function focusTags()
