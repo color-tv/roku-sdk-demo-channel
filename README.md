@@ -242,7 +242,7 @@ colorTvSdk.trackVideoEvents("videoId", msg)
 
 You can use this function with both Scene Graph Video Node messages and `roVideoPlayer` object.
 
-##### Usage with Scene Graph Video Node:
+##### Usage with Scene Graph Video Node
 
 ```
 screen = CreateObject("roSGScreen")
@@ -268,13 +268,13 @@ while true
             colorTvSdk.trackVideoEvents("videoId", msg)
         end if
     end if
-    m.timerTick()
+    colorTvSdk.timerTick()
 end while
 ```
 
 where the `colorTvSdk.trackVideoEvents("videoId", "interrupted")` line is there to notify video being interrupted with the "back" button.
 
-##### Usage with `roVideoPlayer` object:
+##### Usage with `roVideoPlayer` object
 
 ```
 canvas = prepareCanvas()
@@ -300,13 +300,170 @@ while true
             exit while
         end if
     end if
-    ColorTVSdkGetInstance().timerTick()
+    colorTvSdk.timerTick()
 end while
 ```
 
 where the `colorTvSdk.trackVideoEvents("videoId", "interrupted")` line is there to notify video being interrupted with the "back" button.
 
 The `player.SetPositionNotificationPeriod(1)` is very important, because this will notify the SDK of every second of the video that has passed and will allow to determine the watched lenght of the video.
+
+### UpNext
+
+If you want to receive status updates about UpNext create the following callback functions:
+
+```
+sub upNextLoaded()
+    print "UpNext has been loaded"
+end sub
+
+sub upNextClicked(contentData as Object)
+    print "UpNext has been clicked for video id: " + contentData.videoId + " + and content url: " + contentData.videoUrl
+end sub
+
+sub upNextError(error as Object)
+    print "UpNext error occured with error code: " + error.errorCode + " and error message: " + error.errorMessage
+end sub
+```
+
+And then register those callbacks by invoking:
+
+```
+upNextCallbacks = {
+    upNextLoaded: upNextLoaded
+    upNextClicked: upNextClicked
+    upNextError: upNextError
+}
+colorTvSdk.registerUpNextCallbacks(upNextCallbacks)
+```
+
+If UpNext isn't cancelled by the user, you will be notified when the video ends with the video ID and video URL through the `upNextClicked` callback function.
+
+##### Usage with Scene Graph Video Node
+
+To load UpNext for a certain video, you should use the `colorTvSdk.loadUpNextScenegraph(scene.findNode("VideoNodeId"), port, 15, "videoId")`, where the first argument is a reference to the SceneGraph Video node, the second one is the message port that the video uses to send status callbacks to, the third argument is the number of seconds before the end of the video when UpNext should be shown, and the last one is the video ID of the currently watched video.
+
+Additionally you should also capture UpNext events and pass them to the SDK by calling:
+
+```
+if msg.getNode() = "colortv_up_next"
+    colorTvSdk.upNextEventOccurred(msg)
+end if
+```
+
+in your main message loop.
+
+You should always combine UpNext with video tracking, because it relies on the current position within the video and is automatically shown by the SDK.
+
+The complete integration should look like the following:
+
+```
+screen = CreateObject("roSGScreen")
+port = CreateObject("roMessagePort")
+screen.setMessagePort(port)
+
+scene = screen.CreateScene("testVideoScene")
+screen.show()
+
+scene.findNode("musicvideos").observeField("state", port)
+scene.findNode("musicvideos").observeField("position", port)
+
+upNextCallbacks = {
+    upNextLoaded: upNextLoaded
+    upNextClicked: upNextClicked
+    upNextError: upNextError
+}
+colorTvSdk = ColorTvSdk("your_app_id_from_dashboard")
+colorTvSdk.registerUpNextCallbacks(upNextCallbacks)
+
+colorTvSdk.loadUpNextScenegraph(scene.findNode("musicvideos"), port, 15, "videoId")
+while true
+    msg = wait(GetColorTVSDKTimerInterval(), port)
+    msgType = type(msg)
+    if msgType = "roSGScreenEvent"
+        if msg.isScreenClosed() then
+            colorTvSdk.trackVideoEvents("videoId", "interrupted")
+            exit while
+        end if
+    else if msgType = "roSGNodeEvent"
+        if msg.getNode() = "musicvideos"
+            colorTvSdk.trackVideoEvents("videoId", msg)
+        else if msg.getNode() = "colortv_up_next"
+            colorTvSdk.upNextEventOccurred(msg)
+        end if
+    end if
+end while
+```
+
+##### Usage with `roVideoPlayer` object
+
+To load UpNext for a certain video, you should use the `colorTvSdk.loadUpNextCanvas(player, canvas, port, 15, "videoId")`, where the first argument is a reference to the `roVideoPlayer` object, the second is a reference to the `roImageCanvas` object, on which the `roVideoPlayer` is displayed, the third one is the message port that the video uses to send status callbacks to, the fourth argument is the number of seconds before the end of the video when UpNext should be shown, and the last one is the video ID of the currently watched video.
+
+Additionally to enable cancelling UpNext you should include the `colorTvSdk.shouldCloseUpNextCanvas(msg)` method call in the main event loop when `roImageCanvasEvent` comes up like so:
+
+```
+if type(msg) = "roImageCanvasEvent" and msg.isRemoteKeyPressed()
+    if colorTvSdk.shouldCloseUpNextCanvas(msg) then
+    else if msg.GetIndex() = 2 or msg.GetIndex() = 0 then ' BACK or UP
+        exit while
+    end if
+end if
+```
+
+Notice there's an empty if statement here. It will return `true` if UpNext is shown and it will close it. It will return `false` otherwise and go to the next condition.
+
+You should always combine UpNext with video tracking, because it relies on the current position within the video and is automatically shown by the SDK.
+
+The complete integration should look like the following:
+
+```
+port = CreateObject("roMessagePort")
+
+canvas = CreateObject("roImageCanvas")
+canvas.SetMessagePort(port)
+canvas.SetLayer(1, {"color": "#000000"})
+canvas.Show()
+
+di = CreateObject("roDeviceInfo")
+player = CreateObject("roVideoPlayer")
+player.SetMessagePort(port)
+player.SetDestinationRect({h:di.GetDisplaySize().h,w:di.GetDisplaySize().w,x:0,y:0})
+player.SetPositionNotificationPeriod(1)
+videoContent = sampleVideoContent()
+player.AddContent(videoContent)
+player.Play()
+
+upNextCallbacks = {
+    upNextLoaded: upNextLoaded
+    upNextClicked: upNextClicked
+    upNextError: upNextError
+}
+colorTvSdk = ColorTvSdk("your_app_id_from_dashboard")
+colorTvSdk.registerUpNextCallbacks(upNextCallbacks)
+
+while true
+    msg = wait(GetColorTVSDKTimerInterval(), port)
+    msgType = type(msg)
+    if type(msg) = "roVideoPlayerEvent"
+        colorTvSdk.trackVideoEvents("videoId", msg)
+        if msg.isStatusMessage() and msg.GetMessage() = "start of play"
+            canvas.ClearLayer(2)
+            canvas.SetLayer(1, {"color": "#00000000", "CompositionMode": "Source"})
+            colorTvSdk.loadUpNextCanvas(player, canvas, port, 15, "videoId")
+        end if
+    else if type(msg) = "roImageCanvasEvent" and msg.isRemoteKeyPressed()
+        if colorTvSdk.shouldCloseUpNextCanvas(msg) then
+        else if msg.GetIndex() = 2 or msg.GetIndex() = 0 then ' BACK or UP
+            exit while
+        end if
+    end if
+    ColorTVSdkGetInstance().timerTick()
+end while
+```
+
+##### Samples
+
+The samples of correct UpNext integration alongside Content Recommendation can be found in the `sources/main.brs` file in `contentRecommendationSceneGraphExample()` and `contentRecommendationCanvasVideoExample()` functions.
 
 ### User profile
 

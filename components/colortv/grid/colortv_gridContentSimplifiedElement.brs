@@ -47,13 +47,10 @@ function setContentRecommendationModel(contentModel)
     setGenres(contentModel.genres)
     if contentModel.thumbnailUrl <> invalid then
         m.backgroundImage.uri = contentModel.thumbnailUrl
-    end if
-    duration = 0
-    if contentModel.durationInSeconds <> invalid then
-        duration = contentModel.durationInSeconds
     else
-        duration = contentModel.durationInMinutes * 60
+        m.backgroundImage.uri = "pkg:/images/colortv/color_tv_grid_bg_placeholder.jpg"
     end if
+    duration = contentModel.durationInMinutes * 60
     if duration = 0 then
         m.clockImage.visible = false
     end if
@@ -87,6 +84,7 @@ sub setGenres(genres)
 
     translationX = 0
 
+
     for i = 0 to genres.count() - 1
         tag = createObject("RoSGNode","colortv_simplifiedContentTag")
         m.tags.push(tag)
@@ -94,8 +92,13 @@ sub setGenres(genres)
         container.appendChild(tag)
         tag.text = genres[i]
     end for
+
+    reversedColors = m.top.textColor
+    reversedColors.reverse()
+
     for i = 0 to genres.count() - 1
         tag = m.tags[i]
+        tag.colors = reversedColors
         translationX -= tag.viewWidth
         tag.translation = [translationX, 0]
         translationX -= m.spaceBetweenGenresDimension

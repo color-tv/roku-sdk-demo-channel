@@ -1,0 +1,64 @@
+<component name="colortv_up_next" extends="Group">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/up-next/colortv_up_next.brs" />
+
+    <interface>
+        <field id="show" type="boolean" value="false" />
+        <field id="cancelled" type="boolean" value="false" />
+        <field id="videoMoved" type="boolean" value="false" />
+        <field id="timeBeforeVideoEnds" type="integer" />
+        <field id="dataModel" type="assocarray" />
+        <field id="videoNodeReference" type="node" />
+    </interface>
+
+    <children>
+        <Group
+          id="viewContainer"
+          visible="false"
+          translation="[960, 894]"
+        >
+            <Rectangle
+              width="4"
+              height="154"
+              color="0xCC0000FF" />
+            
+            <Rectangle
+              translation="[4, 0]"
+              width="626"
+              height="154"
+              color="0x000000FF"
+            >
+                <Label
+                  id="title"
+                  width="505"
+                  translation="[24, 32]"
+                  wrap="false"
+                  >
+                    <Font role="font" uri="pkg:/fonts/colortv/ABeeZee-Regular.otf" size="26" />
+                </Label>
+                <Label
+                  id="description"
+                  width="512"
+                  maxLines="3"
+                  lineSpacing="0"
+                  wrap="true"
+                  translation="[24, 69]"
+                  >
+                    <Font role="font" uri="pkg:/fonts/colortv/ABeeZee-Regular.otf" size="17" />
+                </Label>
+                <colortv_autoCloseTimer 
+                  id="autoplayTimer"
+                  width="50"
+                  height="50"
+                  duration="10"
+                  translation="[555,25]" />
+            </Rectangle>
+
+            <Poster
+              id="thumbnail"
+              width="308"
+              height="154"
+              translation="[629, 0]" />
+        </Group>
+    </children>
+</component>

@@ -39,7 +39,7 @@ function shakeRepeat()
     end if
 end function
 
-function onKeyEvent(key as String, press as Boolean) as Boolean    
+function onKeyEvent(key as String, press as Boolean) as Boolean
     keyIntercepted = isOneOfTheButtonsToIntercept(key)
 
     if key = "left" or key = "right" then

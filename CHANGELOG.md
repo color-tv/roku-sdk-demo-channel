@@ -1,5 +1,9 @@
 # ROKU SDK changelog
 
+# 1.4.0
+- Added UpNext functionality
+- Small bugfixes and improvements
+
 # 1.3.1
 - UI improvements
 - Prepared the UI for scaling

@@ -3,8 +3,8 @@
     <script type="text/brightscript" uri="pkg:/components/demo/testVideoScene.brs" />
 
     <children>
-		<Video
-		  id="musicvideos"
-		/>
+        <Video
+          id="musicvideos"
+        />
     </children>
 </component>

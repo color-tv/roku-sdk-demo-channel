@@ -229,6 +229,7 @@ sub setGenres(genres)
         container.appendChild(tag)
         tag.translation = [translationX, 0]
         tag.text = genres[i]
+        tag.colors = m.top.textColor
         translationX += calculateGenreViewWidth(genres[i].toStr())
         translationX += m.spaceBetweenGenresDimension
     end for

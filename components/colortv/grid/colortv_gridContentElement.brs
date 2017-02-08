@@ -168,13 +168,10 @@ function setContentRecommendationModel(contentModel)
     m.logoImage.uri = contentModel.logoUrl
     if contentModel.thumbnailUrl <> invalid then
         m.backgroundImage.uri = contentModel.thumbnailUrl
-    end if
-    duration = 0
-    if contentModel.durationInSeconds <> invalid then
-        duration = contentModel.durationInSeconds
     else
-        duration = contentModel.durationInMinutes * 60
+        m.backgroundImage.uri = "pkg:/images/colortv/color_tv_grid_bg_placeholder.jpg"
     end if
+    duration = contentModel.durationInMinutes * 60
     m.durationLabel.text = getDurationString(duration)
     m.titleLabel.text = box(contentModel.title).trim()
     if contentModel.description <> invalid then
@@ -261,6 +258,7 @@ sub setGenres(genres)
         container.appendChild(tag)
         tag.translation = [translationX, 0]
         tag.text = genres[i]
+        tag.colors = m.top.textColor
         translationX += calculateGenreViewWidth(genres[i].toStr())
         translationX += m.spaceBetweenGenresDimension
     end for
