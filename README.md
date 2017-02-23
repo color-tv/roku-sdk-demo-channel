@@ -10,7 +10,7 @@ Download this repository as a zip file, extract it and merge the components, fon
 
 ## Using the ColorTV SDK
 
-Initialize the ColorTV SDK by invoking the following method in your main.brs:
+Initialize the ColorTV SDK by invoking the following function in your main.brs:
 
 ```
 colorTvSdk = ColorTvSdk("your_app_id_from_dashboard")
@@ -138,7 +138,7 @@ adCallbacks = {
 colorTvSdk.registerAdCallbacks(adCallbacks)
 ```
 
-To load an ad for a certain placement, you need to call the following method:
+To load an ad for a certain placement, you need to call the following function:
 
 ```
 colorTvSdk.loadAd("Placement")
@@ -152,7 +152,7 @@ In order to show an ad, call the following function:
 colorTvSdk.showAd("Placement")
 ```
 
-Calling this method will show an ad for the placement you pass. Make sure you get the `adLoaded` callback first, otherwise the ad won't be played.
+Calling this function will show an ad for the placement you pass. Make sure you get the `adLoaded` callback first, otherwise the ad won't be played.
 
 We recommend to show ads in the `adLoaded` callback like so:
 
@@ -197,9 +197,9 @@ contentRecommendationCallbacks = {
 colorTvSdk.registerContentRecommendationCallbacks(contentRecommendationCallbacks)
 ```
 
-After the user clicks on one of the content recommendation items, you will be notified with the video ID they have clicked on through the `contentRecommendationClicked` callback function.
+After the user clicks on one of the content recommendation items, you will be notified with the video ID they have clicked on through the `contentRecommendationClicked` callback function. Additionaly you can specify extra data to be passed through this function in `contentData.videoParams` associative array.
 
-To load content recommendation for a certain placement, you need to call the following method:
+To load content recommendation for a certain placement, you need to call the following function:
 
 ```
 colorTvSdk.loadContentRecommendation("Placement")
@@ -209,7 +209,7 @@ colorTvSdk.loadContentRecommendation("Placement")
 >
 >    You can use the same placements as for ads listed above.
 
-You can also add another argument to this method, a previously watched video id, which will make the recommendation more accurate:
+You can also add another argument to this function, a previously watched video id, which will make the recommendation more accurate:
 
 ```
 colorTvSdk.loadContentRecommendation("Placement", "previousVideoId")
@@ -221,7 +221,7 @@ In order to show content recommendation, call the following function:
 colorTvSdk.showContentRecommendation("Placement")
 ```
 
-Calling this method will show content recommendation for the placement you pass. Make sure you get the `contentRecommendationLoaded` callback first, otherwise the content won't be played.
+Calling this function will show content recommendation for the placement you pass. Make sure you get the `contentRecommendationLoaded` callback first, otherwise the content won't be played.
 
 We recommend to show content recommendation in the `contentRecommendationLoaded` callback function like so:
 
@@ -231,6 +231,17 @@ sub contentRecommendationLoaded(placement as String)
     ColorTVSdkGetInstance().showContentRecommendation(placement)
 end sub
 ```
+
+#### Custom font
+
+You can specify a custom font to be used with content recommendation. To do that, prepare both a regular and bold font and put them somewhere into your channel's folder. To use them invoke the following functions:
+
+```
+colorTvSdk.setContentRecommendationRegularCustomFont("pkg:/fonts/regular.otf")
+colorTvSdk.setContentRecommendationBoldCustomFont("pkg:/fonts/bold.otf")
+```
+
+The bold font is used as a title and the regular font is used elswehere.
 
 #### Video tracking
 
@@ -337,7 +348,7 @@ upNextCallbacks = {
 colorTvSdk.registerUpNextCallbacks(upNextCallbacks)
 ```
 
-If UpNext isn't cancelled by the user, you will be notified when the video ends with the video ID and video URL through the `upNextClicked` callback function.
+If UpNext isn't cancelled by the user, you will be notified when the video ends with the video ID and video URL through the `upNextClicked` callback function. Additionaly you can specify extra data to be passed through this function in `contentData.videoParams` associative array.
 
 ##### Usage with Scene Graph Video Node
 
@@ -399,7 +410,7 @@ end while
 
 To load UpNext for a certain video, you should use the `colorTvSdk.loadUpNextCanvas(player, canvas, port, 15, "videoId")`, where the first argument is a reference to the `roVideoPlayer` object, the second is a reference to the `roImageCanvas` object, on which the `roVideoPlayer` is displayed, the third one is the message port that the video uses to send status callbacks to, the fourth argument is the number of seconds before the end of the video when UpNext should be shown, and the last one is the video ID of the currently watched video.
 
-Additionally to enable cancelling UpNext you should include the `colorTvSdk.shouldCloseUpNextCanvas(msg)` method call in the main event loop when `roImageCanvasEvent` comes up like so:
+Additionally to enable cancelling UpNext you should include the `colorTvSdk.shouldCloseUpNextCanvas(msg)` function call in the main event loop when `roImageCanvasEvent` comes up like so:
 
 ```
 if type(msg) = "roImageCanvasEvent" and msg.isRemoteKeyPressed()

@@ -108,7 +108,6 @@
                   height="25"
                   translation="[36,70]"
                   color="0x4a4a4aff"
-                  text="Rouge One: A Star Wars Story"
                   font="font:SmallBoldSystemFont" />
                 <Label
                   id="description"

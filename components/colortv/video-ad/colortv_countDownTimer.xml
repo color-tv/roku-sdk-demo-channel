@@ -1,0 +1,86 @@
+<component name="colortv_countDownTimer" extends="Group">
+  
+    <interface>
+        <field id="duration" type="int" />
+        <field id="currentPosition" type="int" />
+        <field id="startTimer" type="bool" />
+        <field id="width" type="int" />
+        <field id="height" type="int" />
+        <field id="closeAd" type="bool" />
+        <field id="hideTimer" type="bool" />
+        <field id="visibility" type="bool" />
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/video-ad/colortv_countDownTimer.brs" />
+
+    <children>
+        <Poster 
+          id="autoCloseTimerBg"
+          uri="pkg:/images/colortv/timer/colortv_timer_1.png" />
+        <Label 
+          id="autoCloseLabel"
+          color="0xFFFFFFFF"
+          font="font:SmallSystemFont"
+          translation="[0,2]"
+          horizAlign = "center"
+          vertAlign = "center" 
+          >
+            <Font role="font" uri="pkg:/fonts/colortv/ABeeZee-Regular.otf" size="20" />
+        </Label>
+        <Timer
+          id="lastSecondTimer"
+          repeat="false"
+          duration="1" />
+        <Group
+          id="cachedImages">
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_1.png"
+            translation="[100, 0]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_2.png"
+            translation="[100, 1]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_3.png"
+            translation="[100, 2]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_4.png"
+            translation="[100, 3]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_5.png"
+            translation="[100, 4]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_6.png"
+            translation="[100, 5]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_7.png"
+            translation="[100, 6]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_8.png"
+            translation="[100, 7]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_9.png"
+            translation="[100, 8]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_10.png"
+            translation="[100, 9]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_11.png"
+            translation="[100, 10]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_12.png"
+            translation="[100, 11]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_13.png"
+            translation="[100, 12]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_14.png"
+            translation="[100, 13]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_15.png"
+            translation="[100, 14]" />
+          <Poster
+            uri="pkg:/images/colortv/timer/colortv_timer_16.png"
+            translation="[100, 15]" />
+        </Group>
+    </children>
+</component>

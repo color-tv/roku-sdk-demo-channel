@@ -339,6 +339,16 @@ else
 colortv_dp = colortv_bl(colortv_be.GetString())
 end if
 colortv_dp["previousVideoId"] = colortv_do
+if colortv_dp["recommendations"] <> invalid then
+for colortv_ds = 0 to colortv_dp["recommendations"].count() - 1
+if ColorTVSdkGetInstance().colortv_dt <> invalid then
+colortv_dp["recommendations"][colortv_ds]["regularCustomFont"] = ColorTVSdkGetInstance().colortv_dt
+end if
+if ColorTVSdkGetInstance().colortv_du <> invalid then
+colortv_dp["recommendations"][colortv_ds]["boldCustomFont"] = ColorTVSdkGetInstance().colortv_du
+end if
+end for
+end if
 return colortv_dp
 end function
 function colortv_ax(colortv_bb as String)
@@ -347,17 +357,17 @@ m.colortv_ag(colortv_ca)
 colortv_cc = FormatJson(colortv_ca)
 m.colortv_l(colortv_bb, "POST", colortv_cc)
 end function
-function colortv_az(colortv_do as String, colortv_ds as String, colortv_bd as Object)
+function colortv_az(colortv_do as String, colortv_dv as String, colortv_bd as Object)
 colortv_bb = m.colortv_d + "/ct/evt/" + m.colortv_e + "/" + colortv_do
 colortv_bc = "POST"
 if colortv_bd = invalid then
 colortv_bd = {}
 end if
-colortv_dt = {
+colortv_dw = {
 "videoId": colortv_do
-"eventType": colortv_ds
+"eventType": colortv_dv
 }
-colortv_bd.append(colortv_dt)
+colortv_bd.append(colortv_dw)
 colortv_be = m.colortv_l(colortv_bb, colortv_bc, FormatJson(colortv_bd))
 colortv_bf = colortv_be.GetResponseCode()
 colortv_bg = (colortv_bf = 200)
@@ -365,659 +375,673 @@ if not colortv_bg then
 colortv_bh("Failed to report video tracking event because of: " + colortv_be.GetFailureReason())
 end if
 end function
-Function colortv_bv(colortv_du, colortv_dv=invalid)
-if colortv_dv = invalid then colortv_dv = "Default"
-colortv_dw = CreateObject("roRegistrySection", colortv_dv)
-if colortv_dw.Exists(colortv_du) then return colortv_dw.Read(colortv_du)
+Function colortv_bv(colortv_dx, colortv_dy=invalid)
+if colortv_dy = invalid then colortv_dy = "Default"
+colortv_dz = CreateObject("roRegistrySection", colortv_dy)
+if colortv_dz.Exists(colortv_dx) then return colortv_dz.Read(colortv_dx)
 return invalid
 End Function
-Function colortv_bx(colortv_du, colortv_dx, colortv_dv=invalid)
-if colortv_dv = invalid then colortv_dv = "Default"
-colortv_dw = CreateObject("roRegistrySection", colortv_dv)
-colortv_dw.Write(colortv_du, colortv_dx)
-colortv_dw.Flush() 'colortv_dy colortv_dz
+Function colortv_bx(colortv_dx, colortv_ea, colortv_dy=invalid)
+if colortv_dy = invalid then colortv_dy = "Default"
+colortv_dz = CreateObject("roRegistrySection", colortv_dy)
+colortv_dz.Write(colortv_dx, colortv_ea)
+colortv_dz.Flush() 'colortv_eb colortv_ec
 End Function
-Function colortv_ea(colortv_du, colortv_dv=invalid)
-if colortv_dv = invalid then colortv_dv = "Default"
-colortv_dw = CreateObject("roRegistrySection", colortv_dv)
-colortv_dw.Delete(colortv_du)
-colortv_dw.Flush() 'colortv_dy colortv_dz
+Function colortv_ed(colortv_dx, colortv_dy=invalid)
+if colortv_dy = invalid then colortv_dy = "Default"
+colortv_dz = CreateObject("roRegistrySection", colortv_dy)
+colortv_dz.Delete(colortv_dx)
+colortv_dz.Flush() 'colortv_eb colortv_ec
 End Function
-Function isvalidstr(colortv_eb As Dynamic) As String
-if colortv_ec(colortv_eb) return colortv_eb
+Function isvalidstr(colortv_ee As Dynamic) As String
+if colortv_ef(colortv_ee) return colortv_ee
 return ""
 End Function
-Function colortv_ed(colortv_eb as dynamic) As Boolean
-if colortv_eb = invalid return false
-if GetInterface(colortv_eb, "ifString") = invalid return false
+Function colortv_eg(colortv_ee as dynamic) As Boolean
+if colortv_ee = invalid return false
+if GetInterface(colortv_ee, "ifString") = invalid return false
 return true
 End Function
-Function colortv_ec(colortv_eb)
-if colortv_ee(colortv_eb) return false
+Function colortv_ef(colortv_ee)
+if colortv_eh(colortv_ee) return false
 return true
 End Function
-Function colortv_ee(colortv_eb)
-if colortv_eb = invalid return true
-if not colortv_ed(colortv_eb) return true
-if Len(colortv_eb) = 0 return true
+Function colortv_eh(colortv_ee)
+if colortv_ee = invalid return true
+if not colortv_eg(colortv_ee) return true
+if Len(colortv_ee) = 0 return true
 return false
 End Function
-Sub colortv_bh(colortv_ef As Dynamic)
-if ColorTVSdkGetInstance().colortv_eg then
-colortv_eh = CreateObject("roDateTime")
-print StrI(colortv_eh.getDayOfMonth()).Trim() + "." + StrI(colortv_eh.getMonth()).Trim() + "." StrI(colortv_eh.getYear()).Trim() + " " + StrI(colortv_eh.getHours()).Trim() + ":" + StrI(colortv_eh.getMinutes()).Trim() + ":" + StrI(colortv_eh.getSeconds()).Trim() + ":" + StrI(colortv_eh.getMilliseconds()).Trim() + ": " + colortv_ef.toStr().Trim()
+Sub colortv_bh(colortv_ei As Dynamic)
+if ColorTVSdkGetInstance().colortv_ej then
+colortv_ek = CreateObject("roDateTime")
+print StrI(colortv_ek.getDayOfMonth()).Trim() + "." + StrI(colortv_ek.getMonth()).Trim() + "." StrI(colortv_ek.getYear()).Trim() + " " + StrI(colortv_ek.getHours()).Trim() + ":" + StrI(colortv_ek.getMinutes()).Trim() + ":" + StrI(colortv_ek.getSeconds()).Trim() + ":" + StrI(colortv_ek.getMilliseconds()).Trim() + ": " + colortv_ei.toStr().Trim()
 end if
 End Sub
-function colortv_ei(colortv_ej as Integer) as String
-if colortv_ej < 0 then
-colortv_ej = 0
+function colortv_el(colortv_em as Integer) as String
+if colortv_em < 0 then
+colortv_em = 0
 end if
-colortv_ek = StrI(colortv_ej, 16)
-if(colortv_ej < 16) then
-colortv_ek = "0" + colortv_ek
+colortv_en = StrI(colortv_em, 16)
+if(colortv_em < 16) then
+colortv_en = "0" + colortv_en
 end if
-return colortv_ek
+return colortv_en
 end function
-function colortv_el(colortv_em as Integer, colortv_en as Integer, colortv_eo as Integer) as String
-colortv_ep = "#ff" + colortv_ei(colortv_em) + colortv_ei(colortv_en) + colortv_ei(colortv_eo)
-return colortv_ep
+function colortv_eo(colortv_ep as Integer, colortv_eq as Integer, colortv_er as Integer) as String
+colortv_es = "#ff" + colortv_el(colortv_ep) + colortv_el(colortv_eq) + colortv_el(colortv_er)
+return colortv_es
 end function
 function colortv_bw() as String
-colortv_eq = CreateObject("roAppInfo")
-return colortv_eq.GetVersion()
+colortv_et = CreateObject("roAppInfo")
+return colortv_et.GetVersion()
 end function
-function colortv_er() as LongInteger
-colortv_es = CreateObject("roDateTime")
-colortv_et& = colortv_es.asSeconds() * 1000&
-colortv_et& += colortv_es.getMilliseconds()
-return colortv_et&
+function colortv_eu() as LongInteger
+colortv_ev = CreateObject("roDateTime")
+colortv_ew& = colortv_ev.asSeconds() * 1000&
+colortv_ew& += colortv_ev.getMilliseconds()
+return colortv_ew&
 end function
-function colortv_eu(colortv_ev as String) as LongInteger
-if not colortv_ew(colortv_ev) then
+function colortv_ex(colortv_ey as String) as LongInteger
+if not colortv_ez(colortv_ey) then
 return invalid
 end if
-colortv_ex = 0&
-for colortv_ey = 0 to colortv_ev.len() - 1
-colortv_ex += colortv_ev.mid(colortv_ev.len() - 1 - colortv_ey, 1).toInt() * 10&^colortv_ey
+colortv_fa = 0&
+for colortv_ds = 0 to colortv_ey.len() - 1
+colortv_fa += colortv_ey.mid(colortv_ey.len() - 1 - colortv_ds, 1).toInt() * 10&^colortv_ds
 end for
-return colortv_ex
+return colortv_fa
 end function
-function colortv_ew(colortv_ez) as Boolean
-colortv_fa = CreateObject("roRegex", "^\d+$", "")
-return colortv_fa.isMatch(colortv_ez)
+function colortv_ez(colortv_fb) as Boolean
+colortv_fc = CreateObject("roRegex", "^\d+$", "")
+return colortv_fc.isMatch(colortv_fb)
 end function
 function colortv_df() as String
 colortv_dd = CreateObject("roDeviceInfo")
-colortv_fb = colortv_dd.getIpAddrs()
-colortv_fc = colortv_fb.keys()
-for each colortv_du in colortv_fc
-return colortv_fb[colortv_du]
+colortv_fd = colortv_dd.getIpAddrs()
+colortv_fe = colortv_fd.keys()
+for each colortv_dx in colortv_fe
+return colortv_fd[colortv_dx]
 end for
 return invalid
 end function
-function colortv_fd(colortv_fe, colortv_ff)
-for colortv_ey = 0 to colortv_ff.count() - 1
-if colortv_fg(colortv_fe, colortv_ff[colortv_ey]) then
-return colortv_ey
+function colortv_ff(colortv_fg, colortv_fh)
+for colortv_ds = 0 to colortv_fh.count() - 1
+if colortv_fi(colortv_fg, colortv_fh[colortv_ds]) then
+return colortv_ds
 end if
 end for
 return invalid
 end function
-function colortv_fg(colortv_fh, colortv_fi)
-if type(colortv_fh) = "roAssociativeArray" and type(colortv_fi) = "roAssociativeArray" then
-if colortv_fh.equals = invalid or colortv_fi.equals = invalid then
+function colortv_fi(colortv_fj, colortv_fk)
+if type(colortv_fj) = "roAssociativeArray" and type(colortv_fk) = "roAssociativeArray" then
+if colortv_fj.equals = invalid or colortv_fk.equals = invalid then
 print "Objects have to implement 'equals' method in order to be comparable"
 end if
-return colortv_fh.equals(colortv_fi)
+return colortv_fj.equals(colortv_fk)
 end if
-return colortv_fh = colortv_fi
+return colortv_fj = colortv_fk
 end function
-function colortv_br(colortv_bb as String, colortv_fj as Object) as String
-colortv_fk = colortv_fj.keys()
+function colortv_br(colortv_bb as String, colortv_fl as Object) as String
+colortv_fm = colortv_fl.keys()
 colortv_bb = colortv_bb + "?"
-for each colortv_du in colortv_fk
-colortv_bb = colortv_bb + colortv_du + "=" + colortv_fj[colortv_du] + "&"
+for each colortv_dx in colortv_fm
+colortv_bb = colortv_bb + colortv_dx + "=" + colortv_fl[colortv_dx] + "&"
 end for
 colortv_bb = colortv_bb.left(colortv_bb.len() - 1)
 return colortv_bb
 end function
 function colortv_cb() as Dynamic
-colortv_fl = CreateObject("roDeviceInfo")
-colortv_eq = CreateObject("roAppInfo")
+colortv_fn = CreateObject("roDeviceInfo")
+colortv_et = CreateObject("roAppInfo")
 colortv_ca = {
-"deviceModel": colortv_fl.GetModel()
-"systemVersion": colortv_fl.GetVersion()
-"systemName": colortv_fl.GetModelDetails().VendorName
-"identifierForAds": colortv_fl.GetAdvertisingId()
-"identifierForVendor": colortv_fl.GetPublisherId()
-"language": colortv_fl.GetCurrentLocale()
-"timezone": colortv_fl.GetTimeZone()
-"appName": colortv_eq.GetTitle()
-"appVersion": colortv_eq.GetVersion()
+"deviceModel": colortv_fn.GetModel()
+"systemVersion": colortv_fn.GetVersion()
+"systemName": colortv_fn.GetModelDetails().VendorName
+"identifierForAds": colortv_fn.GetAdvertisingId()
+"identifierForVendor": colortv_fn.GetPublisherId()
+"language": colortv_fn.GetCurrentLocale()
+"timezone": colortv_fn.GetTimeZone()
+"appName": colortv_et.GetTitle()
+"appVersion": colortv_et.GetVersion()
 "sdkVersion": GetColorTVSDKVersion()
 }
 return colortv_ca
 end function
 function colortv_cm() as Dynamic
-colortv_fm = colortv_bv("pollingUrls", "colortv")
-if colortv_fm = invalid then
+colortv_fo = colortv_bv("pollingUrls", "colortv")
+if colortv_fo = invalid then
 return []
 end if
-colortv_fn = ParseJson(colortv_fm)
-colortv_fo = colortv_fn.Keys()
+colortv_fp = ParseJson(colortv_fo)
+colortv_fq = colortv_fp.Keys()
 colortv_cp = []
-colortv_fp = 24 * 60 * 60 * 1000
-colortv_fq = false
-for each colortv_du in colortv_fo
-colortv_fr = colortv_eu(colortv_du)
-if colortv_fr <> invalid then
-if colortv_fr + colortv_fp < colortv_er() then
-colortv_fq = true
-colortv_fn.delete(colortv_du)
+colortv_fr = 24 * 60 * 60 * 1000
+colortv_fs = false
+for each colortv_dx in colortv_fq
+colortv_ft = colortv_ex(colortv_dx)
+if colortv_ft <> invalid then
+if colortv_ft + colortv_fr < colortv_eu() then
+colortv_fs = true
+colortv_fp.delete(colortv_dx)
 else
-colortv_cp.push(colortv_fn[colortv_du])
+colortv_cp.push(colortv_fp[colortv_dx])
 end if
 end if
 end for
-if colortv_fq then
-colortv_fs(colortv_fn)
+if colortv_fs then
+colortv_fu(colortv_fp)
 end if
 return colortv_cp
 end function
-function colortv_fs(colortv_fn)
-colortv_ft = FormatJson(colortv_fn)
-colortv_bx("pollingUrls", colortv_ft, "colortv")
+function colortv_fu(colortv_fp)
+colortv_fv = FormatJson(colortv_fp)
+colortv_bx("pollingUrls", colortv_fv, "colortv")
 end function
 sub colortv_cw(colortv_bb)
-colortv_fm = colortv_bv("pollingUrls", "colortv")
-if colortv_fm = invalid then
+colortv_fo = colortv_bv("pollingUrls", "colortv")
+if colortv_fo = invalid then
 return
 end if
-colortv_fn = ParseJson(colortv_fm)
-colortv_fo = colortv_fn.Keys()
-for each colortv_du in colortv_fo
-if colortv_fn[colortv_du] = colortv_bb then
-colortv_fn.delete(colortv_du)
+colortv_fp = ParseJson(colortv_fo)
+colortv_fq = colortv_fp.Keys()
+for each colortv_dx in colortv_fq
+if colortv_fp[colortv_dx] = colortv_bb then
+colortv_fp.delete(colortv_dx)
 end if
 end for
-colortv_fs(colortv_fn)
+colortv_fu(colortv_fp)
 end sub
 function ColorTvSdk(colortv_e as String) as Object
-colortv_fu = ColorTVSdkGetInstance()
-if colortv_fu <> invalid then
+colortv_fw = ColorTVSdkGetInstance()
+if colortv_fw <> invalid then
 print "Color TV SDK has already been initialized"
-return colortv_fu
+return colortv_fw
 end if
 print "Color TV SDK initialized with appid " + colortv_e
 colortv_c = {
 colortv_e: colortv_e
 sdkVersion: GetColorTVSDKVersion()
-colortv_eg: false
-registerAdCallbacks: colortv_fv
-registerContentRecommendationCallbacks: colortv_fw
-registerUpNextCallbacks: colortv_fx
-setDebugMode: colortv_fy
-colortv_fz: colortv_a(colortv_e)
-colortv_r: colortv_ga
-colortv_gb: {}
-loadAd: colortv_gc
-colortv_bj: colortv_gd
-showAd: colortv_ge
-colortv_gf: colortv_gg
+colortv_ej: false
+registerAdCallbacks: colortv_fx
+registerContentRecommendationCallbacks: colortv_fy
+registerUpNextCallbacks: colortv_fz
+setDebugMode: colortv_ga
+colortv_gb: colortv_a(colortv_e)
+colortv_r: colortv_gc
+colortv_gd: {}
+loadAd: colortv_ge
+colortv_bj: colortv_gf
+showAd: colortv_gg
 colortv_gh: colortv_gi
 colortv_gj: colortv_gk
 colortv_gl: colortv_gm
-colortv_j: colortv_gn
-colortv_go: colortv_gp
-colortv_z: colortv_gq
-colortv_gr: []
-timerTick: colortv_gs
-colortv_ck: colortv_gt
-colortv_gu: colortv_gv
-setUserAge: colortv_gw
-setUserGender: colortv_gx
-setUserKeywords: colortv_gy
-colortv_gz: colortv_ha
+colortv_gn: colortv_go
+colortv_j: colortv_gp
+colortv_gq: colortv_gr
+colortv_z: colortv_gs
+colortv_gt: []
+timerTick: colortv_gu
+colortv_ck: colortv_gv
+colortv_gw: colortv_gx
+setUserAge: colortv_gy
+setUserGender: colortv_gz
+setUserKeywords: colortv_ha
 colortv_hb: colortv_hc
-colortv_hd: {}
-loadContentRecommendation: colortv_he
-colortv_dq: colortv_hf
-colortv_hg: colortv_hh
-showContentRecommendation: colortv_hi
-trackVideoEvents: colortv_hj
-loadUpNext: colortv_hk
-loadUpNextScenegraph: colortv_hl
-loadUpNextCanvas: colortv_hm
-colortv_dr: colortv_hn
-colortv_ho: colortv_hp
-colortv_hq: colortv_hr
-colortv_hs: false
-colortv_ht: false
-colortv_hu: false
-upNextEventOccurred: colortv_hv
-colortv_hw: colortv_hx
-colortv_hy: colortv_hz
+colortv_hd: colortv_he
+setContentRecommendationRegularCustomFont: colortv_hf
+setContentRecommendationBoldCustomFont: colortv_hg
+colortv_hh: {}
+loadContentRecommendation: colortv_hi
+colortv_dq: colortv_hj
+colortv_hk: colortv_hl
+showContentRecommendation: colortv_hm
+trackVideoEvents: colortv_hn
+loadUpNext: colortv_ho
+loadUpNextScenegraph: colortv_hp
+loadUpNextCanvas: colortv_hq
+colortv_dr: colortv_hr
+colortv_hs: colortv_ht
+colortv_hu: colortv_hv
+colortv_hw: false
+colortv_hx: false
+colortv_hy: false
+upNextEventOccurred: colortv_hz
 colortv_ia: colortv_ib
 colortv_ic: colortv_id
 colortv_ie: colortv_if
 colortv_ig: colortv_ih
-shouldCloseUpNextCanvas: colortv_ii
-colortv_ij: colortv_ik
+colortv_ii: colortv_ij
+colortv_ik: colortv_il
+shouldCloseUpNextCanvas: colortv_im
+colortv_in: colortv_io
 }
 GetGlobalAA()["colorTvSdkInstance"] = colortv_c
 colortv_c.colortv_r()
-colortv_c.colortv_fz.colortv_t()
-colortv_c.colortv_gu()
+colortv_c.colortv_gb.colortv_t()
+colortv_c.colortv_gw()
 return colortv_c
 end function
-function colortv_fv(colortv_il as Object)
-m.colortv_il = colortv_il
+function colortv_fx(colortv_ip as Object)
+m.colortv_ip = colortv_ip
 m.colortv_z()
 end function
-function colortv_fw(colortv_im)
-m.colortv_im = colortv_im
+function colortv_fy(colortv_iq)
+m.colortv_iq = colortv_iq
 end function
-function colortv_fx(colortv_in as Object)
-m.colortv_in = colortv_in
+function colortv_fz(colortv_ir as Object)
+m.colortv_ir = colortv_ir
 end function
-function colortv_fy(colortv_eg as Boolean)
-m.colortv_eg = colortv_eg
+function colortv_ga(colortv_ej as Boolean)
+m.colortv_ej = colortv_ej
 end function
-function colortv_ga()
+function colortv_gc()
 colortv_dd = CreateObject("roDeviceInfo")
 colortv_bu = colortv_dd.GetAdvertisingId()
-m.colortv_fz.colortv_r(m.colortv_e, colortv_bu, m.sdkVersion)
+m.colortv_gb.colortv_r(m.colortv_e, colortv_bu, m.sdkVersion)
 end function
-function colortv_gc(colortv_ba as String) as Void
+function colortv_ge(colortv_ba as String) as Void
 colortv_bh("loading ad for placement " + colortv_ba)
-if m.colortv_gb.DoesExist(colortv_ba) then
+if m.colortv_gd.DoesExist(colortv_ba) then
 colortv_bh("Ad for placement: " + colortv_ba + " is already loaded")
-if m.colortv_il <> invalid and m.colortv_il["adLoaded"] <> invalid then
-m.colortv_il["adLoaded"](colortv_ba)
+if m.colortv_ip <> invalid and m.colortv_ip["adLoaded"] <> invalid then
+m.colortv_ip["adLoaded"](colortv_ba)
 end if
 return
 end if
-m.colortv_fz.colortv_f(colortv_ba)
+m.colortv_gb.colortv_f(colortv_ba)
 end function
-function colortv_gd(colortv_io as Object, colortv_ba as String) as Void
-if colortv_io.DoesExist("error") then
-m.colortv_gf(colortv_ba, colortv_io["error"], colortv_io["errorMessage"])
+function colortv_gf(colortv_is as Object, colortv_ba as String) as Void
+if colortv_is.DoesExist("error") then
+m.colortv_gh(colortv_ba, colortv_is["error"], colortv_is["errorMessage"])
 else
 colortv_bh("Ad has been loaded for placement: " + colortv_ba)
-m.colortv_gb.AddReplace(colortv_ba, colortv_io)
-if m.colortv_il <> invalid and m.colortv_il["adLoaded"] <> invalid then
-m.colortv_il["adLoaded"](colortv_ba)
+m.colortv_gd.AddReplace(colortv_ba, colortv_is)
+if m.colortv_ip <> invalid and m.colortv_ip["adLoaded"] <> invalid then
+m.colortv_ip["adLoaded"](colortv_ba)
 end if
 end if
 end function
-sub colortv_ge(colortv_ba as String)
-if not colortv_ip(colortv_ba, m.colortv_gb)
-m.colortv_gb.delete(colortv_ba)
+sub colortv_gg(colortv_ba as String)
+if not colortv_it(colortv_ba, m.colortv_gd)
+m.colortv_gd.delete(colortv_ba)
 return
 end if
-colortv_io = m.colortv_gb[colortv_ba]
-m.colortv_gb.delete(colortv_ba)
-if colortv_io["type"] = "discovery" then
-for colortv_ey = 0 to colortv_io["ads"].count() - 1
-if colortv_io["ads"][colortv_ey]["pollingUrl"] <> invalid then
-colortv_iq(colortv_io["ads"][colortv_ey]["pollingUrl"])
+colortv_is = m.colortv_gd[colortv_ba]
+m.colortv_gd.delete(colortv_ba)
+if colortv_is["type"] = "discovery" then
+for colortv_ds = 0 to colortv_is["ads"].count() - 1
+if colortv_is["ads"][colortv_ds]["pollingUrl"] <> invalid then
+colortv_iu(colortv_is["ads"][colortv_ds]["pollingUrl"])
 end if
 end for
 else
-colortv_iq(colortv_io["ads"][0]["pollingUrl"])
+colortv_iu(colortv_is["ads"][0]["pollingUrl"])
 end if
-if colortv_io["type"] = "video" or colortv_io["ads"][0]["markupUrl"] <> invalid then
-colortv_ir = colortv_is(colortv_io, m.colortv_fz, m.colortv_il)
-if colortv_ir = invalid then
-m.colortv_gf(colortv_ba, "INTERNAL_SDK_ERROR", "Can't play video ad with URL: " + colortv_io["ads"][0]["markupUrl"])
+if colortv_is["type"] = "video" or colortv_is["ads"][0]["markupUrl"] <> invalid then
+colortv_iv = colortv_iw(colortv_is, m.colortv_gb, m.colortv_ip)
+if colortv_iv = invalid then
+m.colortv_gh(colortv_ba, "INTERNAL_SDK_ERROR", "Can't play video ad with URL: " + colortv_is["ads"][0]["markupUrl"])
 return
 end if
-colortv_ir.colortv_it()
+colortv_iv.colortv_ix()
 end if
-if colortv_io["type"] <> "video" and not colortv_iu(colortv_io) then
-colortv_iv = CreateObject("roSGScreen")
-colortv_iw = m.colortv_gh(colortv_iv, colortv_io["type"])
-colortv_iv.show()
-m.colortv_gj(colortv_iw, colortv_io)
-colortv_iw["dataModel"] = colortv_io
+if colortv_is["type"] <> "video" and not colortv_iy(colortv_is) then
+colortv_iz = CreateObject("roSGScreen")
+colortv_ja = m.colortv_gj(colortv_iz, colortv_is["type"])
+colortv_iz.show()
+m.colortv_gl(colortv_ja, colortv_is)
+colortv_ja["dataModel"] = colortv_is
 while true
-colortv_ix = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
-colortv_iy = type(colortv_ix)
-if colortv_iy = "roSGScreenEvent"
-if colortv_ix.isScreenClosed() then
+colortv_jb = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
+colortv_jc = type(colortv_jb)
+if colortv_jc = "roSGScreenEvent"
+if colortv_jb.isScreenClosed() then
 exit while
 end if
-else if colortv_iy = "roSGNodeEvent"
-if m.colortv_gl(colortv_ix, colortv_io, colortv_iw) then
+else if colortv_jc = "roSGNodeEvent"
+if m.colortv_gn(colortv_jb, colortv_is, colortv_ja) then
 exit while
 end if
 end if
 m.timerTick()
 end while
-if m.colortv_il <> invalid then
-m.colortv_fz.colortv_z(m.colortv_il["currencyEarned"])
+if m.colortv_ip <> invalid then
+m.colortv_gb.colortv_z(m.colortv_ip["currencyEarned"])
 end if
 end if
 end sub
-function colortv_gg(colortv_ba as String, colortv_iz as String, colortv_ja as String)
-if m.colortv_il <> invalid and m.colortv_il["adError"] <> invalid then
+function colortv_gi(colortv_ba as String, colortv_jd as String, colortv_je as String)
+if m.colortv_ip <> invalid and m.colortv_ip["adError"] <> invalid then
 colortv_bi = {
 "placement": colortv_ba
-"errorCode": colortv_iz
-"errorMessage": colortv_ja
+"errorCode": colortv_jd
+"errorMessage": colortv_je
 }
-m.colortv_il["adError"](colortv_bi)
+m.colortv_ip["adError"](colortv_bi)
 else
-colortv_bh("Ad error has occurred for placement: """ + colortv_ba + """ with code: """ + colortv_iz + """ and message: """ + colortv_ja + """")
+colortv_bh("Ad error has occurred for placement: """ + colortv_ba + """ with code: """ + colortv_jd + """ and message: """ + colortv_je + """")
 end if
 end function
-function colortv_gi(colortv_iv as Object, colortv_jb as String)
+function colortv_gk(colortv_iz as Object, colortv_jf as String)
 m.colortv_bs = CreateObject("roMessagePort")
-colortv_iv.setMessagePort(m.colortv_bs)
-colortv_iw = colortv_iv.CreateScene("colortv_" + colortv_jb)
-return colortv_iw
+colortv_iz.setMessagePort(m.colortv_bs)
+colortv_ja = colortv_iz.CreateScene("colortv_" + colortv_jf)
+return colortv_ja
 end function
-function colortv_gk(colortv_iw as Object, colortv_jc as Object)
-if colortv_iw.findNode("colorTvAdEvents") <> invalid then
-colortv_iw.findNode("colorTvAdEvents").observeField("closeAd", m.colortv_bs)
-colortv_iw.findNode("colorTvAdEvents").observeField("adShown", m.colortv_bs)
+function colortv_gm(colortv_ja as Object, colortv_jg as Object)
+if colortv_ja.findNode("colorTvAdEvents") <> invalid then
+colortv_ja.findNode("colorTvAdEvents").observeField("closeAd", m.colortv_bs)
+colortv_ja.findNode("colorTvAdEvents").observeField("adShown", m.colortv_bs)
 end if
-if colortv_jc["type"] = "engagement" or colortv_jc["type"] = "interstitial" then
-colortv_jd = colortv_jc["ads"][0]["actionButton"]["actionType"]
-if colortv_je(colortv_jd) then
-colortv_iw.findNode("colorTvSubscriptionEvents").observeField("subscribed", m.colortv_bs)
-else if colortv_jf(colortv_jd) then
-colortv_iw.findNode("colorTvAppstoreEvents").observeField("clicked", m.colortv_bs)
+if colortv_jg["type"] = "engagement" or colortv_jg["type"] = "interstitial" then
+colortv_jh = colortv_jg["ads"][0]["actionButton"]["actionType"]
+if colortv_ji(colortv_jh) then
+colortv_ja.findNode("colorTvSubscriptionEvents").observeField("subscribed", m.colortv_bs)
+else if colortv_jj(colortv_jh) then
+colortv_ja.findNode("colorTvAppstoreEvents").observeField("clicked", m.colortv_bs)
 end if
-else if colortv_jc["type"] = "discovery" then
-colortv_iw.findNode("colorTvGridEvents").observeField("closed", m.colortv_bs)
-colortv_iw.findNode("colorTvGridEvents").observeField("impression", m.colortv_bs)
-colortv_iw.findNode("colorTvGridEvents").observeField("moreDataUrl", m.colortv_bs)
-colortv_iw.findNode("colorTvDiscoveryCenterEvents").observeField("clicked", m.colortv_bs)
-colortv_iw.findNode("colorTvDiscoveryCenterEvents").observeField("subscribed", m.colortv_bs)
+else if colortv_jg["type"] = "discovery" then
+colortv_ja.findNode("colorTvGridEvents").observeField("closed", m.colortv_bs)
+colortv_ja.findNode("colorTvGridEvents").observeField("impression", m.colortv_bs)
+colortv_ja.findNode("colorTvGridEvents").observeField("moreDataUrl", m.colortv_bs)
+colortv_ja.findNode("colorTvDiscoveryCenterEvents").observeField("clicked", m.colortv_bs)
+colortv_ja.findNode("colorTvDiscoveryCenterEvents").observeField("subscribed", m.colortv_bs)
 end if
 end function
-function colortv_gm(colortv_ix as Object, colortv_io as Object, colortv_iw as Object) as Boolean
-colortv_ba = colortv_io["placement"]
-if colortv_ix.getNode() = "colorTvAdEvents" then
-if colortv_ix.getField() = "closeAd" then
-if m.colortv_il <> invalid and m.colortv_il["adClosed"] <> invalid and colortv_ba <> invalid then
-m.colortv_il["adClosed"](colortv_ba)
+function colortv_go(colortv_jb as Object, colortv_is as Object, colortv_ja as Object) as Boolean
+colortv_ba = colortv_is["placement"]
+if colortv_jb.getNode() = "colorTvAdEvents" then
+if colortv_jb.getField() = "closeAd" then
+if m.colortv_ip <> invalid and m.colortv_ip["adClosed"] <> invalid and colortv_ba <> invalid then
+m.colortv_ip["adClosed"](colortv_ba)
 end if
 return true
-else if colortv_ix.getField() = "adShown" then
-m.colortv_fz.colortv_p(colortv_io["ads"][0]["impressionUrl"])
+else if colortv_jb.getField() = "adShown" then
+m.colortv_gb.colortv_p(colortv_is["ads"][0]["impressionUrl"])
 end if
-else if colortv_ix.getNode() = "colorTvSubscriptionEvents" then
-if colortv_ix.getField() = "subscribed" then
-m.colortv_go(colortv_io, colortv_io["ads"][0], colortv_ix.getData())
+else if colortv_jb.getNode() = "colorTvSubscriptionEvents" then
+if colortv_jb.getField() = "subscribed" then
+m.colortv_gq(colortv_is, colortv_is["ads"][0], colortv_jb.getData())
 end if
-else if colortv_ix.getNode() = "colorTvAppstoreEvents" then
-if colortv_ix.getField() = "clicked" then
-m.colortv_fz.colortv_p(colortv_io["ads"][0]["clickTracker"])
-if m.colortv_il <> invalid and m.colortv_il["adClosed"] <> invalid then
-m.colortv_il["adClosed"](colortv_ba)
+else if colortv_jb.getNode() = "colorTvAppstoreEvents" then
+if colortv_jb.getField() = "clicked" then
+m.colortv_gb.colortv_p(colortv_is["ads"][0]["clickTracker"])
+if m.colortv_ip <> invalid and m.colortv_ip["adClosed"] <> invalid then
+m.colortv_ip["adClosed"](colortv_ba)
 end if
-colortv_jg = colortv_io["ads"][0]
-if colortv_jg["type"] = "appstore" then
-if colortv_jg["clickData"]["contentId"] <> invalid then
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
+colortv_jk = colortv_is["ads"][0]
+if colortv_jk["type"] = "appstore" or colortv_jk["actionButton"]["actionType"] = "CLICK_TO_APPSTORE" then
+if colortv_jk["clickData"]["contentId"] <> invalid then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
 else
-m.colortv_fz.colortv_ak(colortv_jg["clickData"]["channelId"])
+m.colortv_gb.colortv_ak(colortv_jk["clickData"]["channelId"])
 end if
-else if colortv_jg["type"] = "content"
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
-end if
-return true
-end if
-else if colortv_ix.getNode() = "colorTvGridEvents" then
-if colortv_ix.getField() = "impression" and colortv_ix.getData() <> ""
-m.colortv_fz.colortv_p(colortv_ix.getData())
-else if colortv_ix.getField() = "moreDataUrl" and colortv_ix.getData() <> "" then
-m.colortv_j(colortv_iw, colortv_ix.getData())
-else if colortv_ix.getField() = "closed" then
-if m.colortv_il <> invalid and m.colortv_il["adClosed"] <> invalid and colortv_ba <> invalid then
-m.colortv_il["adClosed"](colortv_ba)
+else if colortv_jk["type"] = "content" or colortv_jk["actionButton"]["actionType"] = "CLICK_TO_CONTENT" then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
 end if
 return true
 end if
-else if colortv_ix.getNode() = "colorTvDiscoveryCenterEvents" then
-if colortv_ix.getField() = "subscribed" then
-colortv_jh = colortv_ix.getData()["clickedItemModel"]
-colortv_ji = colortv_ix.getData()["inputValue"]
-m.colortv_go(colortv_io, colortv_jh, colortv_ji)
-else if colortv_ix.getField() = "clicked"
-colortv_jg = colortv_ix.getData()
-if colortv_jg["clickTracker"] <> invalid then
-m.colortv_fz.colortv_p(colortv_jg["clickTracker"])
+else if colortv_jb.getNode() = "colorTvGridEvents" then
+if colortv_jb.getField() = "impression" and colortv_jb.getData() <> ""
+m.colortv_gb.colortv_p(colortv_jb.getData())
+else if colortv_jb.getField() = "moreDataUrl" and colortv_jb.getData() <> "" then
+m.colortv_j(colortv_ja, colortv_jb.getData())
+else if colortv_jb.getField() = "closed" then
+if m.colortv_ip <> invalid and m.colortv_ip["adClosed"] <> invalid and colortv_ba <> invalid then
+m.colortv_ip["adClosed"](colortv_ba)
 end if
-if m.colortv_il <> invalid and m.colortv_il["adClosed"] <> invalid then
-m.colortv_il["adClosed"](colortv_ba)
+return true
 end if
-if colortv_jg["type"] = "appstore" then
-if colortv_jg["clickData"]["contentId"] <> invalid then
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
+else if colortv_jb.getNode() = "colorTvDiscoveryCenterEvents" then
+if colortv_jb.getField() = "subscribed" then
+colortv_jl = colortv_jb.getData()["clickedItemModel"]
+colortv_jm = colortv_jb.getData()["inputValue"]
+m.colortv_gq(colortv_is, colortv_jl, colortv_jm)
+else if colortv_jb.getField() = "clicked"
+colortv_jk = colortv_jb.getData()
+if colortv_jk["clickTracker"] <> invalid then
+m.colortv_gb.colortv_p(colortv_jk["clickTracker"])
+end if
+if m.colortv_ip <> invalid and m.colortv_ip["adClosed"] <> invalid then
+m.colortv_ip["adClosed"](colortv_ba)
+end if
+if colortv_jk["type"] = "appstore" then
+if colortv_jk["clickData"]["contentId"] <> invalid then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
 else
-m.colortv_fz.colortv_ak(colortv_jg["clickData"]["channelId"])
+m.colortv_gb.colortv_ak(colortv_jk["clickData"]["channelId"])
 end if
-else if colortv_jg["type"] = "content"
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
+else if colortv_jk["type"] = "content"
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
 end if
 return true
 end if
 end if
 return false
 end function
-function colortv_gn(colortv_iw as Dynamic, colortv_jj as String)
-colortv_jk = m.colortv_fz.colortv_j(colortv_jj)
-if colortv_jk <> invalid then
-if colortv_iw["dataModel"]["ads"] <> invalid then
-colortv_jl = colortv_iw["dataModel"]["ads"]
-colortv_jl.append(colortv_jk["ads"])
-colortv_jk["ads"] = colortv_jl
-colortv_iw["dataModel"] = colortv_jk
-else if colortv_iw["dataModel"].colortv_jm <> invalid then
-colortv_jl = colortv_iw["dataModel"].colortv_jm
-colortv_jl.append(colortv_jk.colortv_jm)
-colortv_jk.colortv_jm = colortv_jl
-colortv_iw["dataModel"] = colortv_jk
+function colortv_gp(colortv_ja as Dynamic, colortv_jn as String)
+colortv_jo = m.colortv_gb.colortv_j(colortv_jn)
+if colortv_jo <> invalid then
+if colortv_ja["dataModel"]["ads"] <> invalid then
+colortv_jp = colortv_ja["dataModel"]["ads"]
+colortv_jp.append(colortv_jo["ads"])
+colortv_jo["ads"] = colortv_jp
+colortv_ja["dataModel"] = colortv_jo
+else if colortv_ja["dataModel"].colortv_jq <> invalid then
+colortv_jp = colortv_ja["dataModel"].colortv_jq
+colortv_jp.append(colortv_jo.colortv_jq)
+colortv_jo.colortv_jq = colortv_jp
+colortv_ja["dataModel"] = colortv_jo
 end if
 end if
-colortv_iw.findNode("colorTvGridEvents")["moreDataUrl"] = ""
+colortv_ja.findNode("colorTvGridEvents")["moreDataUrl"] = ""
 end function
-function colortv_gp(colortv_jn as Dynamic, colortv_jg as Dynamic, colortv_jo as String) as Void
-colortv_jn.colortv_jp(colortv_jo)
-m.colortv_fz.colortv_n(colortv_jg["clickTracker"], colortv_jo, colortv_jg["type"])
-if colortv_jg["clickUrl"] <> invalid then
-m.colortv_fz.colortv_n(colortv_jg["clickUrl"], colortv_jo, colortv_jg["type"])
-else if colortv_jg["clickData"]["clickUrl"] <> invalid then
-m.colortv_fz.colortv_n(colortv_jg["clickData"]["clickUrl"], colortv_jo, colortv_jg["type"])
-end if
-end function
-function colortv_gq()
-if m.colortv_il <> invalid then
-m.colortv_fz.colortv_z(m.colortv_il["currencyEarned"])
+function colortv_gr(colortv_jr as Dynamic, colortv_jk as Dynamic, colortv_js as String) as Void
+colortv_jr.colortv_jt(colortv_js)
+m.colortv_gb.colortv_n(colortv_jk["clickTracker"], colortv_js, colortv_jk["type"])
+if colortv_jk["clickUrl"] <> invalid then
+m.colortv_gb.colortv_n(colortv_jk["clickUrl"], colortv_js, colortv_jk["type"])
+else if colortv_jk["clickData"]["clickUrl"] <> invalid then
+m.colortv_gb.colortv_n(colortv_jk["clickData"]["clickUrl"], colortv_js, colortv_jk["type"])
 end if
 end function
-sub colortv_gs()
-colortv_jq = []
-for each colortv_jr in m.colortv_gr
-if colortv_jr.colortv_js() then
-colortv_jq.push(colortv_jr)
+function colortv_gs()
+if m.colortv_ip <> invalid then
+m.colortv_gb.colortv_z(m.colortv_ip["currencyEarned"])
+end if
+end function
+sub colortv_gu()
+colortv_ju = []
+for each colortv_jv in m.colortv_gt
+if colortv_jv.colortv_jw() then
+colortv_ju.push(colortv_jv)
 end if
 end for
-for each colortv_cn in colortv_jq
-m.colortv_gr.delete( colortv_fd(colortv_cn, m.colortv_gr) )
+for each colortv_cn in colortv_ju
+m.colortv_gt.delete( colortv_ff(colortv_cn, m.colortv_gt) )
 end for
 end sub
-function colortv_gt(colortv_cn as Dynamic) as Void
-m.colortv_gr.push(colortv_cn)
+function colortv_gv(colortv_cn as Dynamic) as Void
+m.colortv_gt.push(colortv_cn)
 end function
-function colortv_gv()
-colortv_jt = m.colortv_fz.colortv_am()
-colortv_ju = colortv_jt.keys()
-colortv_jv = colortv_jw()
-colortv_bx("installedApps", FormatJson(colortv_jt), "colortv")
-colortv_jx = []
-for each colortv_jy in colortv_jv
-for each colortv_du in colortv_jt.keys()
-if colortv_du = colortv_jy then
-colortv_jx.push(colortv_du)
+function colortv_gx()
+colortv_jx = m.colortv_gb.colortv_am()
+colortv_jy = colortv_jx.keys()
+colortv_jz = colortv_ka()
+colortv_bx("installedApps", FormatJson(colortv_jx), "colortv")
+colortv_kb = []
+for each colortv_kc in colortv_jz
+for each colortv_dx in colortv_jx.keys()
+if colortv_dx = colortv_kc then
+colortv_kb.push(colortv_dx)
 end if
 end for
 end for
-for each colortv_e in colortv_jx
-colortv_jz = colortv_fd(colortv_e, colortv_ju)
-colortv_ju.delete(colortv_jz)
+for each colortv_e in colortv_kb
+colortv_kd = colortv_ff(colortv_e, colortv_jy)
+colortv_jy.delete(colortv_kd)
 end for
-colortv_bh("Apps that weren't saved yet: " + FormatJson(colortv_ju))
-m.colortv_fz.colortv_ai(colortv_ju)
+colortv_bh("Apps that weren't saved yet: " + FormatJson(colortv_jy))
+m.colortv_gb.colortv_ai(colortv_jy)
 end function
-sub colortv_gw(colortv_ka)
-if Type(colortv_ka) = "roInt" Or Type(colortv_ka) = "roInteger" or Type(colortv_ka) = "Integer"
-colortv_ka = colortv_ka.toStr()
-else if not ((Type(colortv_ka) = "roString" Or Type(colortv_ka) = "String") and colortv_ew(colortv_ka)) then
+sub colortv_gy(colortv_ke)
+if Type(colortv_ke) = "roInt" Or Type(colortv_ke) = "roInteger" or Type(colortv_ke) = "Integer"
+colortv_ke = colortv_ke.toStr()
+else if not ((Type(colortv_ke) = "roString" Or Type(colortv_ke) = "String") and colortv_ez(colortv_ke)) then
 print "WARNING: Value passed as user age is not a number"
 return
 end if
-colortv_bx("userAge", colortv_ka, "colortv")
+colortv_bx("userAge", colortv_ke, "colortv")
 end sub
-sub colortv_gx(colortv_kb as String)
-if not (LCase(colortv_kb) = "male" or LCase(colortv_kb) = "female") then
+sub colortv_gz(colortv_kf as String)
+if not (LCase(colortv_kf) = "male" or LCase(colortv_kf) = "female") then
 print "WARNING: Value passed as user gender is neither male nor female"
 return
 end if
-colortv_bx("userGender", LCase(colortv_kb), "colortv")
+colortv_bx("userGender", LCase(colortv_kf), "colortv")
 end sub
-sub colortv_gy(colortv_kc as String)
-colortv_bx("userKeywords", colortv_kc, "colortv")
+sub colortv_ha(colortv_kg as String)
+colortv_bx("userKeywords", colortv_kg, "colortv")
 end sub
-function colortv_hc(colortv_kd as String, colortv_bp as String) as Void
-colortv_bh("Saving: " + colortv_kd + ", " + colortv_bp)
-colortv_bx("subscription_" + colortv_bp, colortv_kd, "colortv")
+function colortv_he(colortv_kh as String, colortv_bp as String) as Void
+colortv_bh("Saving: " + colortv_kh + ", " + colortv_bp)
+colortv_bx("subscription_" + colortv_bp, colortv_kh, "colortv")
 end function
-function colortv_ha(colortv_bp as String) as Dynamic
+function colortv_hc(colortv_bp as String) as Dynamic
 return colortv_bv("subscription_" + colortv_bp, "colortv")
 end function
-sub colortv_he(colortv_ba, colortv_ke="" as String)
-if m.colortv_hu and colortv_ba = "VideoEnd" then
-m.colortv_hu = false
+function colortv_hf(colortv_ki as String)
+m.colortv_dt = colortv_ki
+end function
+function colortv_hg(colortv_ki as String)
+m.colortv_du = colortv_ki
+end function
+sub colortv_hi(colortv_ba, colortv_kj="" as String)
+if m.colortv_hy and colortv_ba = "VideoEnd" then
+m.colortv_hy = false
 colortv_bh("UpNext should play instead of content recommendation")
 return
 end if
 colortv_bh("loading content recommendation for placement " + colortv_ba)
-if m.colortv_hd.DoesExist(colortv_ba) and m.colortv_hd[colortv_ba]["previousVideoId"] = colortv_ke then
+if m.colortv_hh.DoesExist(colortv_ba) and m.colortv_hh[colortv_ba]["previousVideoId"] = colortv_kj then
 colortv_bh("Content recommendation for placement: " + colortv_ba + " is already loaded")
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationLoaded"] <> invalid then
-m.colortv_im["contentRecommendationLoaded"](colortv_ba)
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationLoaded"] <> invalid then
+m.colortv_iq["contentRecommendationLoaded"](colortv_ba)
 end if
 return
 end if
-m.colortv_fz.colortv_aq(colortv_ba, colortv_ke)
+m.colortv_gb.colortv_aq(colortv_ba, colortv_kj)
 end sub
-function colortv_hf(colortv_kf as Object, colortv_ba as String) as Void
-if colortv_kf.DoesExist("error") then
-m.colortv_hg(colortv_ba, colortv_kf["errorCode"].toStr(), colortv_kf["error"])
+function colortv_hj(colortv_kk as Object, colortv_ba as String) as Void
+if colortv_kk.DoesExist("error") then
+m.colortv_hk(colortv_ba, colortv_kk["errorCode"].toStr(), colortv_kk["error"])
 else
 colortv_bh("Content recommendation has been loaded for placement: " + colortv_ba)
-m.colortv_hd.AddReplace(colortv_ba, colortv_kf)
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationLoaded"] <> invalid then
-m.colortv_im["contentRecommendationLoaded"](colortv_ba)
+m.colortv_hh.AddReplace(colortv_ba, colortv_kk)
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationLoaded"] <> invalid then
+m.colortv_iq["contentRecommendationLoaded"](colortv_ba)
 end if
 end if
 end function
-function colortv_hh(colortv_ba as String, colortv_iz as String, colortv_ja as String)
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationError"] <> invalid then
+function colortv_hl(colortv_ba as String, colortv_jd as String, colortv_je as String)
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationError"] <> invalid then
 colortv_bi = {
 "placement": colortv_ba
-"errorCode": colortv_iz
-"errorMessage": colortv_ja
+"errorCode": colortv_jd
+"errorMessage": colortv_je
 }
-m.colortv_im["contentRecommendationError"](colortv_bi)
+m.colortv_iq["contentRecommendationError"](colortv_bi)
 else
-colortv_bh("Content recommendation error has occurred for placement: """ + colortv_ba + """ with code: """ + colortv_iz + """ and message: """ + colortv_ja + """")
+colortv_bh("Content recommendation error has occurred for placement: """ + colortv_ba + """ with code: """ + colortv_jd + """ and message: """ + colortv_je + """")
 end if
 end function
-sub colortv_hi(colortv_ba as String)
-if not colortv_kg(colortv_ba, m.colortv_hd)
-m.colortv_hd.delete(colortv_ba)
+sub colortv_hm(colortv_ba as String)
+if not colortv_kl(colortv_ba, m.colortv_hh)
+m.colortv_hh.delete(colortv_ba)
 return
 end if
-colortv_kf = m.colortv_hd[colortv_ba]
-m.colortv_hd.delete(colortv_ba)
-colortv_iv = CreateObject("roSGScreen")
-colortv_iw = m.colortv_gh(colortv_iv, "contentRecommendation")
-colortv_iv.show()
-colortv_iw.findNode("colorTvGridEvents").observeField("moreDataUrl", m.colortv_bs)
-colortv_iw.findNode("colorTvGridEvents").observeField("impression", m.colortv_bs)
-colortv_iw.findNode("colorTvGridEvents").observeField("closed", m.colortv_bs)
-colortv_iw.findNode("colorTvContentRecommendationEvents").observeField("clicked", m.colortv_bs)
-colortv_iw.findNode("colorTvContentRecommendationEvents").observeField("favourite", m.colortv_bs)
-colortv_iw.findNode("colorTvDiscoveryCenterEvents").observeField("clicked", m.colortv_bs)
-colortv_iw.findNode("colorTvDiscoveryCenterEvents").observeField("subscribed", m.colortv_bs)
-for colortv_ey = 0 to colortv_kf["recommendations"].count() - 1
-if colortv_kf["recommendations"][colortv_ey]["pollingUrl"] <> invalid then
-colortv_iq(colortv_kf["recommendations"][colortv_ey]["pollingUrl"])
+colortv_kk = m.colortv_hh[colortv_ba]
+m.colortv_hh.delete(colortv_ba)
+colortv_iz = CreateObject("roSGScreen")
+colortv_ja = m.colortv_gj(colortv_iz, "contentRecommendation")
+colortv_iz.show()
+colortv_ja.findNode("colorTvGridEvents").observeField("moreDataUrl", m.colortv_bs)
+colortv_ja.findNode("colorTvGridEvents").observeField("impression", m.colortv_bs)
+colortv_ja.findNode("colorTvGridEvents").observeField("closed", m.colortv_bs)
+colortv_ja.findNode("colorTvContentRecommendationEvents").observeField("clicked", m.colortv_bs)
+colortv_ja.findNode("colorTvContentRecommendationEvents").observeField("favourite", m.colortv_bs)
+colortv_ja.findNode("colorTvDiscoveryCenterEvents").observeField("clicked", m.colortv_bs)
+colortv_ja.findNode("colorTvDiscoveryCenterEvents").observeField("subscribed", m.colortv_bs)
+for colortv_ds = 0 to colortv_kk["recommendations"].count() - 1
+if colortv_kk["recommendations"][colortv_ds]["pollingUrl"] <> invalid then
+colortv_iu(colortv_kk["recommendations"][colortv_ds]["pollingUrl"])
 end if
 end for
-colortv_iw["dataModel"] = colortv_kf
+colortv_ja["dataModel"] = colortv_kk
 while true
-colortv_ix = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
-colortv_iy = type(colortv_ix)
-if colortv_iy = "roSGScreenEvent"
-if colortv_ix.isScreenClosed() then
+colortv_jb = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
+colortv_jc = type(colortv_jb)
+if colortv_jc = "roSGScreenEvent"
+if colortv_jb.isScreenClosed() then
 exit while
 end if
-else if colortv_iy = "roSGNodeEvent"
-if colortv_ix.getNode() = "colorTvContentRecommendationEvents" then
-if colortv_ix.getField() = "clicked" then
-colortv_jg = colortv_ix.getData()
-if colortv_jg["clickTracker"] <> invalid then
-m.colortv_fz.colortv_p(colortv_jg["clickTracker"])
+else if colortv_jc = "roSGNodeEvent"
+if colortv_jb.getNode() = "colorTvContentRecommendationEvents" then
+if colortv_jb.getField() = "clicked" then
+colortv_jk = colortv_jb.getData()
+if colortv_jk["clickTracker"] <> invalid then
+m.colortv_gb.colortv_p(colortv_jk["clickTracker"])
 end if
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationClicked"] <> invalid then
-colortv_dt = {
-"videoId": colortv_jg["partnerVideoId"]
-"videoUrl": colortv_jg["url"]
-}
-m.colortv_im["contentRecommendationClicked"](colortv_ba, colortv_dt)
-end if
-exit while
-else if colortv_ix.getField() = "favourite" and colortv_ix.getData() <> "" then
-m.colortv_fz.colortv_aw(colortv_ix.getData())
-end if
-else if colortv_ix.getNode() = "colorTvGridEvents" then
-if colortv_ix.getField() = "impression" and colortv_ix.getData() <> ""
-m.colortv_fz.colortv_p(colortv_ix.getData())
-else if colortv_ix.getField() = "moreDataUrl" and colortv_ix.getData() <> "" then
-m.colortv_j(colortv_iw, colortv_ix.getData())
-else if colortv_ix.getField() = "closed" then
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationClosed"] <> invalid then
-m.colortv_im["contentRecommendationClosed"](colortv_ba)
-end if
-exit while
-end if
-else if colortv_ix.getNode() = "colorTvDiscoveryCenterEvents" then
-if colortv_ix.getField() = "subscribed" then
-colortv_jh = colortv_ix.getData()["clickedItemModel"]
-colortv_ji = colortv_ix.getData()["inputValue"]
-m.colortv_go(colortv_kf, colortv_jh, colortv_ji)
-else if colortv_ix.getField() = "clicked"
-colortv_jg = colortv_ix.getData()
-if colortv_jg["clickTracker"] <> invalid then
-m.colortv_fz.colortv_p(colortv_jg["clickTracker"])
-end if
-if m.colortv_im <> invalid and m.colortv_im["contentRecommendationClosed"] <> invalid then
-m.colortv_im["contentRecommendationClosed"](colortv_ba)
-end if
-if colortv_jg["type"] = "appstore" then
-if colortv_jg["clickData"]["contentId"] <> invalid then
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationClicked"] <> invalid then
+if colortv_jk["clickData"] <> invalid and colortv_jk["clickData"]["clickParams"] <> invalid then
+colortv_km = colortv_jk["clickData"]["clickParams"]
 else
-m.colortv_fz.colortv_ak(colortv_jg["clickData"]["channelId"])
+colortv_km = {}
 end if
-else if colortv_jg["type"] = "content"
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
+colortv_dw = {
+"videoId": colortv_jk["partnerVideoId"]
+"videoUrl": colortv_jk["url"]
+"videoParams": colortv_km
+}
+m.colortv_iq["contentRecommendationClicked"](colortv_ba, colortv_dw)
+end if
+exit while
+else if colortv_jb.getField() = "favourite" and colortv_jb.getData() <> "" then
+m.colortv_gb.colortv_aw(colortv_jb.getData())
+end if
+else if colortv_jb.getNode() = "colorTvGridEvents" then
+if colortv_jb.getField() = "impression" and colortv_jb.getData() <> ""
+m.colortv_gb.colortv_p(colortv_jb.getData())
+else if colortv_jb.getField() = "moreDataUrl" and colortv_jb.getData() <> "" then
+m.colortv_j(colortv_ja, colortv_jb.getData())
+else if colortv_jb.getField() = "closed" then
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationClosed"] <> invalid then
+m.colortv_iq["contentRecommendationClosed"](colortv_ba)
+end if
+exit while
+end if
+else if colortv_jb.getNode() = "colorTvDiscoveryCenterEvents" then
+if colortv_jb.getField() = "subscribed" then
+colortv_jl = colortv_jb.getData()["clickedItemModel"]
+colortv_jm = colortv_jb.getData()["inputValue"]
+m.colortv_gq(colortv_kk, colortv_jl, colortv_jm)
+else if colortv_jb.getField() = "clicked"
+colortv_jk = colortv_jb.getData()
+if colortv_jk["clickTracker"] <> invalid then
+m.colortv_gb.colortv_p(colortv_jk["clickTracker"])
+end if
+if m.colortv_iq <> invalid and m.colortv_iq["contentRecommendationClosed"] <> invalid then
+m.colortv_iq["contentRecommendationClosed"](colortv_ba)
+end if
+if colortv_jk["type"] = "appstore" then
+if colortv_jk["clickData"]["contentId"] <> invalid then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
+else
+m.colortv_gb.colortv_ak(colortv_jk["clickData"]["channelId"])
+end if
+else if colortv_jk["type"] = "content"
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
 end if
 exit while
 end if
@@ -1025,328 +1049,334 @@ end if
 end if
 m.timerTick()
 end while
-colortv_iv.close()
+colortv_iz.close()
 end sub
-sub colortv_hj(colortv_do as String, colortv_ds as Object)
+sub colortv_hn(colortv_do as String, colortv_dv as Object)
 if colortv_do = invalid then
 return
 end if
-if type(colortv_ds) = "roSGNodeEvent" then
-if colortv_ds.getField() = "state" then
-if colortv_ds.getData() = "playing" then
-if m.colortv_kh = invalid or not (m.colortv_kh.colortv_ki <> invalid and m.colortv_kh.colortv_ki) then
-if m.colortv_kh = invalid then
-m.colortv_kh = {}
+if type(colortv_dv) = "roSGNodeEvent" then
+if colortv_dv.getField() = "state" then
+if colortv_dv.getData() = "playing" then
+if m.colortv_kn = invalid or not (m.colortv_kn.colortv_ko <> invalid and m.colortv_kn.colortv_ko) then
+if m.colortv_kn = invalid then
+m.colortv_kn = {}
 end if
-m.colortv_kh.colortv_ki = true
-m.colortv_kh["positionSeconds"] = 0
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_STARTED", m.colortv_kh)
+m.colortv_kn.colortv_ko = true
+m.colortv_kn["positionSeconds"] = 0
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_STARTED", m.colortv_kn)
 else
-m.colortv_kj = true
+m.colortv_kp = true
 end if
-else if colortv_ds.getData() = "stopped"  and m.colortv_kh <> invalid then
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kh)
-m.colortv_kh = invalid
-else if colortv_ds.getData() = "paused" then
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_PAUSED", m.colortv_kh)
-else if colortv_ds.getData() = "finished"
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_COMPLETED", m.colortv_kh)
-m.colortv_kh = invalid
-if m.colortv_hs and not m.colortv_ht then
-m.colortv_ij()
+else if colortv_dv.getData() = "stopped"  and m.colortv_kn <> invalid then
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kn)
+m.colortv_kn = invalid
+else if colortv_dv.getData() = "paused" then
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_PAUSED", m.colortv_kn)
+else if colortv_dv.getData() = "finished"
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_COMPLETED", m.colortv_kn)
+m.colortv_kn = invalid
+if m.colortv_hw and not m.colortv_hx then
+m.colortv_in()
 end if
 end if
-else if colortv_ds.getField() = "position" then
-colortv_kk% = colortv_ds.getData()
-if m.colortv_kj <> invalid and m.colortv_kj then
-m.colortv_kj = false
-if m.colortv_kh <> invalid and colortv_kk% - m.colortv_kh["positionSeconds"] > 1 then
-m.colortv_kh["positionSeconds"] = colortv_kk%
+else if colortv_dv.getField() = "position" then
+colortv_kq% = colortv_dv.getData()
+if m.colortv_kp <> invalid and m.colortv_kp then
+m.colortv_kp = false
+if m.colortv_kn <> invalid and colortv_kq% - m.colortv_kn["positionSeconds"] > 1 then
+m.colortv_kn["positionSeconds"] = colortv_kq%
 end if
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kh)
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kn)
 end if
-if m.colortv_kh = invalid then
-m.colortv_kh = {}
+if m.colortv_kn = invalid then
+m.colortv_kn = {}
 end if
-m.colortv_kh["positionSeconds"] = colortv_kk%
-m.colortv_hq(colortv_kk%)
+m.colortv_kn["positionSeconds"] = colortv_kq%
+m.colortv_hu(colortv_kq%)
 end if
-else if type(colortv_ds) = "roVideoPlayerEvent" or type(colortv_ds) = "roVideoScreenEvent" then
-if colortv_ds.isStreamStarted() then
-if m.colortv_kj = invalid or m.colortv_kj = false then
-m.colortv_kh = { "positionSeconds": colortv_ds.getIndex() }
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_STARTED", m.colortv_kh)
+else if type(colortv_dv) = "roVideoPlayerEvent" or type(colortv_dv) = "roVideoScreenEvent" then
+if colortv_dv.isStreamStarted() then
+if m.colortv_kp = invalid or m.colortv_kp = false then
+m.colortv_kn = { "positionSeconds": colortv_dv.getIndex() }
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_STARTED", m.colortv_kn)
 end if
-else if colortv_ds.isPlaybackPosition() then
-m.colortv_kh = { "positionSeconds": colortv_ds.getIndex() }
-if m.colortv_kj <> invalid and m.colortv_kj then
-m.colortv_kj = false
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kh)
+else if colortv_dv.isPlaybackPosition() then
+m.colortv_kn = { "positionSeconds": colortv_dv.getIndex() }
+if m.colortv_kp <> invalid and m.colortv_kp then
+m.colortv_kp = false
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kn)
 end if
-m.colortv_hq(colortv_ds.getIndex())
-m.colortv_ic(colortv_ds.getIndex())
-else if colortv_ds.isFullResult() then
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_COMPLETED", m.colortv_kh)
-m.colortv_kh = invalid
-if m.colortv_hs and not m.colortv_ht then
-m.colortv_ij()
+m.colortv_hu(colortv_dv.getIndex())
+m.colortv_ig(colortv_dv.getIndex())
+else if colortv_dv.isFullResult() then
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_COMPLETED", m.colortv_kn)
+m.colortv_kn = invalid
+if m.colortv_hw and not m.colortv_hx then
+m.colortv_in()
 end if
-else if colortv_ds.isPartialResult() and m.colortv_kh <> invalid then
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kh)
-m.colortv_kh = invalid
-else if colortv_ds.isPaused() then
-m.colortv_kj = true
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_PAUSED", m.colortv_kh)
-else if colortv_ds.isResumed() then
-m.colortv_kj = false
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kh)
+else if colortv_dv.isPartialResult() and m.colortv_kn <> invalid then
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kn)
+m.colortv_kn = invalid
+else if colortv_dv.isPaused() then
+m.colortv_kp = true
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_PAUSED", m.colortv_kn)
+else if colortv_dv.isResumed() then
+m.colortv_kp = false
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_RESUMED", m.colortv_kn)
 end if
-else if type(colortv_ds) = "String" or type(colortv_ds) = "roString" then
-if colortv_ds = "interrupted" and m.colortv_kh <> invalid then
-m.colortv_fz.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kh)
-m.colortv_kh = invalid
+else if type(colortv_dv) = "String" or type(colortv_dv) = "roString" then
+if colortv_dv = "interrupted" and m.colortv_kn <> invalid then
+m.colortv_gb.colortv_ay(colortv_do, "VIDEO_STOPPED", m.colortv_kn)
+m.colortv_kn = invalid
 end if
 end if
 end sub
-sub colortv_hl(colortv_kl, colortv_bs, colortv_km=10 as Integer, colortv_ke="" as String)
-m.loadUpNext(colortv_kl, colortv_bs, colortv_km, colortv_ke)
+sub colortv_hp(colortv_kr, colortv_bs, colortv_ks=10 as Integer, colortv_kj="" as String)
+m.loadUpNext(colortv_kr, colortv_bs, colortv_ks, colortv_kj)
 end sub
-sub colortv_hk(colortv_kl, colortv_bs, colortv_km as Integer, colortv_ke as String, colortv_kn=invalid)
-m.colortv_ko = colortv_kl
-m.colortv_kp = colortv_kn
-m.colortv_kq = colortv_bs
-m.colortv_km = colortv_km + 1
-m.colortv_kr = true
-m.colortv_ht = false
+sub colortv_ho(colortv_kr, colortv_bs, colortv_ks as Integer, colortv_kj as String, colortv_kt=invalid)
+m.colortv_ku = colortv_kr
+m.colortv_kv = colortv_kt
+m.colortv_kw = colortv_bs
+m.colortv_ks = colortv_ks + 1
+m.colortv_kx = true
+m.colortv_hx = false
 colortv_bh("loading up next")
 colortv_ba = "VideoEnd"
-if m.colortv_hd.DoesExist(colortv_ba) and m.colortv_hd[colortv_ba]["previousVideoId"] = colortv_ke then
+if m.colortv_hh.DoesExist(colortv_ba) and m.colortv_hh[colortv_ba]["previousVideoId"] = colortv_kj then
 colortv_bh("Up next is already loaded")
-if m.colortv_in <> invalid and m.colortv_in["upNextLoaded"] <> invalid then
-m.colortv_in["upNextLoaded"]()
+if m.colortv_ir <> invalid and m.colortv_ir["upNextLoaded"] <> invalid then
+m.colortv_ir["upNextLoaded"]()
 end if
 return
 end if
-m.colortv_fz.colortv_au("VideoEnd", colortv_ke)
+m.colortv_gb.colortv_au("VideoEnd", colortv_kj)
 end sub
-sub colortv_hm(colortv_kl, colortv_kn, colortv_bs, colortv_km=10 as Integer, colortv_ke="" as String)
-m.loadUpNext(colortv_kl, colortv_bs, colortv_km, colortv_ke, colortv_kn)
+sub colortv_hq(colortv_kr, colortv_kt, colortv_bs, colortv_ks=10 as Integer, colortv_kj="" as String)
+m.loadUpNext(colortv_kr, colortv_bs, colortv_ks, colortv_kj, colortv_kt)
 end sub
-function colortv_hn(colortv_ks as Object, colortv_ba as String)
-if colortv_ks.DoesExist("error") then
-m.colortv_ho(colortv_ba, colortv_ks["errorCode"].toStr(), colortv_ks["error"])
+function colortv_hr(colortv_ky as Object, colortv_ba as String)
+if colortv_ky.DoesExist("error") then
+m.colortv_hs(colortv_ba, colortv_ky["errorCode"].toStr(), colortv_ky["error"])
 else
 colortv_bh("Up next has been loaded")
-m.colortv_hd.AddReplace(colortv_ba, colortv_ks)
-if m.colortv_in <> invalid and m.colortv_in["upNextLoaded"] <> invalid then
-m.colortv_in["upNextLoaded"]()
+m.colortv_hh.AddReplace(colortv_ba, colortv_ky)
+if m.colortv_ir <> invalid and m.colortv_ir["upNextLoaded"] <> invalid then
+m.colortv_ir["upNextLoaded"]()
 end if
 end if
 end function
-function colortv_hp(colortv_ba as String, colortv_iz as String, colortv_ja as String)
-if m.colortv_in <> invalid and m.colortv_in["upNextError"] <> invalid then
+function colortv_ht(colortv_ba as String, colortv_jd as String, colortv_je as String)
+if m.colortv_ir <> invalid and m.colortv_ir["upNextError"] <> invalid then
 colortv_bi = {
 "placement": colortv_ba
-"errorCode": colortv_iz
-"errorMessage": colortv_ja
+"errorCode": colortv_jd
+"errorMessage": colortv_je
 }
-m.colortv_in["upNextError"](colortv_bi)
+m.colortv_ir["upNextError"](colortv_bi)
 else
-colortv_bh("Up next error has occurred with code: """ + colortv_iz + """ and message: """ + colortv_ja + """")
+colortv_bh("Up next error has occurred with code: """ + colortv_jd + """ and message: """ + colortv_je + """")
 end if
 end function
-function colortv_hr(colortv_kt as Integer)
-if m.colortv_hd.DoesExist("VideoEnd") and m.colortv_ko <> invalid and not m.colortv_hs and not m.colortv_ht then
-if type(m.colortv_ko) = "roSGNode" then
-colortv_ku = m.colortv_ko["duration"]
+function colortv_hv(colortv_kz as Integer)
+if m.colortv_hh.DoesExist("VideoEnd") and m.colortv_ku <> invalid and not m.colortv_hw and not m.colortv_hx then
+if type(m.colortv_ku) = "roSGNode" then
+colortv_la = m.colortv_ku["duration"]
 else
-colortv_ku = m.colortv_ko.getPlaybackDuration()
+colortv_la = m.colortv_ku.getPlaybackDuration()
 end if
-if colortv_ku > 0 and colortv_ku - colortv_kt < m.colortv_km then
-if not m.colortv_kr then
-m.colortv_hw(m.colortv_hd["VideoEnd"]["recommendations"][0])
-m.colortv_fz.colortv_p(m.colortv_kv["impressionUrl"])
+if colortv_la > 0 and colortv_la - colortv_kz < m.colortv_ks then
+if not m.colortv_kx then
+m.colortv_ia(m.colortv_hh["VideoEnd"]["recommendations"][0])
+m.colortv_gb.colortv_p(m.colortv_lb["impressionUrl"])
 else
-m.colortv_kr = false
+m.colortv_kx = false
 end if
 end if
 end if
-if m.colortv_hs and not m.colortv_ht and type(m.colortv_ko) = "roVideoPlayer" and m.colortv_ko.getPlaybackDuration() - colortv_kt > m.colortv_km then
+if m.colortv_hw and not m.colortv_hx and type(m.colortv_ku) = "roVideoPlayer" and m.colortv_ku.getPlaybackDuration() - colortv_kz > m.colortv_ks then
+m.colortv_ii()
+end if
+end function
+function colortv_ib(colortv_lc)
+m.colortv_lb = colortv_lc
+if type(m.colortv_ku) = "roSGNode" then
+m.colortv_ic()
+else
 m.colortv_ie()
 end if
 end function
-function colortv_hx(colortv_kw)
-m.colortv_kv = colortv_kw
-if type(m.colortv_ko) = "roSGNode" then
-m.colortv_hy()
-else
-m.colortv_ia()
-end if
-end function
-function colortv_hz()
-m.colortv_kx = createObject("roSGNode", "colortv_up_next")
-m.colortv_ko.appendChild(m.colortv_kx)
-m.colortv_kx["timeBeforeVideoEnds"] = m.colortv_km
-m.colortv_kx["videoNodeReference"] = m.colortv_ko
-m.colortv_kx["id"] = "colortv_up_next"
-m.colortv_kx["dataModel"] = m.colortv_kv
-m.colortv_kx["show"] = true
-m.colortv_kx.setFocus(true)
-m.colortv_kx.observeField("cancelled", m.colortv_kq)
-m.colortv_kx.observeField("videoMoved", m.colortv_kq)
-m.colortv_hs = true
-end function
-function colortv_ib()
-m.colortv_ky = colortv_kz(m.colortv_kp)
-m.colortv_ky.colortv_hw(m.colortv_kv)
-m.colortv_hs = true
-end function
-function colortv_id(colortv_kt)
-if m.colortv_hs and not m.colortv_ht and m.colortv_ky <> invalid then
-m.colortv_ky.colortv_la(colortv_kt, m.colortv_ko.getPlaybackDuration())
-end if
-end function
-function colortv_ii(colortv_ix)
-colortv_lb = false
-if type(colortv_ix) = "roImageCanvasEvent" and colortv_ix.isRemoteKeyPressed() and colortv_ix.GetIndex() = 2 or colortv_ix.GetIndex() = 0 and m.colortv_hs then
-m.colortv_ie()
-m.colortv_ht = true
-colortv_lb = true
-end if
-return colortv_lb
+function colortv_id()
+m.colortv_ld = createObject("roSGNode", "colortv_up_next")
+m.colortv_ku.appendChild(m.colortv_ld)
+m.colortv_ld["timeBeforeVideoEnds"] = m.colortv_ks
+m.colortv_ld["videoNodeReference"] = m.colortv_ku
+m.colortv_ld["id"] = "colortv_up_next"
+m.colortv_ld["dataModel"] = m.colortv_lb
+m.colortv_ld["show"] = true
+m.colortv_ld.setFocus(true)
+m.colortv_ld.observeField("cancelled", m.colortv_kw)
+m.colortv_ld.observeField("videoMoved", m.colortv_kw)
+m.colortv_hw = true
 end function
 function colortv_if()
-m.colortv_kr = true
-m.colortv_hs = false
-if type(m.colortv_ko) = "roSGNode" then
-m.colortv_ig()
+m.colortv_le = colortv_lf(m.colortv_kv)
+m.colortv_le.colortv_ia(m.colortv_lb)
+m.colortv_hw = true
+end function
+function colortv_ih(colortv_kz)
+if m.colortv_hw and not m.colortv_hx and m.colortv_le <> invalid then
+m.colortv_le.colortv_lg(colortv_kz, m.colortv_ku.getPlaybackDuration())
+end if
+end function
+function colortv_im(colortv_jb)
+colortv_lh = false
+if type(colortv_jb) = "roImageCanvasEvent" and colortv_jb.isRemoteKeyPressed() and colortv_jb.GetIndex() = 2 or colortv_jb.GetIndex() = 0 and m.colortv_hw then
+m.colortv_ii()
+m.colortv_hx = true
+colortv_lh = true
+end if
+return colortv_lh
+end function
+function colortv_ij()
+m.colortv_kx = true
+m.colortv_hw = false
+if type(m.colortv_ku) = "roSGNode" then
+m.colortv_ik()
 else
-m.colortv_ky.colortv_ie()
+m.colortv_le.colortv_ii()
 end if
 end function
-function colortv_ih()
-m.colortv_ko.removeChild(m.colortv_kx)
-m.colortv_ko.setFocus(true)
+function colortv_il()
+m.colortv_ku.removeChild(m.colortv_ld)
+m.colortv_ku.setFocus(true)
 end function
-function colortv_hv(colortv_ds)
-if type(colortv_ds) = "roSGNodeEvent" then
-if colortv_ds.getField() = "cancelled"
-m.colortv_ie()
-m.colortv_ht = true
-else if colortv_ds.getField() = "videoMoved" and m.colortv_hs
-m.colortv_ie()
+function colortv_hz(colortv_dv)
+if type(colortv_dv) = "roSGNodeEvent" then
+if colortv_dv.getField() = "cancelled"
+m.colortv_ii()
+m.colortv_hx = true
+else if colortv_dv.getField() = "videoMoved" and m.colortv_hw
+m.colortv_ii()
 end if
 end if
 end function
-function colortv_ik()
-m.colortv_hs = false
-m.colortv_hu = true
-m.colortv_ko = invalid
-m.colortv_hd.delete("VideoEnd")
-colortv_dt = {}
-colortv_dt["videoId"] = m.colortv_kv["partnerVideoId"]
-colortv_dt["videoUrl"] = m.colortv_kv["url"]
-m.colortv_fz.colortv_p(m.colortv_kv["clickTracker"])
-if m.colortv_in <> invalid and m.colortv_in["upNextClicked"] <> invalid then
-m.colortv_in["upNextClicked"](colortv_dt)
+function colortv_io()
+m.colortv_hw = false
+m.colortv_hy = true
+m.colortv_ku = invalid
+m.colortv_hh.delete("VideoEnd")
+colortv_dw = {}
+colortv_dw["videoId"] = m.colortv_lb["partnerVideoId"]
+colortv_dw["videoUrl"] = m.colortv_lb["url"]
+if m.colortv_lb["clickData"] <> invalid and m.colortv_lb["clickData"]["clickParams"] <> invalid then
+colortv_km = m.colortv_lb["clickData"]["clickParams"]
+else
+colortv_km = {}
+end if
+colortv_dw["videoParams"] = colortv_km
+m.colortv_gb.colortv_p(m.colortv_lb["clickTracker"])
+if m.colortv_ir <> invalid and m.colortv_ir["upNextClicked"] <> invalid then
+m.colortv_ir["upNextClicked"](colortv_dw)
 end if
 end function
 function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.4.0"
+return "1.5.0"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000
 end function
-sub colortv_iq(colortv_lc)
-if colortv_lc = invalid then
+sub colortv_iu(colortv_li)
+if colortv_li = invalid then
 return
 end if
-colortv_fm = colortv_bv("pollingUrls", "colortv")
-if colortv_fm = invalid then
-colortv_fm = "{}"
+colortv_fo = colortv_bv("pollingUrls", "colortv")
+if colortv_fo = invalid then
+colortv_fo = "{}"
 end if
-colortv_fn = ParseJson(colortv_fm)
-colortv_fn[colortv_er().toStr()] = colortv_lc
-colortv_bx("pollingUrls", FormatJson(colortv_fn), "colortv")
+colortv_fp = ParseJson(colortv_fo)
+colortv_fp[colortv_eu().toStr()] = colortv_li
+colortv_bx("pollingUrls", FormatJson(colortv_fp), "colortv")
 end sub
-function colortv_jw()
-colortv_ld = []
-colortv_le = colortv_bv("installedApps", "colortv")
-if colortv_le <> invalid
-colortv_ld = ParseJson(colortv_le)
+function colortv_ka()
+colortv_lj = []
+colortv_lk = colortv_bv("installedApps", "colortv")
+if colortv_lk <> invalid
+colortv_lj = ParseJson(colortv_lk)
 end if
-return colortv_ld
+return colortv_lj
 end function
-function colortv_iu(colortv_io) as Boolean
-return colortv_io.colortv_lf <> invalid and colortv_io.colortv_lf
+function colortv_iy(colortv_is) as Boolean
+return colortv_is.colortv_ll <> invalid and colortv_is.colortv_ll
 end function
-function colortv_ip(colortv_ba as String, colortv_gb as Object) as Boolean
-if not colortv_gb.DoesExist(colortv_ba) then
+function colortv_it(colortv_ba as String, colortv_gd as Object) as Boolean
+if not colortv_gd.DoesExist(colortv_ba) then
 colortv_bh("Ad for placement: " + colortv_ba + " isn't loaded. Please call loadAd function first.")
 return false
-else if not colortv_lg(colortv_gb[colortv_ba]) then
+else if not colortv_lm(colortv_gd[colortv_ba]) then
 colortv_bh("Ad for placement: " + colortv_ba + " is not valid anymore. Please load the ad again.")
 return false
 end if
 return true
 end function
-function colortv_kg(colortv_ba as String, colortv_lh as Object) as Boolean
-if not colortv_lh.DoesExist(colortv_ba) then
+function colortv_kl(colortv_ba as String, colortv_ln as Object) as Boolean
+if not colortv_ln.DoesExist(colortv_ba) then
 colortv_bh("Content recommendation for placement: " + colortv_ba + " isn't loaded. Please call loadContentRecommendation function first.")
 return false
-else if not colortv_lg(colortv_lh[colortv_ba]) then
+else if not colortv_lm(colortv_ln[colortv_ba]) then
 colortv_bh("Content recommendation for placement: " + colortv_ba + " is not valid anymore. Please load the content recommendation again.")
 return false
 end if
 return true
 end function
-function colortv_lg(colortv_io) as Boolean
-colortv_li = CreateObject("roDateTime")
-colortv_li.fromIso8601String(colortv_io["validUntil"])
-colortv_lj = CreateObject("roDateTime")
-return colortv_li.asSeconds() > colortv_lj.asSeconds()
+function colortv_lm(colortv_is) as Boolean
+colortv_lo = CreateObject("roDateTime")
+colortv_lo.fromIso8601String(colortv_is["validUntil"])
+colortv_lp = CreateObject("roDateTime")
+return colortv_lo.asSeconds() > colortv_lp.asSeconds()
 end function
-function colortv_je(colortv_lk as String) as Boolean
-return colortv_lk = "CLICK_TO_SMS" or colortv_lk = "CLICK_TO_CALL" or colortv_lk = "CLICK_TO_EMAIL"
+function colortv_ji(colortv_lq as String) as Boolean
+return colortv_lq = "CLICK_TO_SMS" or colortv_lq = "CLICK_TO_CALL" or colortv_lq = "CLICK_TO_EMAIL"
 end function
-function colortv_jf(colortv_lk as String) as Boolean
-return colortv_lk = "CLICK_TO_APPSTORE" or colortv_lk = "CLICK_TO_CONTENT"
+function colortv_jj(colortv_lq as String) as Boolean
+return colortv_lq = "CLICK_TO_APPSTORE" or colortv_lq = "CLICK_TO_CONTENT"
 end function
 function colortv_bl(colortv_cc as String) as Object
 colortv_c = ParseJson(colortv_cc)
 if not colortv_c.DoesExist("error") then
-colortv_ll = CreateObject("roDateTime")
-colortv_ll.fromSeconds(colortv_ll.asSeconds() + colortv_c["validFor"])
-colortv_c["validUntil"] = colortv_ll.toIsoString()
-colortv_c.colortv_jp = colortv_lm
-colortv_c["storedPhoneNumber"] = colortv_ln("phone")
-colortv_c["storedEmailAddress"] = colortv_ln("email")
+colortv_lr = CreateObject("roDateTime")
+colortv_lr.fromSeconds(colortv_lr.asSeconds() + colortv_c["validFor"])
+colortv_c["validUntil"] = colortv_lr.toIsoString()
+colortv_c.colortv_jt = colortv_ls
+colortv_c["storedPhoneNumber"] = colortv_lt("phone")
+colortv_c["storedEmailAddress"] = colortv_lt("email")
 end if
 return colortv_c
 end function
-function colortv_ln(colortv_bp)
-return ColorTVSdkGetInstance().colortv_gz(colortv_bp)
+function colortv_lt(colortv_bp)
+return ColorTVSdkGetInstance().colortv_hb(colortv_bp)
 end function
-function colortv_lm(colortv_lo as String) as Void
-if colortv_lo = invalid then
+function colortv_ls(colortv_lu as String) as Void
+if colortv_lu = invalid then
 return
 end if
-colortv_lp = CreateObject("roRegex", "\A[^@]+@[^@]+\z", "")
-colortv_lq = CreateObject("roRegex", "[\(]?[0-9]{3}[\)]?[ ]?[-]?[ ]?[0-9]{3}[ ]?[-]?[ ]?[0-9]{3,4}", "")
-colortv_lr = invalid
-if colortv_lp.isMatch(colortv_lo) then
-colortv_lr = "email"
-else if colortv_lq.isMatch(colortv_lo)
-colortv_lr = "phone"
+colortv_lv = CreateObject("roRegex", "\A[^@]+@[^@]+\z", "")
+colortv_lw = CreateObject("roRegex", "[\(]?[0-9]{3}[\)]?[ ]?[-]?[ ]?[0-9]{3}[ ]?[-]?[ ]?[0-9]{3,4}", "")
+colortv_lx = invalid
+if colortv_lv.isMatch(colortv_lu) then
+colortv_lx = "email"
+else if colortv_lw.isMatch(colortv_lu)
+colortv_lx = "phone"
 end if
-if colortv_lr = invalid then
+if colortv_lx = invalid then
 return
 end if
-colortv_ls = ColorTVSdkGetInstance()
-colortv_ls.colortv_hb(colortv_lo, colortv_lr)
+colortv_ly = ColorTVSdkGetInstance()
+colortv_ly.colortv_hd(colortv_lu, colortv_lx)
 end function
 function colortv_cd(colortv_cc) as Object
 if colortv_cc = invalid or Len(colortv_cc) = 0
@@ -1364,567 +1394,378 @@ end function
 function colortv_cg()
 return 60 * 1000
 end function
-function colortv_ci(colortv_lt as Double, colortv_fj as Dynamic, colortv_co as Function)
+function colortv_ci(colortv_lz as Double, colortv_fl as Dynamic, colortv_co as Function)
 colortv_c = {
 colortv_co: colortv_co,
-colortv_fj: colortv_fj,
-colortv_js: colortv_lu,
-equals: colortv_lv
+colortv_fl: colortv_fl,
+colortv_jw: colortv_ma,
+equals: colortv_mb
 }
-colortv_c.colortv_lw = colortv_er() + colortv_lt
+colortv_c.colortv_mc = colortv_eu() + colortv_lz
 return colortv_c
 end function
-function colortv_lu() as Boolean
-colortv_lx = colortv_er()
-if colortv_lx < m.colortv_lw then
+function colortv_ma() as Boolean
+colortv_md = colortv_eu()
+if colortv_md < m.colortv_mc then
 return false
 end if
-if m.colortv_fj.isEmpty() then
+if m.colortv_fl.isEmpty() then
 m.colortv_co()
 else
-m.colortv_co(m.colortv_fj)
+m.colortv_co(m.colortv_fl)
 end if
 return true
 end function
-function colortv_lv(colortv_ly as Dynamic) as Boolean
-return m.colortv_lw = colortv_ly.colortv_lw and m.colortv_co = colortv_ly.colortv_co
+function colortv_mb(colortv_me as Dynamic) as Boolean
+return m.colortv_mc = colortv_me.colortv_mc and m.colortv_co = colortv_me.colortv_co
 end function
-function colortv_kz(colortv_kn)
-colortv_lz = createObject("roFontRegistry")
-colortv_lz.register("pkg:/fonts/colortv/ABeeZee-Regular.otf")
-colortv_ma = 720 / 1080
-colortv_mb = int(960.0 * colortv_ma)
-colortv_mc = int(894.0 * colortv_ma)
+function colortv_lf(colortv_kt)
+colortv_mf = createObject("roFontRegistry")
+colortv_mf.register("pkg:/fonts/colortv/ABeeZee-Regular.otf")
+colortv_mg = 720 / 1080
+colortv_mh = int(960.0 * colortv_mg)
+colortv_mi = int(894.0 * colortv_mg)
 colortv_c = {
-colortv_lz: colortv_lz
-colortv_kn: colortv_kn
-colortv_mb: colortv_mb
-colortv_mc: colortv_mc
-colortv_ma: colortv_ma
-colortv_md: false
-colortv_hw: colortv_me
-colortv_mf: colortv_mg
-colortv_ie: colortv_mh
-colortv_la: colortv_mi
-colortv_mj: colortv_mk
+colortv_mf: colortv_mf
+colortv_kt: colortv_kt
+colortv_mh: colortv_mh
+colortv_mi: colortv_mi
+colortv_mg: colortv_mg
+colortv_mj: false
+colortv_ia: colortv_mk
 colortv_ml: colortv_mm
-colortv_mn: colortv_mo
+colortv_ii: colortv_mn
+colortv_lg: colortv_mo
 colortv_mp: colortv_mq
 colortv_mr: colortv_ms
 colortv_mt: colortv_mu
+colortv_mv: colortv_mw
+colortv_mx: colortv_my
+colortv_mz: colortv_na
 }
 return colortv_c
 end function
-function colortv_me(colortv_kw)
-m.colortv_mf(colortv_kw)
-m.colortv_kn.SetLayer(10028, m.colortv_mv)
-m.colortv_kn.SetLayer(10024, m.colortv_mw)
-m.colortv_kn.SetLayer(10025, m.colortv_mx)
-m.colortv_kn.SetLayer(10026, m.colortv_my)
-m.colortv_kn.SetLayer(10027, m.colortv_mz)
+function colortv_mk(colortv_lc)
+m.colortv_ml(colortv_lc)
+m.colortv_kt.SetLayer(10028, m.colortv_nb)
+m.colortv_kt.SetLayer(10024, m.colortv_nc)
+m.colortv_kt.SetLayer(10025, m.colortv_nd)
+m.colortv_kt.SetLayer(10026, m.colortv_ne)
+m.colortv_kt.SetLayer(10027, m.colortv_nf)
 end function
-function colortv_mg(colortv_kw)
-m.colortv_mw = m.colortv_mj()
-m.colortv_mx = m.colortv_ml()
-m.colortv_my = m.colortv_mn(colortv_kw["title"].trim())
-m.colortv_mz = m.colortv_mr(colortv_kw["description"].trim())
-m.colortv_mv = m.colortv_mt(colortv_kw["thumbnailUrl"])
+function colortv_mm(colortv_lc)
+m.colortv_nc = m.colortv_mp()
+m.colortv_nd = m.colortv_mr()
+m.colortv_ne = m.colortv_mt(colortv_lc["title"].trim())
+m.colortv_nf = m.colortv_mx(colortv_lc["description"].trim())
+m.colortv_nb = m.colortv_mz(colortv_lc["thumbnailUrl"])
 end function
-function colortv_mh()
-for colortv_ey = 10024 to 10030
-m.colortv_kn.clearLayer(colortv_ey)
+function colortv_mn()
+for colortv_ds = 10024 to 10030
+m.colortv_kt.clearLayer(colortv_ds)
 end for
 end function
-function colortv_mi(colortv_lj, colortv_na)
-if not m.colortv_md then
-m.colortv_md = true
-m.colortv_nb = colortv_na - colortv_lj
+function colortv_mo(colortv_lp, colortv_ng)
+if not m.colortv_mj then
+m.colortv_mj = true
+m.colortv_nh = colortv_ng - colortv_lp
 end if
-colortv_nc% = m.colortv_mb + 555.0 * m.colortv_ma
-colortv_nd% = m.colortv_mc + 25.0 * m.colortv_ma
-colortv_ne% = 50.0 * m.colortv_ma
-colortv_nf% = 50.0 * m.colortv_ma
-colortv_ng = colortv_el(255, 255, 255)
-colortv_nh = (colortv_na - colortv_lj).toStr()
-colortv_ni = m.colortv_lz.get("ABeeZee", int(17.0*m.colortv_ma), false, false)
-colortv_nj = {
+colortv_ni% = m.colortv_mh + 555.0 * m.colortv_mg
+colortv_nj% = m.colortv_mi + 25.0 * m.colortv_mg
+colortv_nk% = 50.0 * m.colortv_mg
+colortv_nl% = 50.0 * m.colortv_mg
+colortv_nm = colortv_eo(255, 255, 255)
+colortv_nn = (colortv_ng - colortv_lp).toStr()
+colortv_no = m.colortv_mf.get("ABeeZee", int(17.0*m.colortv_mg), false, false)
+colortv_np = {
 "TargetRect": {
-"x": colortv_nc%
-"y": colortv_nd%
-"w": colortv_ne%
-"h": colortv_nf%
+"x": colortv_ni%
+"y": colortv_nj%
+"w": colortv_nk%
+"h": colortv_nl%
 }
-"Text": colortv_nh
+"Text": colortv_nn
 "TextAttrs":{
-"Color" : colortv_ng,
-"Font" : colortv_ni,
+"Color" : colortv_nm,
+"Font" : colortv_no,
 "HAlign" : "HCenter",
 "VAlign" : "VCenter",
 "Direction" : "LeftToRight"
 }
 }
-colortv_nk! = (m.colortv_nb - (colortv_na - colortv_lj)) / m.colortv_nb
-if colortv_nk! >= 1 then
-colortv_nl = "colortv_timer_16"
-else if colortv_nk! >= 0.93 then
-colortv_nl = "colortv_timer_15"
-else if colortv_nk! >= 0.86 then
-colortv_nl = "colortv_timer_14"
-else if colortv_nk! >= 0.8 then
-colortv_nl = "colortv_timer_13"
-else if colortv_nk! >= 0.73 then
-colortv_nl = "colortv_timer_12"
-else if colortv_nk! >= 0.66 then
-colortv_nl = "colortv_timer_11"
-else if colortv_nk! >= 0.6 then
-colortv_nl = "colortv_timer_10"
-else if colortv_nk! >= 0.53 then
-colortv_nl = "colortv_timer_9"
-else if colortv_nk! >= 0.46 then
-colortv_nl = "colortv_timer_8"
-else if colortv_nk! >= 0.4 then
-colortv_nl = "colortv_timer_7"
-else if colortv_nk! >= 0.33 then
-colortv_nl = "colortv_timer_6"
-else if colortv_nk! >= 0.26 then
-colortv_nl = "colortv_timer_5"
-else if colortv_nk! >= 0.2 then
-colortv_nl = "colortv_timer_4"
-else if colortv_nk! >= 0.13 then
-colortv_nl = "colortv_timer_3"
-else if colortv_nk! >= 0.066 then
-colortv_nl = "colortv_timer_2"
+colortv_nq! = (m.colortv_nh - (colortv_ng - colortv_lp)) / m.colortv_nh
+if colortv_nq! >= 1 then
+colortv_nr = "colortv_timer_16"
+else if colortv_nq! >= 0.93 then
+colortv_nr = "colortv_timer_15"
+else if colortv_nq! >= 0.86 then
+colortv_nr = "colortv_timer_14"
+else if colortv_nq! >= 0.8 then
+colortv_nr = "colortv_timer_13"
+else if colortv_nq! >= 0.73 then
+colortv_nr = "colortv_timer_12"
+else if colortv_nq! >= 0.66 then
+colortv_nr = "colortv_timer_11"
+else if colortv_nq! >= 0.6 then
+colortv_nr = "colortv_timer_10"
+else if colortv_nq! >= 0.53 then
+colortv_nr = "colortv_timer_9"
+else if colortv_nq! >= 0.46 then
+colortv_nr = "colortv_timer_8"
+else if colortv_nq! >= 0.4 then
+colortv_nr = "colortv_timer_7"
+else if colortv_nq! >= 0.33 then
+colortv_nr = "colortv_timer_6"
+else if colortv_nq! >= 0.26 then
+colortv_nr = "colortv_timer_5"
+else if colortv_nq! >= 0.2 then
+colortv_nr = "colortv_timer_4"
+else if colortv_nq! >= 0.13 then
+colortv_nr = "colortv_timer_3"
+else if colortv_nq! >= 0.066 then
+colortv_nr = "colortv_timer_2"
 else
-colortv_nl = "colortv_timer_1"
+colortv_nr = "colortv_timer_1"
 end if
-colortv_nm = {
-"Url": "pkg:/images/colortv/timer/" + colortv_nl + ".png"
+colortv_ns = {
+"Url": "pkg:/images/colortv/timer/" + colortv_nr + ".png"
 "TargetRect": {
-"x": colortv_nc%
-"y": colortv_nd%
-"w": colortv_ne%
-"h": colortv_nf%
+"x": colortv_ni%
+"y": colortv_nj%
+"w": colortv_nk%
+"h": colortv_nl%
 }
 }
-m.colortv_kn.SetLayer(10029, colortv_nm)
-m.colortv_kn.SetLayer(10030, colortv_nj)
+m.colortv_kt.SetLayer(10029, colortv_ns)
+m.colortv_kt.SetLayer(10030, colortv_np)
 end function
-function colortv_mk()
+function colortv_mq()
 return {
 "TargetRect": {
-"x": m.colortv_mb
-"y": m.colortv_mc
-"w": int(4.0 * m.colortv_ma)
-"h": int(154.0 * m.colortv_ma)
+"x": m.colortv_mh
+"y": m.colortv_mi
+"w": int(4.0 * m.colortv_mg)
+"h": int(154.0 * m.colortv_mg)
 }
 "color": "#ffcc0000"
 }
 end function
-function colortv_mm()
+function colortv_ms()
 return {
 "TargetRect": {
-"x": m.colortv_mb + int(4.0 * m.colortv_ma)
-"y": m.colortv_mc
-"w": int(626.0 * m.colortv_ma)
-"h": int(154.0 * m.colortv_ma)
+"x": m.colortv_mh + int(4.0 * m.colortv_mg)
+"y": m.colortv_mi
+"w": int(626.0 * m.colortv_mg)
+"h": int(154.0 * m.colortv_mg)
 }
 "color": "#ff000000"
 }
 end function
-function colortv_mo(colortv_nn)
-colortv_no = m.colortv_lz.getFont("ABeeZee", int(26.0*m.colortv_ma), false, false)
-colortv_np = m.colortv_lz.get("ABeeZee", int(26.0*m.colortv_ma), false, false)
-colortv_nq = m.colortv_mp(colortv_nn, colortv_no, 505.0 * m.colortv_ma)
+function colortv_mu(colortv_nt)
+colortv_nu = m.colortv_mf.getFont("ABeeZee", int(26.0*m.colortv_mg), false, false)
+colortv_nv = m.colortv_mf.get("ABeeZee", int(26.0*m.colortv_mg), false, false)
+colortv_nw = m.colortv_mv(colortv_nt, colortv_nu, 505.0 * m.colortv_mg)
 return {
 "TargetRect": {
-"x": m.colortv_mb + int(24.0 * m.colortv_ma)
-"y": m.colortv_mc + int(32.0 * m.colortv_ma)
-"w": int(550.0 * m.colortv_ma)
-"h": int(26.0 * m.colortv_ma)
+"x": m.colortv_mh + int(24.0 * m.colortv_mg)
+"y": m.colortv_mi + int(32.0 * m.colortv_mg)
+"w": int(550.0 * m.colortv_mg)
+"h": int(26.0 * m.colortv_mg)
 }
-"Text": colortv_nq
+"Text": colortv_nw
 "TextAttrs":{
 "Color" : "#ffffffff",
-"Font" : colortv_np,
+"Font" : colortv_nv,
 "HAlign" : "Left",
 "VAlign" : "Top",
 "TextDirection": "LeftToRight"
 }
 }
 end function
-function colortv_mq(colortv_nr, colortv_ns, colortv_nt)
-if colortv_ns.GetOneLineWidth(colortv_nr, 10000) < colortv_nt
-return colortv_nr
+function colortv_mw(colortv_nx, colortv_ny, colortv_nz)
+if colortv_ny.GetOneLineWidth(colortv_nx, 10000) < colortv_nz
+return colortv_nx
 else
-while colortv_ns.GetOneLineWidth(colortv_nr + "...", 10000) > colortv_nt
-colortv_nr = left(colortv_nr, len(colortv_nr) - 1)
+while colortv_ny.GetOneLineWidth(colortv_nx + "...", 10000) > colortv_nz
+colortv_nx = left(colortv_nx, len(colortv_nx) - 1)
 end while
 end if
-return colortv_nr + "...     "
+return colortv_nx + "...     "
 end function
-function colortv_ms(colortv_nu)
-colortv_nv = m.colortv_lz.getFont("ABeeZee", int(17.0*m.colortv_ma), false, false)
-colortv_nw = m.colortv_lz.get("ABeeZee", int(17.0*m.colortv_ma), false, false)
-colortv_nx = m.colortv_mp(colortv_nu, colortv_nv, 1500.0 * m.colortv_ma)
+function colortv_my(colortv_oa)
+colortv_ob = m.colortv_mf.getFont("ABeeZee", int(17.0*m.colortv_mg), false, false)
+colortv_oc = m.colortv_mf.get("ABeeZee", int(17.0*m.colortv_mg), false, false)
+colortv_od = m.colortv_mv(colortv_oa, colortv_ob, 1500.0 * m.colortv_mg)
 return {
 "TargetRect": {
-"x": m.colortv_mb + int(24.0 * m.colortv_ma)
-"y": m.colortv_mc + int(69.0 * m.colortv_ma)
-"w": int(550.0 * m.colortv_ma)
-"h": int(51.0 * m.colortv_ma)
+"x": m.colortv_mh + int(24.0 * m.colortv_mg)
+"y": m.colortv_mi + int(69.0 * m.colortv_mg)
+"w": int(550.0 * m.colortv_mg)
+"h": int(51.0 * m.colortv_mg)
 }
-"Text": colortv_nx
+"Text": colortv_od
 "TextAttrs":{
 "Color" : "#ffffffff",
-"Font" : colortv_nw,
+"Font" : colortv_oc,
 "HAlign" : "Left",
 "VAlign" : "Top",
 "TextDirection": "LeftToRight"
 }
 }
 end function
-function colortv_mu(colortv_ny)
-if colortv_ny = invalid then
-colortv_ny = "pkg:/images/colortv/color_tv_grid_bg_placeholder.jpg"
+function colortv_na(colortv_oe)
+if colortv_oe = invalid then
+colortv_oe = "pkg:/images/colortv/color_tv_grid_bg_placeholder.jpg"
 end if
 return {
-"Url": colortv_ny
+"Url": colortv_oe
 "TargetRect": {
-"x": m.colortv_mb + int(629.0 * m.colortv_ma)
-"y": m.colortv_mc
-"w": int(308.0 * m.colortv_ma)
-"h": int(154.0 * m.colortv_ma)
+"x": m.colortv_mh + int(629.0 * m.colortv_mg)
+"y": m.colortv_mi
+"w": int(308.0 * m.colortv_mg)
+"h": int(154.0 * m.colortv_mg)
 }
 }
 end function
-function colortv_is(colortv_io as Object, colortv_fz as Object, colortv_il as Object) as Object
-colortv_nz = NWM_VAST()
-colortv_oa = colortv_nz.GetPrerollFromURL(colortv_io["ads"][0]["markupUrl"])
-if colortv_oa = invalid then
+function colortv_iw(colortv_is as Object, colortv_gb as Object, colortv_ip as Object) as Object
+colortv_of = NWM_VAST()
+colortv_og = colortv_of.GetPrerollFromURL(colortv_is["ads"][0]["markupUrl"])
+if colortv_og = invalid then
 return invalid
 end if
 colortv_c = {
-colortv_it: colortv_ob
-colortv_oc: colortv_od
-colortv_oe: colortv_of
-colortv_og: colortv_oh
+colortv_ix: colortv_oh
 colortv_oi: colortv_oj
 colortv_ok: colortv_ol
 colortv_om: colortv_on
 colortv_oo: colortv_op
-colortv_oq: colortv_or
-colortv_os: colortv_ot
-colortv_oa: colortv_oa
-colortv_io: colortv_io
-colortv_il: colortv_il
-colortv_fz: colortv_fz
+colortv_og: colortv_og
+colortv_oq: -1
+colortv_is: colortv_is
+colortv_ip: colortv_ip
+colortv_gb: colortv_gb
 }
 return colortv_c
 end function
-function colortv_ob() as Void
-colortv_kn = m.colortv_oc()
-colortv_kn.Show()
-colortv_ou = m.colortv_oe()
-colortv_ou.Play()
-if m.colortv_io["type"] <> "video"
-m.colortv_og(colortv_kn)
-end if
-while true
-colortv_ix = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
-colortv_iy = type(colortv_ix)
-if colortv_iy = "roSGScreenEvent"
-if colortv_ix.isScreenClosed() then
-exit while
-end if
-else if colortv_iy = "roSGNodeEvent"
-if colortv_ix.getNode() = "colorTvAdEvents" then
-if colortv_ix.getField() = "closeAd" then
-exit while
-end if
-end if
-else if type(colortv_ix) = "roVideoPlayerEvent"
-if colortv_ix.isFullResult()
-exit while
-else if colortv_ix.isPartialResult()
-exit while
-else if colortv_ix.isRequestFailed()
-ColorTVSdkGetInstance().colortv_gf(m.colortv_io["placement"], "INTERNAL_SDK_ERROR", colortv_ix.getMessage())
-exit while
-else if colortv_ix.isStatusMessage() and colortv_ix.GetMessage() = "start of play"
-m.colortv_oi(colortv_kn)
-else if colortv_ix.isPlaybackPosition()
-m.colortv_ok(colortv_kn, colortv_ix.GetIndex(), m.colortv_oa["length"])
-m.colortv_om(colortv_ix.getIndex())
-end if
-else if type(colortv_ix) = "roImageCanvasEvent" and colortv_ix.isRemoteKeyPressed()
-if m.colortv_oo(colortv_ix.GetIndex(), colortv_ou) then
-exit while
-end if
-end if
-ColorTVSdkGetInstance().timerTick()
-end while
-end function
-function colortv_od()
+function colortv_oh() as Void
+colortv_iz = CreateObject("roSGScreen")
 m.colortv_bs = CreateObject("roMessagePort")
-colortv_kn = CreateObject("roImageCanvas")
-colortv_kn.SetMessagePort(m.colortv_bs)
-colortv_kn.SetLayer(1, {"color": "#000000"})
-return colortv_kn
-end function
-function colortv_of()
-colortv_dd = CreateObject("roDeviceInfo")
-colortv_ou = CreateObject("roVideoPlayer")
-colortv_ou.SetMessagePort(m.colortv_bs)
-colortv_ou.SetDestinationRect({colortv_ov:colortv_dd.GetDisplaySize().colortv_ov,colortv_ow:colortv_dd.GetDisplaySize().colortv_ow,colortv_ox:0,colortv_oy:0})
-colortv_ou.SetPositionNotificationPeriod(1)
-colortv_ou.AddContent(m.colortv_oa)
-return colortv_ou
-end function
-function colortv_oj(colortv_kn as Object)
-colortv_kn.ClearLayer(2)
-colortv_kn.SetLayer(1, {"color": "#00000000", "CompositionMode": "Source"})
-end function
-function colortv_on(colortv_oz)
-for each colortv_pa in m.colortv_oa["trackingEvents"]
-if colortv_pa["time"] = colortv_oz
-colortv_pb(colortv_pa)
-end if
-end for
-end function
-function colortv_op(colortv_pc, colortv_ou) as Boolean
-if colortv_pc = 2 or colortv_pc = 0  'colortv_pd or colortv_pe
-m.colortv_os()
-return true
-else if colortv_pc = 6 and m.colortv_io["type"] <> "video"
-colortv_ou.pause()
-if colortv_je(m.colortv_io["ads"][0]["actionButton"]["actionType"]) then
-if m.colortv_oq() then
-m.colortv_os()
-m.colortv_io.colortv_lf = true
-return true
-else
-colortv_ou.resume()
-end if
-else if m.colortv_io["ads"][0]["actionButton"]["actionType"] = "CLICK_TO_APPSTORE"
-m.colortv_os()
-m.colortv_io.colortv_lf = true
-colortv_jg = m.colortv_io["ads"][0]
-m.colortv_fz.colortv_p(colortv_jg["clickTracker"])
-if colortv_jg["clickData"]["contentId"] <> invalid then
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
-else
-m.colortv_fz.colortv_ak(colortv_jg["clickData"]["channelId"])
-end if
-return true
-else if m.colortv_io["ads"][0]["actionButton"]["actionType"] = "CLICK_TO_CONTENT"
-m.colortv_os()
-colortv_jg = m.colortv_io["ads"][0]
-m.colortv_io.colortv_lf = true
-m.colortv_fz.colortv_ao(colortv_jg["clickData"]["channelId"], colortv_jg["clickData"]["contentId"])
-return true
-end if
-end if
-return false
-end function
-function colortv_ot()
-for each colortv_pa in m.colortv_oa["trackingEvents"]
-if colortv_pa["event"] = "CLOSE"
-colortv_pb(colortv_pa)
-end if
-end for
-if m.colortv_il <> invalid and m.colortv_il["adClosed"] <> invalid then
-m.colortv_il["adClosed"](m.colortv_io["placement"])
-end if
-end function
-sub colortv_oh(colortv_kn as Object)
-colortv_pf = 720.0 / 1080.0
-colortv_pg% = 1356.0 * colortv_pf
-colortv_ph% = 902.0 * colortv_pf
-colortv_pi% = 400.0 * colortv_pf
-colortv_pj% = 100.0 * colortv_pf
-colortv_pk = invalid
-colortv_pl = m.colortv_io["ads"][0]
-if colortv_je(colortv_pl["actionButton"]["actionType"]) then
-colortv_pm% = colortv_pg% + 30 * colortv_pf
-colortv_pn% = colortv_ph% + 4 * colortv_pf
-colortv_po% = colortv_pg% + 30.0 * colortv_pf
-colortv_pp% = colortv_ph% + 30.0 * colortv_pf
-colortv_pq% = 40.0 * colortv_pf
-colortv_pr% = 40.0 * colortv_pf
-if colortv_pl["actionButton"]["actionType"] = "CLICK_TO_EMAIL" then
-colortv_ps = "color_tv_icon_mail"
-else if colortv_pl["actionButton"]["actionType"] = "CLICK_TO_CALL" then
-colortv_ps = "color_tv_icon_phone"
-else
-colortv_ps = "color_tv_icon_sms"
-end if
-colortv_pk = {
-"Url": "pkg:/images/colortv/" + colortv_ps + ".png"
-"TargetRect": {
-"x": colortv_po%
-"y": colortv_pp%
-"w": colortv_pr%
-"h": colortv_pq%
-}
-}
-else
-colortv_pm% = colortv_pg%
-colortv_pn% = colortv_ph%
-end if
-colortv_pt = colortv_el(colortv_pl["actionButton"]["backgroundRed"], colortv_pl["actionButton"]["backgroundGreen"], colortv_pl["actionButton"]["backgroundBlue"])
-colortv_pu = colortv_el(colortv_pl["actionButton"]["textRed"], colortv_pl["actionButton"]["textGreen"], colortv_pl["actionButton"]["textBlue"])
-colortv_pv = {
-"TargetRect": {
-"x": colortv_pm%
-"y": colortv_pn%
-"w": colortv_pi%
-"h": colortv_pj%
-}
-"Text": colortv_pl["actionButton"]["text"]
-"TextAttrs":{
-"Color" : colortv_pu,
-"Font" : "Small",
-"HAlign" : "HCenter",
-"VAlign" : "VCenter",
-"Direction" : "LeftToRight"
-}
-}
-colortv_pw = {
-"TargetRect": {
-"x": colortv_pg%
-"y": colortv_ph%
-"w": colortv_pi%
-"h": colortv_pj%
-}
-"color": colortv_pt
-}
-colortv_kn.SetLayer(20, colortv_pv)
-colortv_kn.SetLayer(19, colortv_pw)
-if colortv_pk <> invalid then
-colortv_kn.SetLayer(21, colortv_pk)
-end if
-end sub
-sub colortv_ol(colortv_kn as Object, colortv_lj as Integer, colortv_na as Integer)
-colortv_pf = 720.0 / 1080.0
-colortv_px% = 100.0 * colortv_pf
-colortv_py% = 906.0 * colortv_pf
-colortv_nd% = 902.0 * colortv_pf
-colortv_pz% = 100.0 * colortv_pf
-colortv_qa% = 100.0 * colortv_pf
-colortv_ng = colortv_el(255, 255, 255)
-colortv_nh = (colortv_na - colortv_lj).toStr()
-colortv_nj = {
-"TargetRect": {
-"x": colortv_px%
-"y": colortv_py%
-"w": colortv_pz%
-"h": colortv_qa%
-}
-"Text": colortv_nh
-"TextAttrs":{
-"Color" : colortv_ng,
-"Font" : "Small",
-"HAlign" : "HCenter",
-"VAlign" : "VCenter",
-"Direction" : "LeftToRight"
-}
-}
-colortv_nk! = (colortv_na - colortv_lj) / colortv_na
-if colortv_nk! >= 1 then
-colortv_nl = "colortv_timer_1"
-else if colortv_nk! >= 0.93 then
-colortv_nl = "colortv_timer_2"
-else if colortv_nk! >= 0.86 then
-colortv_nl = "colortv_timer_3"
-else if colortv_nk! >= 0.8 then
-colortv_nl = "colortv_timer_4"
-else if colortv_nk! >= 0.73 then
-colortv_nl = "colortv_timer_5"
-else if colortv_nk! >= 0.66 then
-colortv_nl = "colortv_timer_6"
-else if colortv_nk! >= 0.6 then
-colortv_nl = "colortv_timer_7"
-else if colortv_nk! >= 0.53 then
-colortv_nl = "colortv_timer_8"
-else if colortv_nk! >= 0.46 then
-colortv_nl = "colortv_timer_9"
-else if colortv_nk! >= 0.4 then
-colortv_nl = "colortv_timer_10"
-else if colortv_nk! >= 0.33 then
-colortv_nl = "colortv_timer_11"
-else if colortv_nk! >= 0.26 then
-colortv_nl = "colortv_timer_12"
-else if colortv_nk! >= 0.2 then
-colortv_nl = "colortv_timer_13"
-else if colortv_nk! >= 0.13 then
-colortv_nl = "colortv_timer_14"
-else if colortv_nk! >= 0.066 then
-colortv_nl = "colortv_timer_15"
-else
-colortv_nl = "colortv_timer_16"
-end if
-colortv_nm = {
-"Url": "pkg:/images/colortv/timer/" + colortv_nl + ".png"
-"TargetRect": {
-"x": colortv_px%
-"y": colortv_nd%
-"w": colortv_pz%
-"h": colortv_qa%
-}
-}
-colortv_kn.SetLayer(22, colortv_nm)
-colortv_kn.SetLayer(23, colortv_nj)
-end sub
-function colortv_or()
-colortv_iv = CreateObject("roSGScreen")
-colortv_bs = CreateObject("roMessagePort")
-colortv_iv.setMessagePort(colortv_bs)
-colortv_iw = colortv_iv.CreateScene("colortv_subscriptionWindowWrapper")
-colortv_iv.show()
-colortv_iw.findNode("colorTvSubscriptionEvents").observeField("subscribed", colortv_bs)
-colortv_iw.findNode("colorTvSubscriptionEvents").observeField("closed", colortv_bs)
-colortv_iw.findNode("colorTvAdEvents").observeField("closeAd", colortv_bs)
-colortv_iw["dataModel"] = m.colortv_io
+colortv_iz.setMessagePort(m.colortv_bs)
+colortv_ja = colortv_iz.CreateScene("colortv_video")
+colortv_iz.show()
+m.colortv_oi(colortv_ja, m.colortv_is)
+colortv_ja["dataModel"] = m.colortv_is
+colortv_ja["videoContent"] = m.colortv_og
 while true
-colortv_ix = wait(GetColorTVSDKTimerInterval(), colortv_bs)
-colortv_iy = type(colortv_ix)
-if colortv_iy = "roSGNodeEvent"
-if colortv_ix.getNode() = "colorTvSubscriptionEvents" then
-if colortv_ix.getField() = "subscribed" then
-ColorTVSdkGetInstance().colortv_go(m.colortv_io, m.colortv_io["ads"][0], colortv_ix.getData())
-else if colortv_ix.getField() = "closed"
-return false
+colortv_jb = wait(GetColorTVSDKTimerInterval(), m.colortv_bs)
+colortv_jc = type(colortv_jb)
+if colortv_jc = "roSGScreenEvent"
+if colortv_jb.isScreenClosed() then
+exit while
 end if
-else if colortv_ix.getNode() = "colorTvAdEvents" then
-if colortv_ix.getField() = "closeAd" then
-return true
-end if
+else if colortv_jc = "roSGNodeEvent"
+if m.colortv_ok(colortv_jb, m.colortv_is, colortv_ja) then
+exit while
 end if
 end if
 ColorTVSdkGetInstance().timerTick()
 end while
+if m.colortv_ip <> invalid then
+m.colortv_gb.colortv_z(m.colortv_ip["currencyEarned"])
+end if
 end function
-function colortv_pb(colortv_pa)
+function colortv_oj(colortv_ja as Object, colortv_jg as Object)
+if colortv_ja.findNode("colorTvAdEvents") <> invalid then
+colortv_ja.findNode("colorTvAdEvents").observeField("closeAd", m.colortv_bs)
+colortv_ja.findNode("colorTvAdEvents").observeField("adShown", m.colortv_bs)
+end if
+if colortv_jg["type"] = "engagement" or colortv_jg["type"] = "interstitial" then
+colortv_jh = colortv_jg["ads"][0]["actionButton"]["actionType"]
+if colortv_ji(colortv_jh) then
+colortv_ja.findNode("colorTvSubscriptionEvents").observeField("subscribed", m.colortv_bs)
+else if colortv_jj(colortv_jh) then
+colortv_ja.findNode("colorTvAppstoreEvents").observeField("clicked", m.colortv_bs)
+end if
+end if
+colortv_ja.findNode("videoNode").observeField("position", m.colortv_bs)
+end function
+function colortv_ol(colortv_jb as Object, colortv_is as Object, colortv_ja as Object) as Boolean
+colortv_ba = colortv_is["placement"]
+if colortv_jb.getNode() = "videoNode" then
+if colortv_jb.getField() = "position" then
+colortv_kq% = colortv_jb.getData()
+m.colortv_om(colortv_kq%)
+end if
+else if colortv_jb.getNode() = "colorTvAdEvents" then
+if colortv_jb.getField() = "closeAd" then
+m.colortv_oo()
+return true
+else if colortv_jb.getField() = "adShown" then
+m.colortv_gb.colortv_p(colortv_is["ads"][0]["impressionUrl"])
+end if
+else if colortv_jb.getNode() = "colorTvSubscriptionEvents" then
+if colortv_jb.getField() = "subscribed" then
+colortv_is.colortv_ll = true
+ColorTVSdkGetInstance().colortv_gq(colortv_is, colortv_is["ads"][0], colortv_jb.getData())
+end if
+else if colortv_jb.getNode() = "colorTvAppstoreEvents" then
+if colortv_jb.getField() = "clicked" then
+colortv_is.colortv_ll = true
+m.colortv_gb.colortv_p(colortv_is["ads"][0]["clickTracker"])
+if m.colortv_ip <> invalid and m.colortv_ip["adClosed"] <> invalid then
+m.colortv_ip["adClosed"](colortv_ba)
+end if
+colortv_jk = colortv_is["ads"][0]
+if colortv_jk["type"] = "appstore" or colortv_jk["actionButton"]["actionType"] = "CLICK_TO_APPSTORE" then
+if colortv_jk["clickData"]["contentId"] <> invalid then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
+else
+m.colortv_gb.colortv_ak(colortv_jk["clickData"]["channelId"])
+end if
+else if colortv_jk["type"] = "content" or colortv_jk["actionButton"]["actionType"] = "CLICK_TO_CONTENT" then
+m.colortv_gb.colortv_ao(colortv_jk["clickData"]["channelId"], colortv_jk["clickData"]["contentId"])
+end if
+return true
+end if
+end if
+return false
+end function
+function colortv_on(colortv_or)
+for each colortv_os in m.colortv_og["trackingEvents"]
+if colortv_os["time"] = colortv_or and m.colortv_oq <> colortv_or
+colortv_ot(colortv_os)
+end if
+end for
+m.colortv_oq = colortv_or
+end function
+function colortv_ot(colortv_os)
 colortv_dp = true
-colortv_qb = 3000
-colortv_qc = CreateObject("roTimespan")
-colortv_qc.Mark()
+colortv_ou = 3000
+colortv_ov = CreateObject("roTimespan")
+colortv_ov.Mark()
 colortv_bs = CreateObject("roMessagePort")
-colortv_qd = CreateObject("roURLTransfer")
-colortv_qd.SetCertificatesFile("common:/certs/ca-bundle.crt")
-colortv_qd.SetPort(colortv_bs)
-colortv_qd.SetURL(colortv_pa["url"])
-colortv_bh("~~~TRACKING: " + colortv_qd.GetURL())
-if colortv_qd.AsyncGetToString()
-colortv_ds = wait(colortv_qb, colortv_bs)
-if colortv_ds = invalid
-colortv_qd.AsyncCancel()
+colortv_ow = CreateObject("roURLTransfer")
+colortv_ow.SetCertificatesFile("common:/certs/ca-bundle.crt")
+colortv_ow.SetPort(colortv_bs)
+colortv_ow.SetURL(colortv_os["url"])
+colortv_bh("~~~TRACKING: " + colortv_ow.GetURL())
+if colortv_ow.AsyncGetToString()
+colortv_dv = wait(colortv_ou, colortv_bs)
+if colortv_dv = invalid
+colortv_ow.AsyncCancel()
 colortv_dp = false
 else
-colortv_bh("Req finished: " + colortv_qc.TotalMilliseconds().ToStr())
-colortv_bh(colortv_ds.GetResponseCode().ToStr())
-colortv_bh(colortv_ds.GetFailureReason())
+colortv_bh("Req finished: " + colortv_ov.TotalMilliseconds().ToStr())
+colortv_bh(colortv_dv.GetResponseCode().ToStr())
+colortv_bh(colortv_dv.GetFailureReason())
 end if
 end if
 return colortv_dp
+end function
+function colortv_op()
+for each colortv_os in m.colortv_og["trackingEvents"]
+if colortv_os["event"] = "CLOSE"
+colortv_ot(colortv_os)
+end if
+end for
 end function

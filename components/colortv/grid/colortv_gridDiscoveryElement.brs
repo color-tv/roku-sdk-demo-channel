@@ -150,24 +150,53 @@ function setDiscoveryCenterModel(contentModel)
     m.priceLabel.text = contentModel.price
     m.titleLabel.text = contentModel.title
     m.descriptionLabel.text = contentModel.description
-    if contentModel.rating = invalid then
+    if contentModel.rating = invalid and contentModel.reviews = invalid then
         hideSeparators()
+        m.reviewsImage.visible = false
+        m.reviewsCountLabel.visible = false
         m.starImage.visible = false
         m.ratingsLabel.visible = false
+    else if contentModel.rating = invalid then
+        moveViewsToRatingPosition()
+        m.separator2.visible = false
+        m.separator1.visible = true
+        m.starImage.visible = false
+        m.ratingsLabel.visible = false
+        m.reviewsCountLabel.text = contentModel.reviews
+    else if contentModel.reviews = invalid then
+        m.separator2.visible = false
+        m.separator1.visible = true
+        m.reviewsImage.visible = false
+        m.starImage.visible = true
+        m.reviewsCountLabel.visible = false
+        m.ratingsLabel.visible = true
+        m.ratingsLabel.text = getRatingsString(contentModel.rating.toStr())
     else
+        moveViewsToOriginalPosition()
         showSeparators()
         m.starImage.visible = true
         m.ratingsLabel.visible = true
         m.ratingsLabel.text = getRatingsString(contentModel.rating.toStr())
-    end if
-    if contentModel.reviews = invalid then
-        hideSeparators()
-        m.reviewsCountLabel.visible = false
-    else
-        showSeparators()
+        m.reviewsImage.visible = true
         m.reviewsCountLabel.visible = true
         m.reviewsCountLabel.text = contentModel.reviews
     end if
+end function
+
+function moveViewsToRatingPosition()
+    imageXTranslationDimension = 143
+    imageYTranslationDimension = 31
+    m.reviewsImage.translation = "[" + imageXTranslationDimension.toStr() + ", " + imageYTranslationDimension.toStr() + "]"
+    m.viewsCountLabel.translation = m.ratingsLabel.translation
+end function
+
+function moveViewsToOriginalPosition()
+    imageXTranslationDimension = 211
+    imageYTranslationDimension = 31
+    m.reviewsImage.translation = "[" + imageXTranslationDimension.toStr() + ", " + imageYTranslationDimension.toStr() + "]"
+    labelXTranslationDimension = 237
+    labelYTranslationDimension = 29
+    m.viewsCountLabel.translation = "[" + labelXTranslationDimension.toStr() + ", " + labelYTranslationDimension.toStr() + "]"
 end function
 
 function hideSeparators()

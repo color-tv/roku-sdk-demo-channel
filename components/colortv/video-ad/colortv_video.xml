@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="colortv_video" extends="colortv_commonAdElements">
+
+    <script type="text/brightscript" uri="pkg:/components/colortv/video-ad/colortv_video.brs" />
+
+    <interface>
+      <field id="videoContent" type="assocarray" />
+    </interface>
+
+    <children>
+      
+        <Video
+          id="videoNode" />
+
+        <colortv_actionButton 
+          id="actionButton"
+          buttonLabelText="E-Mail Now!"
+          buttonColor="0xE35050FF"
+          buttonLabelColor="0x000000FF"
+          buttonClickedColor="0xA31C1CFF"
+          scaleRotateCenter="[165,44]"
+          translation="[1356,902]" />
+        
+        <colortv_countDownTimer 
+          id="countDownTimer"
+          width="80"
+          height="80"
+          translation="[100,900]" />
+
+        <colortv_progressSpinner
+          id="progressSpinner" />
+        
+    </children>
+
+</component>

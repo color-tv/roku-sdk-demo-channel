@@ -81,6 +81,10 @@ end sub
 
 sub contentRecommendationClicked(placement as String, contentData as Object)
     print "Content recommendation has been clicked for placement: " + placement + " and content id: " + contentData.videoId
+    print "video params:"
+    for each param in contentData["videoParams"]
+        print Chr(34) + param + Chr(34) + ": " + Chr(34) + contentData["videoParams"][param].toStr() + Chr(34)
+    end for
 end sub
 
 sub contentRecommendationClosed(placement as String)
@@ -101,6 +105,10 @@ end sub
 
 sub upNextClicked(contentData as Object)
     print "UpNext has been clicked for video id: " + contentData.videoId + " + and content url: " + contentData.videoUrl
+    print "video params:"
+    for each param in contentData["videoParams"]
+        print Chr(34) + param + Chr(34) + ": " + Chr(34) + contentData["videoParams"][param].toStr() + Chr(34)
+    end for
 end sub
 
 sub upNextError(error as Object)

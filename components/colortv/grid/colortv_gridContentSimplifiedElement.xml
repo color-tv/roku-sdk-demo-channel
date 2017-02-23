@@ -48,9 +48,9 @@
                       uri="pkg:/images/colortv/color_tv_icon_clock.png" />
                     <Label
                       id="duration"
-                      width="70"
+                      width="200"
                       height="15"
-                      horizAlign = "center"
+                      horizAlign = "left"
                       translation="[73,433]"
                       color="0x000000ff"
                       text="1h 48m"

@@ -164,7 +164,7 @@ function setContentModel() as Void
 end function
 
 function setContentRecommendationModel(contentModel)
-    setGenres(contentModel.genres)
+    setGenres(contentModel.genres, contentModel.regularCustomFont)
     m.logoImage.uri = contentModel.logoUrl
     if contentModel.thumbnailUrl <> invalid then
         m.backgroundImage.uri = contentModel.thumbnailUrl
@@ -177,26 +177,55 @@ function setContentRecommendationModel(contentModel)
     if contentModel.description <> invalid then
         m.descriptionLabel.text = box(contentModel.description).trim()
     end if
-    if contentModel.rating = invalid then
+    if contentModel.rating = invalid and contentModel.views = invalid then
         hideSeparators()
+        m.viewsImage.visible = false
+        m.viewsCountLabel.visible = false
         m.starImage.visible = false
         m.ratingsLabel.visible = false
+    else if contentModel.rating = invalid then
+        moveViewsToRatingPosition()
+        m.separator2.visible = false
+        m.separator1.visible = true
+        m.starImage.visible = false
+        m.ratingsLabel.visible = false
+        m.viewsCountLabel.text = contentModel.views
+    else if contentModel.views = invalid then
+        m.separator2.visible = false
+        m.separator1.visible = true
+        m.viewsImage.visible = false
+        m.starImage.visible = true
+        m.viewsCountLabel.visible = false
+        m.ratingsLabel.visible = true
+        m.ratingsLabel.text = getRatingsString(contentModel.rating.toStr())
     else
+        moveViewsToOriginalPosition()
         showSeparators()
         m.starImage.visible = true
         m.ratingsLabel.visible = true
         m.ratingsLabel.text = getRatingsString(contentModel.rating.toStr())
-    end if
-    if contentModel.views = invalid then
-        hideSeparators()
-        m.viewsImage.visible = false
-        m.viewsCountLabel.visible = false
-    else
-        showSeparators()
         m.viewsImage.visible = true
         m.viewsCountLabel.visible = true
         m.viewsCountLabel.text = contentModel.views
     end if
+    setRegularCustomFont(contentModel.regularCustomFont)
+    setBoldCustomFont(contentModel.boldCustomFont)
+end function
+
+function moveViewsToRatingPosition()
+    imageXTranslationDimension = 144
+    imageYTranslationDimension = 33
+    m.viewsImage.translation = "[" + imageXTranslationDimension.toStr() + ", " + imageYTranslationDimension.toStr() + "]"
+    m.viewsCountLabel.translation = m.ratingsLabel.translation
+end function
+
+function moveViewsToOriginalPosition()
+    imageXTranslationDimension = 211
+    imageYTranslationDimension = 33
+    m.viewsImage.translation = "[" + imageXTranslationDimension.toStr() + ", " + imageYTranslationDimension.toStr() + "]"
+    labelXTranslationDimension = 237
+    labelYTranslationDimension = 29
+    m.viewsCountLabel.translation = "[" + labelXTranslationDimension.toStr() + ", " + labelYTranslationDimension.toStr() + "]"
 end function
 
 function hideSeparators()
@@ -217,7 +246,7 @@ function getRatingsString(rating as String) as String
     return returnValue
 end function
 
-sub setGenres(genres)
+sub setGenres(genres, customFont)
     container = m.top.findNode("tagsContainer")
     if m.tags <> invalid and m.tags.count() > 0 then
         for i = 0 to m.tags.count() - 1
@@ -259,10 +288,21 @@ sub setGenres(genres)
         tag.translation = [translationX, 0]
         tag.text = genres[i]
         tag.colors = m.top.textColor
+        if customFont <> invalid then
+            smallFont = createFontObject(customFont, 14)
+            tag.findNode("tagLabel").font = smallFont
+        end if
         translationX += calculateGenreViewWidth(genres[i].toStr())
         translationX += m.spaceBetweenGenresDimension
     end for
 end sub
+
+function createFontObject(fontUri, fontSize)
+    fontNode = CreateObject("roSGNode", "Font")
+    fontNode.size = fontSize
+    fontNode.uri = fontUri
+    return fontNode
+end function
 
 function calculateTotalGenresWidth(genres as Object)
     totalWidth = 0
@@ -298,4 +338,25 @@ function getDurationString(duration as Integer) as String
         seconds = "0" + seconds.toStr()
     end if
     return hours.toStr() + ":" + minutes.toStr() + ":" + seconds.toStr()
+end function
+
+function setRegularCustomFont(fontUri)
+    if fontUri <> invalid then
+        largeFont = createFontObject(fontUri, 20)
+        smallFont = createFontObject(fontUri, 16)
+        m.top.findNode("autoplayTimer").findNode("autoCloseLabel").font = largeFont
+        m.durationLabel.font = smallFont
+        m.ratingsLabel.font = smallFont
+        m.viewsCountLabel.font = smallFont
+        m.descriptionLabel.font = smallFont
+    end if
+end function
+
+function setBoldCustomFont(fontUri)
+    if fontUri <> invalid then
+        largeFont = createFontObject(fontUri, 20)
+        m.titleLabel.font = largeFont
+        m.watchNowButton.findNode("buttonLabel").font = largeFont
+        m.favouriteButton.findNode("buttonLabel").font = largeFont
+    end if
 end function

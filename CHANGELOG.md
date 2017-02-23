@@ -1,5 +1,10 @@
 # ROKU SDK changelog
 
+# 1.5.0
+- Added font customization for content recommendation
+- Added videoParams additional data to content recommendation and UpNext callbacks
+- Video ads now use SceneGraph Video node instead of roVideoPlayer
+
 # 1.4.0
 - Added UpNext functionality
 - Small bugfixes and improvements

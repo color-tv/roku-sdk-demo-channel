@@ -44,7 +44,7 @@ function setContentModel() as Void
 end function
 
 function setContentRecommendationModel(contentModel)
-    setGenres(contentModel.genres)
+    setGenres(contentModel.genres, contentModel.regularCustomFont)
     if contentModel.thumbnailUrl <> invalid then
         m.backgroundImage.uri = contentModel.thumbnailUrl
     else
@@ -56,9 +56,12 @@ function setContentRecommendationModel(contentModel)
     end if
     m.durationLabel.text = getDurationString(duration)
     m.titleLabel.text = box(contentModel.title).trim()
+
+    setRegularCustomFont(contentModel.regularCustomFont)
+    setBoldCustomFont(contentModel.boldCustomFont)
 end function
 
-sub setGenres(genres)
+sub setGenres(genres, customFont)
     container = m.top.findNode("tagsContainer")
     if m.tags <> invalid and m.tags.count() > 0 then
         for i = 0 to m.tags.count() - 1
@@ -99,11 +102,22 @@ sub setGenres(genres)
     for i = 0 to genres.count() - 1
         tag = m.tags[i]
         tag.colors = reversedColors
+        if customFont <> invalid then
+            smallFont = createFontObject(customFont, 20)
+            tag.findNode("tagLabel").font = smallFont
+        end if
         translationX -= tag.viewWidth
         tag.translation = [translationX, 0]
         translationX -= m.spaceBetweenGenresDimension
     end for
 end sub
+
+function createFontObject(fontUri, fontSize)
+    fontNode = CreateObject("roSGNode", "Font")
+    fontNode.size = fontSize
+    fontNode.uri = fontUri
+    return fontNode
+end function
 
 function getDurationString(duration as Integer) as String
     if duration = 0 then
@@ -122,4 +136,20 @@ function getDurationString(duration as Integer) as String
         seconds = "0" + seconds.toStr()
     end if
     return hours.toStr() + ":" + minutes.toStr() + ":" + seconds.toStr()
+end function
+
+function setRegularCustomFont(fontUri)
+    if fontUri <> invalid then
+        largeFont = createFontObject(fontUri, 20)
+        smallFont = createFontObject(fontUri, 16)
+        m.top.findNode("autoplayTimer").findNode("autoCloseLabel").font = largeFont
+        m.durationLabel.font = smallFont
+    end if
+end function
+
+function setBoldCustomFont(fontUri)
+    if fontUri <> invalid then
+        largeFont = createFontObject(fontUri, 24)
+        m.titleLabel.font = largeFont
+    end if
 end function

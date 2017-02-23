@@ -7,7 +7,7 @@ function exitView()
 end function
 
 function performEngagement()
-    if m.top.dataModel.ads[0].type = "appstore" or m.top.dataModel.ads[0].type = "content" then
+    if m.top.dataModel.ads[0].type = "appstore" or m.top.dataModel.ads[0].type = "content" or m.top.dataModel.ads[0].actionButton.actionType = "CLICK_TO_APPSTORE" or m.top.dataModel.ads[0].actionButton.actionType = "CLICK_TO_CONTENT" then
         m.top.findNode("colorTvAppstoreEvents").clicked = true
     else
         showEngagementForm()
@@ -35,18 +35,22 @@ function hideEngagementForm()
 end function
 
 function startAutoCloseTimer()
-    if m.top.dataModel.autoCloseVisible = "false" then
-        m.autoCloseTimer.visible = false
-    else
-        m.autoCloseTimer.visible = true
-    end if
+    if m.autoCloseTimer <> invalid then
+        if m.top.dataModel.autoCloseVisible = "false" then
+            m.autoCloseTimer.visible = false
+        else
+            m.autoCloseTimer.visible = true
+        end if
     m.autoCloseTimer.startTimer = true
+    end if
 end function
 
 function cancelAutoCloseTimer()
-    if m.autoCloseTimer.startTimer then
-        m.autoCloseTimer.visible = false
-        m.autoCloseTimer.startTimer = false
+    if m.autoCloseTimer <> invalid then
+        if m.autoCloseTimer.startTimer then
+            m.autoCloseTimer.visible = false
+            m.autoCloseTimer.startTimer = false
+        end if
     end if
 end function
 
