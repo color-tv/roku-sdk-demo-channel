@@ -14,6 +14,8 @@ function initViews()
     m.titleLabel = m.top.findNode("title")
     m.durationLabel = m.top.findNode("duration")
     m.clockImage = m.top.findNode("clockImage")
+    m.typeFrame = m.top.findNode("typeFrame")
+    m.typeLabel = m.top.findNode("typeLabel")
 end function
 
 function setTextColor()
@@ -22,6 +24,9 @@ function setTextColor()
     m.titleLabel.color = textColor
     m.durationLabel.color = textColor
     m.clockImage.blendColor = textColor
+    if m.typeLabel <> invalid
+        m.typeLabel.color = textColor
+    end if
     reversedColors = m.top.textColor
     reversedColors.reverse()
     for i = 0 to m.tags.count() - 1
@@ -57,6 +62,7 @@ function setContentRecommendationModel(contentModel)
     m.durationLabel.text = getDurationString(duration)
     m.titleLabel.text = box(contentModel.title).trim()
 
+    setRecommendationType(contentModel.index)
     setRegularCustomFont(contentModel.regularCustomFont)
     setBoldCustomFont(contentModel.boldCustomFont)
 end function
@@ -138,6 +144,16 @@ function getDurationString(duration as Integer) as String
     return hours.toStr() + ":" + minutes.toStr() + ":" + seconds.toStr()
 end function
 
+function setRecommendationType(index)
+    if m.typeFrame <> invalid then
+        if index = 0 then
+            m.typeFrame.visible = true
+        else
+            m.typeFrame.visible = false
+        end if
+    end if
+end function
+
 function setRegularCustomFont(fontUri)
     if fontUri <> invalid then
         largeFont = createFontObject(fontUri, 20)
@@ -151,5 +167,9 @@ function setBoldCustomFont(fontUri)
     if fontUri <> invalid then
         largeFont = createFontObject(fontUri, 24)
         m.titleLabel.font = largeFont
+        if m.typeLabel <> invalid
+            smallFont = createFontObject(fontUri, 18)
+            m.typeLabel.font = smallFont
+        end if
     end if
 end function

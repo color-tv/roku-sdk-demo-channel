@@ -1285,7 +1285,7 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.5.0"
+return "1.5.1"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000

@@ -24,6 +24,9 @@ end sub
 
 function updateViewWithData(dataArray)
     m.dataArray = dataArray
+    for i = 0 to dataArray.count() - 1
+        m.dataArray[i].index = i
+    end for
     if not m.loadingMoreData then
         removeGridElementsIfNecessary()
         setGridAndAnimationDimensions()
