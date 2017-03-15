@@ -1,5 +1,8 @@
 # ROKU SDK changelog
 
+# 1.5.2
+- Added ad tracking info to be sent to the server
+
 # 1.5.1
 - Minor UI improvements
 

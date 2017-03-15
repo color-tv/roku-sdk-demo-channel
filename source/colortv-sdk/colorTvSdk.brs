@@ -499,6 +499,7 @@ colortv_ca = {
 "systemVersion": colortv_fn.GetVersion()
 "systemName": colortv_fn.GetModelDetails().VendorName
 "identifierForAds": colortv_fn.GetAdvertisingId()
+"dnt": colortv_fn.IsAdIdTrackingDisabled()
 "identifierForVendor": colortv_fn.GetPublisherId()
 "language": colortv_fn.GetCurrentLocale()
 "timezone": colortv_fn.GetTimeZone()
@@ -1285,7 +1286,7 @@ function ColorTVSdkGetInstance()
 return GetGlobalAA()["colorTvSdkInstance"]
 end function
 function GetColorTVSDKVersion() as String
-return "1.5.1"
+return "1.5.2"
 end function
 function GetColorTVSDKTimerInterval() as Integer
 return 1000
