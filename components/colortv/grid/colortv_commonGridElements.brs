@@ -14,6 +14,10 @@ sub init()
     m.colorTvGridEvents = m.top.findNode("colorTvGridEvents")
     m.colorTvGridEvents.ObserveField("moreDataUrl", "moreDataDownloadFinished")
 
+    m.recommendationsForLabel = m.top.findNode("becauseYouWatchedLabel")
+    m.recommendationsForTitleLabel = m.top.findNode("becauseYouWatchedTitleLabel")
+    m.recommendationsForContainer = m.top.findNode("becauseYouWatchedContainer")
+
     initAnimations()
 
     initGridElementsViews()
@@ -24,6 +28,8 @@ end sub
 
 function updateViewWithData(dataArray)
     m.dataArray = dataArray
+    setRegularCustomFont(dataArray[0].regularCustomFont)
+    setBoldCustomFont(dataArray[0].boldCustomFont)
     for i = 0 to dataArray.count() - 1
         m.dataArray[i].index = i
     end for
@@ -38,6 +44,7 @@ function updateViewWithData(dataArray)
             m.gridElementViews[i].findNode(getBackgroundImageNodeName()).findNode("backgroundImage").ObserveField("loadStatus", "checkIfAlreadyLoaded")
         end for
         setFeatured()
+        setRecommendationsFor()
         checkIfAlreadyLoaded()
     else
         updateGridViewsPositionsAndContent("last")
@@ -191,7 +198,7 @@ function animateGridTranslation()
     for i = 0 to m.gridElementViews.count() - 1
         startTranslation = m.gridElementViews[i].startTranslation
         animationTranslation = m.animationTranslation.translation
-        m.gridElementViews[i].translation = [startTranslation[0] + animationTranslation[0], startTranslation[1] + animationTranslation[1]]
+        m.gridElementViews[i].translation = [startTranslation[0] + animationTranslation[0], m.gridElementViews[i].translation[1]]
     end for
 end function
 
@@ -270,13 +277,31 @@ function presentView()
     if m.featured <> invalid then
         m.showFeaturedAnimation.control = "start"
     end if
-    for i = 0 to m.gridElementViews.count() - 1 
+    for i = 0 to m.gridElementViews.count() - 1
         m.gridElementViews[i].findNode(getBackgroundImageNodeName()).findNode("backgroundImage").UnobserveField("loadStatus")
     end for
     if isContentRecommendation(m.top.dataModel) and m.top.dataModel.autoPlayEnabled = "true" then
         startAutoplayTimer()
     end if
     m.gridElementViews[0].focused = true
+end function
+
+function setRecommendationsFor()
+    title = m.top.dataModel.recommendationsForTitle
+    if title <> invalid and title <> "" then
+        m.recommendationsForLabel.text = Chr(34) + title + Chr(34)
+    else
+        m.recommendationsForContainer.visible = false
+        standardEvenYDimension = 29
+        standardOddYDimension = 554
+        for i = 0 to m.gridElementViews.count() - 1
+            if i MOD 2 = 0 then
+                m.gridElementViews[i].translation = "[" + m.gridElementViews[i].translation[0].toStr() + "," + standardEvenYDimension.toStr() + "]"
+            else
+                m.gridElementViews[i].translation = "[" + m.gridElementViews[i].translation[0].toStr() + "," + standardOddYDimension.toStr() + "]"
+            end if
+    end for
+    end if
 end function
 
 function startAutoplayTimer()
@@ -668,4 +693,25 @@ function IntToZeroPaddedHexString(decimalNumber as Integer) as String
         hexString = "0" + hexString
     end if
     return hexString
+end function
+
+function setRegularCustomFont(fontUri)
+    if fontUri <> invalid then
+        font = createFontObject(fontUri, 28)
+        m.recommendationsForLabel.font = font
+    end if
+end function
+
+function setBoldCustomFont(fontUri)
+    if fontUri <> invalid then
+        font = createFontObject(fontUri, 28)
+        m.recommendationsForTitleLabel.font = font
+    end if
+end function
+
+function createFontObject(fontUri, fontSize)
+    fontNode = CreateObject("roSGNode", "Font")
+    fontNode.size = fontSize
+    fontNode.uri = fontUri
+    return fontNode
 end function

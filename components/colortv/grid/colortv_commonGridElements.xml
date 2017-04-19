@@ -26,32 +26,67 @@
           color="0xdde3e9ff"/>
 
         <Group
+          id="becauseYouWatchedContainer">
+
+            <Rectangle
+              width="1920"
+              height="46"
+              color="0xffffffff">
+
+              <Label
+                id="becauseYouWatchedTitleLabel"
+                width="960"
+                height="46"
+                vertAlign="center"
+                horizAlign="right"
+                color="0x000000ff"
+                text="BECAUSE YOU WATCHED - "
+                translation="[0, 5]"
+                font="font:SmallBoldSystemFont" />
+              <Label
+                id="becauseYouWatchedLabel"
+                width="960"
+                height="46"
+                vertAlign="center"
+                horizAlign="left"
+                color="0x000000ff"
+                translation="[970, 5]"
+                font="font:SmallSystemFont" />
+            </Rectangle>
+            <Poster
+                width="1920"
+                height="4"
+                translation="[0, 46]"
+                uri="pkg:/images/colortv/shadow.png" />
+        </Group>
+
+        <Group
           id="gridContainer"
           >
           <colortv_gridElement
             id="gridElement0" 
-            translation="[29,29]"/>
+            translation="[29,61]"/>
           <colortv_gridElement
             id="gridElement1" 
-            translation="[29,554]" />
+            translation="[29,571]" />
           <colortv_gridElement
             id="gridElement2" 
-            translation="[698,29]" />
+            translation="[698,61]" />
           <colortv_gridElement
             id="gridElement3" 
-            translation="[698,554]" />
+            translation="[698,571]" />
           <colortv_gridElement
             id="gridElement4" 
-            translation="[1367,29]" />
+            translation="[1367,61]" />
           <colortv_gridElement
             id="gridElement5"
-            translation="[1367,554]" />
+            translation="[1367,571]" />
           <colortv_gridElement
             id="gridElement6"
-            translation="[2036,29]" />
+            translation="[2036,61]" />
           <colortv_gridElement
             id="gridElement7"
-            translation="[2036,554]" />
+            translation="[2036,571]" />
         </Group>
 
         <colortv_progressSpinner
